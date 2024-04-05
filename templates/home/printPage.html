@@ -1,0 +1,227 @@
+{% extends 'base.html' %} {% block title %}صفحة طباعة موظف {% endblock %} 
+{% load static %} {% block sub_title %}صفحة طباعة موظف {% endblock %} 
+{% block content %}
+<style>
+  @media print {
+    .centerprint {
+      margin-top: 5%;
+    }
+  }
+</style>
+<div class="d-none d-print-block text-center">
+  <img class="rounded-circle w-25 h-25" style="margin-top: -10px" src="{% static 'dist/img/1.png' %}" alt="" />
+  <p class="mb-1 fs-4">وزارة الــصــحــة</p>
+  <p class="mb-1 fs-4">إدارة الخدمات الصحية قصر بن غشير</p>
+  {% if user.profile.job_place.id != 1  %}<p class="mb-1 fs-4">{{user.profile.job_place}}</p>{% endif %}
+</div>
+
+<div style="direction: rtl" class="wrapper">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="card card-primary d-print-flex centerprint">
+      <div class="card-header">
+        <h3 class="card-title">بيانات الموظف {{employee.name}}</h3>
+      </div>
+      <!-- /.card-header -->
+      <!-- form start -->
+      <div class="card-body">
+        <div class="form-row">
+          <div class="form-group col-6">
+            <label for="id_name">الاسم</label>
+            <input
+              type="text"
+              readonly
+              class="form-control"
+              value="{{employee.name}}"
+              required
+              name="name"
+              id="id_name"
+              placeholder="ادخل الاسم"
+            />
+          </div>
+          <div class="form-group col-6">
+            <label for="id_national_number">الرقم الوطني / رقم الهوية</label>
+            <input
+              type="text"
+              readonly
+              name="national_number"
+              value="{{employee.national_number}}"
+              required
+              class="form-control"
+              id="id_national_number"
+              placeholder="ادخل الرقم الوطني / رقم الهوية"
+            />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-6">
+            <label for="nationality">الجنسية</label>
+            <input
+              type="text"
+              readonly
+              name="nationality"
+              value="{{employee.nationality}}"
+              required
+              class="form-control"
+              id="nationality"
+              placeholder="ادخل الجنسية"
+            />
+          </div>
+          <div class="form-group col-6">
+            <label for="id_qualification">المؤهل العلمي</label>
+            <input
+              type="text"
+              class="form-control"
+              readonly
+              name="qualification"
+              required
+              value="{{employee.qualification}}"
+              id="id_qualification"
+              placeholder="ادخل المؤهل العلمي"
+            />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-6">
+            <label for="id_specialization">التخصص</label>
+            <input
+              type="text"
+              class="form-control"
+              readonly
+              name="specialization"
+              required
+              value="{{employee.specialization}}"
+              id="id_specialization"
+              placeholder="ادخل التخصص"
+            />
+          </div>
+          <div class="form-group col-6">
+            <label for="id_graduation_date">تاريخ التخرج</label>
+            <input
+              type="text"
+              class="form-control"
+              readonly
+              name="graduation_date"
+              value="{{employee.graduation_date}}"
+              id="id_graduation_date"
+              placeholder="ادخل تاريخ التخرج"
+            />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-6">
+            <label for="id_job_place">جهة العمل</label>
+            <input
+              type="text"
+              name="job_place"
+              readonly
+              class="form-control"
+              required
+              value="{{employee.job_place}}"
+              id="id_job_place"
+              placeholder="ادخل جهة العمل"
+            />
+          </div>
+          <div class="form-group col-6">
+            <label for="id_date_start">تاريخ المباشرة</label>
+            <input
+              type="text"
+              name="date_start"
+              readonly
+              class="form-control"
+              value="{{employee.date_start}}"
+              id="id_date_start"
+              placeholder="ادخل تاريخ المباشرة"
+            />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-6">
+            <label for="id_job_place"> الحالة</label>
+            <input
+              type="text"
+              name="job_place"
+              readonly
+              class="form-control"
+              required
+              value="{% if employee.attends %}مستمر في العمل {% else %} منقطع عن العمل {% endif %}"
+              id="id_job_place"
+            />
+          </div>
+          <div class="form-group col-6">
+            <label for="id_date_start">الدرجة </label>
+            <input
+              type="text"
+              name="degree"
+              class="form-control"
+              id="id_date_start"
+              readonly
+              value="{% if employee.degree %}{{employee.degree}}{% else %}لم يتم ادخال الدرجة{% endif %}"
+            />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-6">
+            <label for="id_folder_number">رقم الملف </label>
+            <input
+              type="text"
+              name="folder_number"
+              readonly
+              class="form-control"
+              id="id_folder_number"
+              value="{% if employee.folder_number %}{{employee.folder_number}}
+                  {% else %}لم يتم ادخال رقم الملف{% endif %}"
+            />
+          </div>
+          <div class="form-group col-6">
+            <label class="" for="appointment_number" name="appointment_record"
+              >قرار التعين</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              readonly
+              name="appointment_record"
+              id="appointment_record"
+              value="{% if employee.appointment_record  %}{{employee.appointment_record }}{% else %}لم يتم ادخال قرار التعين{% endif %}"
+            />
+          </div>
+        </div>
+
+        <button type="button" id="printBtn" class="btn btn-info d-print-none">
+          طباعة
+        </button>
+        <button
+          type="button"
+          onclick="history.back()"
+          class="btn btn-danger d-print-none"
+        >
+          الرجوع
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<strong class="d-none d-print-block text-center">
+  التوقيع او الختم مدير الوحدة الصحية
+</strong>
+<strong class="d-none d-print-block text-center mt-3">
+  .................................
+</strong>
+<footer class="main-footer d-none d-print-block fixed-bottom">
+  <strong>
+    تم طباعته بواسطة المنظومة ادارة الموظفين عبر الموظف {{user.first_name}}
+    {{user.last_name}}
+  </strong>
+  <div class="float-right d-none d-sm-inline-block">
+    بتاريخ اليوم : {% now "d-m-Y" %}
+  </div>
+</footer>
+{% endblock %} {% block scripts %}
+<script>
+  $("#printBtn").on("click", function () {
+    window.print();
+  });
+</script>
+{% endblock scripts %}

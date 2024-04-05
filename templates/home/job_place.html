@@ -1,0 +1,370 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% block title %} جهات العمل {% endblock title %}
+{% block sub_title %} جهات العمل{% endblock %} {% load static %}
+{% block content %}
+<style>
+
+  .table-wrapper-scroll-y {
+    display: block;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  .modal-image {
+    width: 70px;
+    height: 70px;
+    margin: auto;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px #48db71;
+    padding: 11px 10px 2px;
+    margin-bottom: 2em;
+  }
+
+  .modal-body h1 {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+  }
+
+  .modal-body p {
+    margin-bottom: 2em;
+    color: #666;
+  }
+</style>
+<div class="d-none d-print-block text-center">
+  <img class="rounded-circle w-25 h-25" style="margin-top: -10px" src="{% static 'dist/img/1.png' %}" alt="" />
+  <p class="mb-1 fs-4">وزارة الــصــحــة</p>
+  <p class="mb-1 fs-4">إدارة الخدمات الصحية قصر بن غشير</p>
+</div>
+
+<div style="direction: rtl" class="wrapper">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper bg-dark">
+    <!-- Content Header (Page header) -->
+    <div class="content bg-dark">
+      <div class="container-fluid bg-dark">
+        <div class="col-12">
+          <!-- Account details card-->
+          <div class="card card-navy mt-4 bg-dark h-100">
+            <div class="card-header bg-navy bg-gradient d-flex justify-content-center fs-4">
+              جهات العمل </div>
+            <div class="card-body">
+              <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="col-12 h-75 mt-3">
+                  <div class="my-custom-scrollbar">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th class="text-center">ر.م</th>
+                          <th class="text-center">اسم الجهة العمل</th>
+                          <th class="text-center">مكان جهة العمل</th>
+                          <th class="text-center">موقع جهة العمل </th>
+                          <th class="text-center">رقم الهاتف جهة العمل</th>
+                          <th class="text-center">اسم المندوب</th>
+                          <th class="text-center">رقم هاتف المندوب</th>
+                          <th class="text-center d-print-none">الاجراءات</th>
+                        </tr>
+                      </thead>
+                      <tbody id="tbody">
+                        {% for job_place in job_places %}
+                        <tr id="{{ job_placement.id }}">
+                          <td class="text-center">
+                            {{ job_place.id }}
+                          </td>
+                          <td class="text-center">
+                            {{ job_place.name }}
+                          </td>
+                          <td class="text-center">
+                            {{ job_place.address }}
+                          </td>
+                          <td class="text-center">
+                            <a href="{{ job_place.location }}" class="btn bg-navy">
+                              الانتقال الى الموقع على الخريطة <img width="25px" height="25px"
+                                src="{% static 'home/default_imges/job_location.png' %}">
+                            </a>
+                          </td>
+                          <td class="text-center" id="{{employee.id}}">
+                            {{ job_place.phone_number }}
+                          </td>
+                          <td class="text-center" id="{{employee.id}}">
+                            {% if job_place.representative_name %}
+                            {{ job_place.representative_name }}
+                            {% else %}
+                            لايوجد
+                            {% endif %}
+                          </td>
+                          <td class="text-center" id="{{employee.id}}">
+                            {% if job_place.representative_phone_number %}
+                            {{ job_place.representative_phone_number }}
+                            {% else %}
+                            لايوجد
+                            {% endif %}
+                          </td>
+                          <td class="text-center">
+                            <div class="dropdown">
+                              <button class="btn bg-navy dropdown-toggle d-print-none" type="button"
+                                id="`actionsDropdown${employee.id}`" data-bs-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                                الإجراءات
+                              </button>
+                              <div class="dropdown-menu" aria-labelledby="`actionsDropdown${employee.id}`">
+                                <a class="dropdown-item"
+                                  onclick="editJobPlace(this.parentElement.parentElement.parentElement.parentElement)"
+                                  class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editJobPlace">تعديل جهة
+                                  العمل</a>
+                                <a class="dropdown-item"
+                                  onclick="deleteUpdate(this.parentElement.parentElement.parentElement.parentElement)"
+                                  class="dropdown-item" data-bs-toggle="modal" data-bs-target="#message">حذف جهة
+                                  العمل</a>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </form>
+              <div class="form-row col-12 mt-5 d-print-none">
+                <div class="col-md-6">
+                  <a href="{% url 'personnel_view' %}" class="btn btn-danger w-100">
+                    رجوع <i class="fa fa-undo-alt fa-rotate-180 ml-3"></i>
+                  </a>
+                </div>
+                <div class="col-md-6">
+                  <button data-bs-toggle="modal" data-bs-target="#addJobPlace" type="button"
+                    class="btn btn-success w-100">
+                    إضافة جهة العمل<i class="fa fa-plus-circle ml-3"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer bg-navy bg-gradient ">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="editJobPlace" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content bg-dark bg-dark">
+        <div class="modal-header bg-navy bg-gradient">
+          <h5 class="modal-title" id="exampleModalLabel">
+            تعديل جهة العمل
+          </h5>
+          <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body ">
+          <form id="jobPlaceEdit" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="id">
+            <input type="hidden" name="edit_job_place" val=".">
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label class="form-label" for="id_name">الاسم</label>
+                <input type="text" name="name" maxlength="200" class="form-control"
+                  placeholder="الرجاء ادخال اسم جهة العمل" required="" id="id_name">
+              </div>
+              <div class="form-group col-md-6">
+                <label class="form-label" for="id_address">عنوان </label>
+                <input type="text" name="address" maxlength="50" class="form-control"
+                  placeholder="الرجاء ادخال عنوان جهة العمل" required id="id_address">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label class="form-label" for="id_location">المكان على الخريطة</label>
+                <input type="url" name="location" maxlength="200" class="form-control"
+                  placeholder="الرجاء إدخال رابط عنوان على الخريطة" required="" id="id_location">
+              </div>
+              <div class="form-group col-md-6">
+                <label class="form-label" for="id_phone_number">رقم الهاتف</label>
+                <input type="text" name="phone_number" maxlength="15" class="form-control"
+                  placeholder="الرجاء إدخال رقم هاتف جهة العمل" required="" id="id_phone_number">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label class="form-label" for="id_location">اسم المندوب</label>
+                <input type="text" name="representative_name" maxlength="200" class="form-control"
+                  placeholder="الرجاء ادخال اسم المندوب" id="id_location">
+              </div>
+              <div class="form-group col-md-6">
+                <label class="form-label" for="id_phone_number">رقم الهاتف المندوب</label>
+                <input type="number" name="representative_phone_number" maxlength="15" class="form-control"
+                  placeholder="الرجاء إدخال رقم هاتف المندوب" id="id_phone_number">
+              </div>
+            </div>
+            <div class="form-row col-12 mt-4">
+              <div class="col-md-6">
+                <button type="button" class="btn btn-danger w-100" data-bs-dismiss="modal">أغلاق <i
+                    class="fas fa-chevron-right ml-3"></i></button>
+              </div>
+              <div class="col-md-6">
+                <button type="submit" class="btn btn-primary w-100">حفظ <i class="fas fa-save ml-3"></i></button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer bg-navy bg-gradient">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="addJobPlace" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content bg-dark bg-dark">
+        <div class="modal-header bg-success bg-gradient">
+          <h5 class="modal-title" id="exampleModalLabel">
+            إضافة مكان العمل
+          </h5>
+          <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body ">
+          <form id="jobPlaceAdd" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="add_job_place">
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label class="form-label" for="id_name">الاسم</label>
+                <input type="text" name="name" maxlength="200" class="form-control"
+                  placeholder="الرجاء ادخال اسم جهة العمل" required="" id="id_name">
+              </div>
+              <div class="form-group col-md-6">
+                <label class="form-label" for="id_address">عنوان </label>
+                <input type="text" name="address" maxlength="50" class="form-control"
+                  placeholder="الرجاء ادخال عنوان جهة العمل" required id="id_address">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label class="form-label" for="id_location">المكان على الخريطة</label>
+                <input type="url" name="location" maxlength="200" class="form-control"
+                  placeholder="الرجاء إدخال رابط عنوان على الخريطة" required="" id="id_location">
+              </div>
+              <div class="form-group col-md-6">
+                <label class="form-label" for="id_phone_number">رقم الهاتف</label>
+                <input type="text" name="phone_number" maxlength="15" class="form-control"
+                  placeholder="الرجاء إدخال رقم هاتف جهة العمل" required="" id="id_phone_number">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label class="form-label" for="id_location">اسم المندوب</label>
+                <input type="url" name="representative_name" maxlength="200" class="form-control"
+                  placeholder="الرجاء ادخال اسم المندوب" id="id_location">
+              </div>
+              <div class="form-group col-md-6">
+                <label class="form-label" for="id_phone_number">رقم الهاتف المندوب</label>
+                <input type="number" name="representative_phone_number" maxlength="15" class="form-control"
+                  placeholder="الرجاء إدخال رقم هاتف المندوب" id="id_phone_number">
+              </div>
+            </div>
+            <div class="form-row col-12 mt-4">
+              <div class="col-md-6">
+                <button type="button" class="btn btn-danger w-100" data-bs-dismiss="modal">أغلاق <i
+                    class="fas fa-chevron-right ml-3"></i></button>
+              </div>
+              <div class="col-md-6">
+                <button type="submit" class="btn btn-primary w-100">حفظ <i class="fas fa-save ml-3"></i></button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer bg-success bg-gradient">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="message" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content bg-dark bg-dark">
+        <div class="modal-header bg-gradient bg-maroon">
+          <h5 class="modal-title" id="">حذف جهة العمل</h5>
+          <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-body text-center">
+            <img src="{% static 'dist/img/alert-icon.png' %}" class="w-25 h-25 mb-3" alt="" />
+            <h1>هل انت متأكد انك تريد حذف جهة العمل ؟</h1>
+            <p id="employeeNameWarrning"></p>
+          </div>
+          <form id="jobPlaceDelete" method="POST">
+            {% csrf_token %}
+            <input type="number" name="id" class="d-none" value="" />
+            <input type="number" name="delete_job_place" class="d-none" value="." />
+            <div class="form-row">
+              <div class="col-md-6">
+                <button type="button" class="btn btn-info w-100" data-bs-dismiss="modal">
+                  رجوع
+                </button>
+              </div>
+              <div class="col-md-6">
+                <button type="submit" class="btn btn-danger w-100">تأكيد</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer bg-gradient bg-maroon"></div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="successMsg" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-gradient bg-success">
+          <h5 class="modal-title" id="exampleModalLabel">
+            رسالة
+          </h5>
+          <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center bg-dark">
+          <div class="modal-image">
+            <svg viewBox="1 0 30 40" style="fill: #48db71">
+              <path d="M1 14 L5 10 L13 18 L27 4 L31 8 L13 26 z"></path>
+            </svg>
+          </div>
+          <h1>تمت العملية بنجاح !</h1>
+          <p></p>
+        </div>
+        <div class="modal-footer bg-gradient bg-success"></div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="errorMsg" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-danger bg-gradient">
+          <h5 class="modal-title" id="exampleModalLabel">رسالة خطأ</h5>
+          <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center bg-dark">
+          <img src="{% static 'dist/img/error.png' %}" class="w-25 h-25 mb-3" alt="" />
+          <h1>لم تتم عملية بنجاح !</h1>
+          <p>تأكد من الاتصال </p>
+        </div>
+        <div class="modal-footer bg-danger bg-gradient"></div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+<footer class="main-footer d-none d-print-block fixed-bottom">
+  <strong>تم طباعته بواسطة منظومة إدارة شؤون الموظفين عبر الموظف {{user.first_name}}
+    {{user.last_name}}</strong>
+  <div class="float-right d-none d-sm-inline-block">
+    بتاريخ اليوم : {% now "d-m-Y" %}
+  </div>
+</footer>
+{% endblock %} {% block scripts %}
+<script src="{% static 'home/js/job_place.js' %}">
+</script>
+{% endblock scripts %}

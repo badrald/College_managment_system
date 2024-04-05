@@ -1,0 +1,140 @@
+{% extends "base.html" %} {% load static %} {% block custom_css %}
+<link rel="stylesheet" href="{% static 'attends/css/schedule_view.css' %}" />
+{% endblock custom_css %}
+{% block title %} جدول الورديات {% endblock title %}
+{% block sub_title %} جدول الورديات {% endblock  %}
+
+{% block content %}
+<style>
+  .my-custom-scrollbar {
+    position: relative;
+    height: 200px;
+    overflow: auto;
+  }
+
+  .table-wrapper-scroll-y {
+    display: block;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+</style>
+<div class="wrapper">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper bg-dark">
+    <!-- Content Header (Page header) -->
+    <div class="content bg-dark">
+      <div class="container-fluid bg-dark">
+        <div class="col-12 mt-4">
+          <a onclick="history.back()" class="btn bg-cyan" style="width: 100%">رجوع <i
+              class="fas fa-undo fa-rotate-180 ml-3"></i></a>
+        </div>
+        <br />
+        <div class="cd-schedule loading">
+          <div class="timeline">
+            <ul>
+              <li><span>08:00</span></li>
+              <li><span>08:30</span></li>
+              <li><span>09:00</span></li>
+              <li><span>09:30</span></li>
+              <li><span>10:00</span></li>
+              <li><span>10:30</span></li>
+              <li><span>11:00</span></li>
+              <li><span>11:30</span></li>
+              <li><span>12:00</span></li>
+              <li><span>12:30</span></li>
+              <li><span>13:00</span></li>
+              <li><span>13:30</span></li>
+              <li><span>14:00</span></li>
+              <li><span>14:30</span></li>
+              <li><span>16:00</span></li>
+              <li><span>16:30</span></li>
+              <li><span>17:00</span></li>
+              <li><span>17:30</span></li>
+              <li><span>18:00</span></li>
+            </ul>
+          </div>
+          <!-- .timeline -->
+          <div class="events">
+            <ul class="wrap">
+              {% for day, schedules in schedule_groups.items %}
+              <li class="events-group">
+                <div class="top-info"><span>{{ day }}</span></div>
+                <ul>
+                  {% for schedule in schedules %}
+
+                  <li class="single-event" data-start="{{ schedule.start_time|time:'H:i' }}"
+                    data-end="{{ schedule.end_time|time:'H:i' }}" data-content="event-{{ schedule.id }}">
+
+                    <a href="#0">
+                      <em class="event-name">{{ schedule.name }}</em>
+                    </a>
+                  </li>
+                  {% endfor %}
+                </ul>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+
+          <div class="event-modal">
+            <header class="header">
+              <div class="content">
+                <span class="event-date"></span>
+                <h3 class="event-name"></h3>
+              </div>
+
+              <div class="header-bg"></div>
+            </header>
+
+            <div class="body">
+              <div class="event-info ">
+                <div class="my-custom-scrollbar">
+                  <div class="text-cetner m-2 fw-bold fs-4  ">
+                    <p id="description"></p>
+                    <p class="mt-2 mb-2 fs-6">اسماء الموظفين في هذه الوردية</p>
+                  </div>
+                  <table class="table ">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>اسم الموظف</th>
+                        <th>اسم المجموعة</th>
+                        <th>التخصص</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tbody">
+                    <tr id="spinnerContainer" style="display: none;">
+                      <td colspan="6" class="text-center">
+                        <div class="d-flex justify-content-center">
+                          <div class="spinner-border text-primary" role="status" style="width: 6rem;height: 6rem;">
+                            <span class="visually-hidden">Loading...</span>
+                          </div>
+                        </div>
+                      </th>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="body-bg bg-dark">
+
+              </div>
+            </div>
+
+            <a href="#0" class="close  bg-dark "></a>
+          </div>
+
+          <div class="cover-layer"></div>
+        </div>
+        <!-- .cd-schedule -->
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %} {% block scripts %}
+
+<script src="{% static 'attends/js/schedule_view.js' %}"></script>
+
+{% endblock scripts %}

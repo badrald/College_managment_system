@@ -1,0 +1,121 @@
+{% extends 'base.html' %} {% load static %} {% block custom_css %}
+<link rel="stylesheet" href="{% static 'home/css/settings.css' %}" />
+{% endblock custom_css %} {% block title%}القائمة الرئيسية{% endblock title %}
+{% block sub_title %} القائمة الرئيسية{% endblock %}
+{% block content %}
+<style>
+  .notification-badge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 26px;
+  height: 26px;
+  background-color: red; /* Background color of the circle */
+  color: white; /* Text color of the number */
+  border-radius: 50%; /* Makes it a circle */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: bold;
+  z-index: 1; /* Ensures it's displayed on top of other content */
+}
+</style>
+<div style="direction: rtl" class="wrapper">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper bg-dark">
+    <!-- Content Header (Page header) -->
+    <div class="content bg-dark">
+      <div class="container-fluid bg-dark">
+        <!-- form add employee -->
+        <div class="row">
+          <div class="col-xl-3 col-lg-4 col-md-5 col-sm-6 mt-4 mb-4">
+            <a href="{% url 'personnel_view' %}">
+              <div
+                class="card pulse-grow  shadow-lg rounded"
+                style="width: 18rem;">
+                <img
+                  src="{% static 'home/default_imges/employee_mage.png' %}"
+                  class="card-img-top bg-white"
+                  alt="..." />
+                <div class="card-body bg-navy ">
+                  <p class="card-text text-center fs-4">
+                    شؤون الموظفين
+                  </p>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-xl-3 col-lg-4 col-md-5 col-sm-6 mt-4 mb-4">
+            <a href="{% url 'statistics_view' %}">
+              <div
+                class="card  {% if notify %}pulse-grow-none-stop {% else %} pulse-grow {% endif %}  shadow-lg rounded"
+                style="width: 18rem;background-color:#88c3ff;color:white;">
+                <img
+                  src="{% static 'home/default_imges/analytics.png' %}"
+                  class="card-img-top bg-white"
+                  alt="..." />
+                  {% if notify %}<span class="notification-badge">{{notify}}</span>{% endif %}
+                <div class="card-body bg-navy">
+                  <p class="card-text text-center fs-4">الإحصائيات</p>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-xl-3 col-lg-4 col-md-5 col-sm-6 mt-4 mb-4">
+            <a href="{% url 'attends' %}">
+              <div
+                class="card pulse-grow  shadow-lg rounded"
+                style="width: 18rem;">
+                <img
+                  src="{% static 'home/default_imges/attendance.png' %}"
+                  class="card-img-top bg-white"
+                  alt="..." />
+                <div class="card-body bg-navy ">
+                  <p class="card-text text-center fs-4">
+                    الحضور و الانصراف
+                  </p>
+                </div>
+              </div>
+            </a>
+          </div>
+          {% if user.is_staff %}
+          <div class="col-xl-3 col-lg-4 col-md-5 col-sm-6 mt-4 mb-4">
+            <a href="{% url 'profiles' %}">
+              <div
+                class="card  {% if notify %}pulse-grow-none-stop {% else %} pulse-grow {% endif %}  shadow-lg rounded"
+                style="width: 18rem;background-color:#88c3ff;color:white;">
+                <img
+                  src="{% static 'home/default_imges/users.png' %}"
+                  class="card-img-top bg-white"
+                  alt="..." />
+                  {% if notify %}<span class="notification-badge">{{notify}}</span>{% endif %}
+                <div class="card-body bg-navy">
+                  <p class="card-text text-center fs-4">المستخدمين</p>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-xl-3 col-lg-4 col-md-5 col-sm-6 mt-4 mb-4">
+            <a href="{% url 'settings_view' %}">
+              <div
+                class="card  {% if notify %}pulse-grow-none-stop {% else %} pulse-grow {% endif %}  shadow-lg rounded"
+                style="width: 18rem;background-color:#88c3ff;color:white;">
+                <img
+                  src="{% static 'home/default_imges/folder.png' %}"
+                  class="card-img-top bg-white"
+                  alt="..." />
+                  {% if notify %}<span class="notification-badge">{{notify}}</span>{% endif %}
+                <div class="card-body bg-navy">
+                  <p class="card-text text-center fs-4">قاعدة البيانات</p>
+                </div>
+              </div>
+            </a>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

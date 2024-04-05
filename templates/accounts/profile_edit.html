@@ -1,0 +1,273 @@
+{% extends 'base.html' %} {% load django_bootstrap5 %} {% load static %} {% block title %}
+صفحة الملف الشخصي للمستخدم
+{% endblock title %}
+{% block sub_title %}
+صفحة الملف الشخصي للمستخدم
+{% endblock %} {% block content %}
+<style>
+    #toggle {
+        position: absolute;
+        bottom: 30px;
+        left: 10px;
+        color: #808080;
+        cursor: pointer;
+    }
+
+    #toggle i {
+        font-size: 20px;
+    }
+
+    .strength {
+        width: 25%;
+        display: inline-block;
+        position: relative;
+        height: 100%;
+        bottom: 5px;
+    }
+
+    #strength-bar {
+        background-color: #dcdcdc;
+        height: 10px;
+        position: relative;
+        margin-top: 15px;
+        border-radius: 10px;
+    }
+</style>
+<div style="direction: rtl" class="wrapper">
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper bg-dark">
+        <!-- Content Header (Page header) -->
+        <div class="content bg-dark">
+            <div class="container-fluid bg-dark">
+                <hr class="mt-0 mb-4" />
+                <div class="row">
+                    <div class="col-xl-4">
+                        <!-- Profile picture card-->
+                        <div class="card mb-4 mb-xl-0 bg-dark">
+                            <div class="card-header">صورة الملف الشخصي</div>
+                            <div class="card-body text-center">
+                                <!-- Profile picture image-->
+                                <img class="img-account-profile rounded-circle mb-2 h-100 w-100"
+                                    src="{% if profile.user_photo %}{{profile.user_photo.url}}{% else %} {% static 'home/default_imges/user-defualt.png' %} {% endif %}"
+                                    alt="" />
+                                <!-- Profile picture help block-->
+                                <div class="small font-italic text-muted mb-4">
+                                    JPG or PNG no larger than 5 MB
+                                </div>
+                                {% if profile.user != request.user %}
+                                <form action="" method="POST">
+                                    {% csrf_token %}
+
+                                    <div class="mb-3">
+                                        <label for="group">صلاحيات المستخدم</label>
+                                        <select class="form-select" id="group" name="permissions"
+                                            aria-label="مستخدم مع صلاحيات البحث فقط">
+                                            <option value="super" {% if profile.user.is_superuser %} selected {% endif%}> مستخدم مع صلاحيات المدير يمكنه الوصول الى جميع الوظائف</option>
+                                            <option value="staff" {% if profile.user.is_staff and not profile.user.is_superuser %} selected {% endif %}>مستخدم مع صلاحيات
+                                                تعديل و البحث</option>
+                                            <option value="user" {% if not profile.user.is_staff and not profile.user.is_superuser %} selected {% endif %}>مستخدم مع صلاحيات
+                                                البحث فقط</option>
+
+                                        </select>
+                                    </div>
+
+                                    <button class="btn btn-primary" type="submit">
+                                        تحديث صلاحيات المستخدم
+                                    </button>
+                                </form>
+                                {% endif %}
+                                <!-- Profile picture upload button-->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-8">
+                        <!-- Account details card-->
+                        <div class="card mb-4 bg-dark">
+                            <div class="card-header">تعديل بيانات الحساب</div>
+                            <div class="card-body">
+                                <form method="POST" enctype="multipart/form-data" id="EditForm">
+                                    {% csrf_token %}
+                                    {% bootstrap_form userForm exclude="password" %}
+                                    {% if user.profile.job_place.id != 1 %}
+                                    {% bootstrap_form profileForm exclude='job_place' %}
+                                    <div class="mb-3">
+                                        <label class="form-label" for="id_job_place">مكان العمل</label>
+                                        <select name="job_place" class="form-select" id="id_job_place"
+                                            fdprocessedid="ko2wc">
+                                            <option value="{{user.profile.job_place.id}}" selected>
+                                                {{user.profile.job_place}}</option>
+                                        </select>
+                                    </div>
+                                    {% else %}
+                                    {% bootstrap_form profileForm %}
+                                    {% endif %}
+                                    
+                                    <div class="form-row col-12 mt-4">
+                                        <div class="col-md-3">
+                                            <a href="{% url 'profiles' %}" class="btn bg-info w-100">رجوع <i
+                                                class="fa fa-undo ml-3"></i></a>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <a class="btn btn-danger w-100" href="#message" data-bs-toggle="modal">
+                                                    حذف <i class="far fa-trash-alt ml-3"></i>
+                                                </a>
+                                            </div>
+                                            <div class="col-md-3">
+                                            <a class="btn btn-warning text-secondary w-100" data-bs-toggle="modal"
+                                                data-bs-target="#change_password">
+                                                تغير كلمة المرور <i class="fas fa-exchange-alt ml-3"></i>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <button class="btn btn-primary w-100" type="submit">
+                                                حفظ التغيرات <i class="fa fa-save ml-3"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<div class="modal fade" id="change_password" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark">
+            <div class="modal-header bg-gradient bg-navy">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    تغير كلمة المرور
+                </h5>
+                <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" enctype="multipart/form-data" id="changePasswordForm">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label class="form-label" for="new_password">
+                                كلمة المرور الجديدة
+                            </label>
+                            <input type="password" name="new_password1" maxlength="128" class="form-control"
+                                placeholder="رجاء  ادخال كلمة مرور الجديدة" required="" oninput="strengthChecker()"
+                                id="new_password1" />
+                            <span id="toggle" onclick="toggle()">
+                                <i class="fas fa-eye"></i>
+                            </span>
+                            <div id="strength-bar"></div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label class="form-label" for="new_password2">
+                                تأكيد كلمة المرور الجديدة
+                            </label>
+                            <input type="password" name="new_password2" maxlength="128" class="form-control"
+                                placeholder="رجاء اعادة ادخال كلمة مرور" required="" oninput="checkMatch()"
+                                id="new_password2" />
+                        </div>
+                    </div>
+                    <div class="form-row mt-3">
+                        <button type="submit" id="submitBtn" class="btn btn-success w-100">
+                            تغير كلمة المرور <i class="fas fa-key ml-3"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer bg-gradient bg-navy"></div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="message" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark bg-dark">
+            <div class="modal-header bg-gradient-danger">
+                <h5 class="modal-title" id=""> رسالة حذف</h5>
+                <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center">
+                    <img src="{% static 'dist/img/alert-icon.png' %}" class="w-25 h-25 mb-3" alt="" />
+                    <h4> هل انت متأكد انك تريد حذف هذا المستخدم ؟</h4>
+                    <p> سيتم حذف المستخدم {{profile.user.first_name}} {{profile.user.last_name}}</p>
+                </div>
+                <form action="" method="post" id="delete_form">
+                    {% csrf_token %}
+                    <div class="col-12 form-row">
+                        <div class="col-6">
+                            <button type="button" class="btn btn-info w-100" data-bs-dismiss="modal">
+                                رجوع
+                            </button>
+                        </div>
+                        <div class="col-6">
+                            <button type="submit" class="btn btn-danger w-100" id="confirmButton">
+                                تأكيد
+                                <i class="fas fa-trash ml-3"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer bg-gradient-danger">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="successMsg" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark">
+            <div class="modal-header bg-gradient-success">
+                <h5 class="modal-title">
+                    رسالة
+                </h5>
+                <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center bg-dark">
+                <div class="modal-image">
+                    <svg viewBox="1 0 30 40" style="fill: #48db71">
+                        <path d="M1 14 L5 10 L13 18 L27 4 L31 8 L13 26 z"></path>
+                    </svg>
+                </div>
+                <h1>تمت العملية بنجاح !</h1>
+                <p id="successText"></p>
+            </div>
+            <div class="modal-footer bg-gradient-success"></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="errorMsg" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg bg-dark">
+        <div class="modal-content bg-dark">
+            <div class="modal-header bg-gradient-danger">
+                <h5 class="modal-title">رسالة خطأ </h5>
+                <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center bg-dark">
+                <img src="{% static 'dist/img/error.png' %}" class="w-25 h-25 mb-3" alt="" />
+                <h1>لم تتم عملية بنجاح !</h1>
+                <p id="errorText">تأكد من الاتصال او إدخال البيانات بشكل صحيح</p>
+            </div>
+            <div class="modal-footer bg-gradient-danger"></div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+{% block scripts %}
+<script>
+    let isLoginUser = {{ profile.user.id }} === {{ user.id }};
+    let userId = {{ profile.user.id }};
+
+</script>
+<script src="{% static 'home/js/edit_user.js' %}"></script>
+
+{% endblock %}

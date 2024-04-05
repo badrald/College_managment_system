@@ -1,0 +1,31 @@
+{% extends 'base.html' %} {% block content %}
+{% block title %} حــذف مــوظــف {% endblock  %}
+{% block sub_title %} حــذف مــوظــف {% endblock  %}
+<div style="direction: rtl" class="wrapper">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="card card-danger">
+      <div class="card-header">
+        <h3 class="card-title">حذف موظف</h3>
+      </div>
+      <!-- /.card-header -->
+      <!-- form start -->
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row">
+          <p class="p-3">هل انت متأكد انك تريد حذف {{employee.name}}؟</p>
+        </div>
+        <!-- /.card-body -->
+
+        <div class="card-footer">
+          <button type="submit" class="btn btn-danger">حذف</button>
+          <a href="{% url 'search' %}" type="submit" class="btn btn-primary"
+            >تراجع</a
+          >
+        </div>
+      </form>
+    </div>
+  </div>
+  {% endblock %}
+</div>

@@ -1,0 +1,164 @@
+{% extends "base.html" %} {% load static %} {% block title %} بــطــاقــة تــعــريــف مــوظــف {% endblock title %}
+{% block sub_title %} بــطــاقــة تــعــريــف مــوظــف {% endblock  %}
+
+{% block content %}
+<style>
+  .qr-code {
+    width: 100px;
+    height: 100px;
+  }
+
+  .qr-code img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .card-body {
+    display: flex;
+    align-items: center;
+  }
+
+  .col-10 {
+    flex: 1;
+  }
+
+  @media print {
+
+    /* Ensure background colors are printed */
+    .card-navy {
+      -webkit-print-color-adjust: exact;
+    }
+
+    /* Other print-specific styles if needed */
+  }
+
+  .avatar-edit {
+    position: absolute;
+    right: 12px;
+    z-index: 1;
+    top: -5px;
+  }
+
+  .avatar-edit input {
+    display: none;
+  }
+</style>
+<div style="direction: rtl" class="wrapper">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content">
+      <div class="container-fluid">
+        <div class="card">
+          <div class="d-flex justify-content-center align-items-center mt-5 ">
+            <div class="card card-navy  mb-5 shadow-lg rounded" style="width: 630px;height: 415px;">
+              <div class="card-header" style="height: 195px;">
+                <div class=" d-flex justify-content-center">
+                  <img src="{% static 'dist/img/1.png' %}" alt="There's nothing to appear" class="w-25 h-25" />
+                  <div class="w-100 position-absolute text-bold" style="font-size: 25px;right: 24%;bottom: 2%;">
+                    إدارة الخدمات الصحية قصر بن غشير
+                  </div>
+
+                </div>
+              </div>
+              <div class="card-body p-5 position-relative">
+                <p class="position-absolute fs-4 text-bold font-italic " style="top: 4%;left: 36%;">تــعــريــف موظــف
+                </p>
+
+                <div class="col-10 fs-4">
+
+                  <p class="mb-1">
+                    الاســم : <span class="text-bold">{{employee.name}}</span>
+                  </p>
+                  <p class="mb-1">
+                    الــتــخــصــص :
+                    <span class="text-bold">{{employee.specialization}}</span>
+                  </p>
+                </div>
+                <div class="col-3 qr-code">
+                  <div class="avatar-edit">
+                    <input type="file" id="imageUpload" accept=".png, .jpg, .jpeg" />
+                    <label for="imageUpload" class="d-print-none"><i class="fas fa-upload"></i></label>
+                  </div>
+                  <img id="imagePreview"
+                    src="{% if employee.sex %} {% static 'home/default_imges/employee_male.png' %}{% else %} {% static 'home/default_imges/employee_female.png' %} {% endif %}"
+                    alt="" />
+                </div>
+              </div>
+              <div class="card-header d-flex"></div>
+            </div>
+          </div>
+          <div class="d-flex justify-content-center align-items-center">
+            <div class="card card-navy  mb-5 shadow-lg rounded" style="width: 630px;height: 415px;">
+              <div class="card-header" style="height: 195px;">
+                <div class=" d-flex justify-content-center">
+                  <img src="{% static 'dist/img/1.png' %}" alt="There's nothing to appear" class="w-25 h-25" />
+                  <div class="w-100 position-absolute text-bold" style="font-size: 25px;right: 24%;bottom: 2%;">
+                    إدارة الخدمات الصحية قصر بن غشير
+                  </div>
+
+                </div>
+              </div>
+              <div class="card-body position-relative p-5">
+                <p class="position-absolute fs-4 text-bold font-italic text-navy " style="top: 4%;left: 36%;">تــعــريــف موظــف
+                </p>
+
+                <div class="col-10 fs-5">
+
+                  <p class="mb-1">
+                    كود الموظف :
+                    <span class="text-bold">{{employee.id}}</span>
+                  </p>
+                  <p class="mb-1">
+                    مكان العمل :
+                    <span class="text-bold">{{employee.job_place}}</span>
+                  </p>
+                </div>
+                <div class="col-3 qr-code ">
+                  <img src="{% if employee.qr_code %} {{employee.qr_code.url}}
+                                {% endif %}" alt="" />
+                </div>
+              </div>
+              <div class="card-header d-flex"></div>
+            </div>
+          </div>
+          <div class="col-12 d-print-none">
+
+            <button onclick="history.back()" type="button" class="btn bg-gradient-danger "
+              style="width:45%;">الرجوع</button>
+            <button onclick="print()" type="button" class="btn bg-gradient-navy w-50 ">طباعة</button>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<footer class="main-footer d-none d-print-block fixed-bottom">
+  <strong
+    >تم طباعته بواسطة منظومة إدارة شؤون الموظفين عبر الموظف {{user.first_name}}
+    {{user.last_name}}</strong
+  >
+  <div class="float-right d-none d-sm-inline-block">
+    بتاريخ اليوم : {% now "d-m-Y" %}
+  </div>
+</footer>
+
+{% endblock content %} {% block scripts %}
+<script>
+  function readURL(input) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        $("#imagePreview").attr({ src: `${e.target.result}` });
+        $("#imagePreview").hide();
+        $("#imagePreview").fadeIn(650);
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+  $("#imageUpload").change(function () {
+    readURL(this);
+  });
+</script>
+{% endblock %}

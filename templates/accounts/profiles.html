@@ -1,0 +1,307 @@
+{% extends 'base.html' %} {% load static %} {% block custom_css %}
+<link rel="stylesheet" href="{% static 'home/css/profiles.css' %}" />
+{% endblock custom_css %} {% block title %}المستخدمين{% endblock %}
+{% block sub_title %}المستخدمين{% endblock %}
+{% block content%}
+<div style="direction: rtl" class="wrapper">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper bg-dark">
+    <!-- Content Header (Page header) -->
+    <div class="content bg-dark">
+      <div class="container-fluid bg-dark">
+        <div class="row">
+          <div class="col-12 col-sm-6 col-lg-3 mt-3">
+            <a data-bs-toggle="modal" data-bs-target="#addUser">
+              <div class="single_advisor_profile wow fadeInUp" data-wow-delay="0.2s" style="
+                  visibility: visible;
+                  animation-delay: 0.2s;
+                  animation-name: fadeInUp;
+                ">
+                <!-- Team Thumb-->
+                <div class="advisor_thumb">
+                  <img src=" {% static 'dist/img/addUser.png' %}" style="wdith: 300px; height: 300px" alt="" />
+                </div>
+                <!-- Team Details-->
+                <div class="single_advisor_details_info">
+                  <h6>إضافة مستخدم</h6>
+                  <p class="designation">انقر هنا لإضافة مستخدم</p>
+                </div>
+              </div>
+            </a>
+          </div>
+          {% for profile in profiles %}
+          <!-- Single Advisor-->
+          <div class="col-12 col-sm-6 col-lg-3 mt-3">
+            <a href="{% url 'profile_edit' profile.id %}">
+              <div class="single_advisor_profile wow fadeInUp" data-wow-delay="0.2s" style="
+                  visibility: visible;
+                  animation-delay: 0.2s;
+                  animation-name: fadeInUp;
+                ">
+                <!-- Team Thumb-->
+                <div class="advisor_thumb">
+                  <img
+                    src="{% if profile.user_photo %}{{profile.user_photo.url}} {% else %} {% static 'home/default_imges/user-defualt.png' %} {% endif %}"
+                    style="wdith: 300px; height: 300px" alt="" />
+                </div>
+                <!-- Team Details-->
+                <div class="single_advisor_details_info">
+                  <h6>{{profile}}</h6>
+                  <p class="designation">{{profile.job_title}}</p>
+                </div>
+              </div>
+            </a>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="addUser" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark">
+          <div class="modal-header bg-gradient bg-navy">
+            <h5 class="modal-title" id="exampleModalLabel">
+              اضافة مستخدم جديد
+            </h5>
+            <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body bg-dark">
+            <div class="form-row mb-3 d-flex justify-content-center fs-4">
+              الرجاء إدخال البيانات بشكل صحيح
+            </div>
+            <form method="POST" enctype="multipart/form-data" id="UserForm">
+              {% csrf_token %}
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label class="form-label" for="id_username">اسم المستخدم</label><input type="text" name="username"
+                    maxlength="150" class="form-control" placeholder="الرجاء ادخال اسم المستخدم" required=""
+                    id="id_username" />
+                </div>
+                <div class="from-group col-md-6">
+                  <label class="form-label" for="id_email">البريد الالكتروني
+                  </label>
+                  <input type="email" name="email" maxlength="75" class="form-control"
+                    placeholder="الرجاء ادخال البريد الالكتروني لهذا المستخدم" />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label class="form-label" for="id_first_name">الاسم الأول</label>
+                  <input type="text" name="first_name" maxlength="150" class="form-control"
+                    placeholder="رجاء ادخال الاسم الاول" id="id_first_name" />
+                </div>
+                <div class="form-group col-md-6">
+                  <label class="form-label" for="id_last_name">الاسم الاخير</label>
+                  <input type="text" name="last_name" maxlength="150" class="form-control"
+                    placeholder="الرجاء ادخال الاسم الاخير" id="id_last_name" />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label class="form-label" for="id_password">كلمة المرور</label>
+                  <input type="password" name="password1" oninput="strengthChecker()" maxlength="128"
+                    class="form-control" placeholder="رجاء ادخال كلمة مرور لهذا المستخدم" required=""
+                    id="id_password1" />
+                  <span id="toggle" onclick="toggle()">
+                    <i class="fas fa-eye"></i>
+                  </span>
+                  <div id="strength-bar"></div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label class="form-label" for="id_password">تأكيد كلمة المرور
+                  </label>
+                  <input type="password" name="password2" maxlength="128" class="form-control"
+                    placeholder="رجاء اعادة ادخال كلمة مرور" required="" oninput="checkMatch()" id="id_password2" />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="group">صلاحيات المستخدم</label>
+                  <select class="form-select" id="group" name="permissions" aria-label="مستخدم مع صلاحيات البحث فقط">
+                    <option value="user">
+                      مستخدم مع صلاحيات البحث فقط
+                    </option>
+                    <option value="staff">
+                      مستخدم مع صلاحيات تعديل و البحث
+                    </option>
+                    <option value="super">
+                      مستخدم مع صلاحيات المدير يمكنه الوصول الى جميع
+                      الوظائف
+                    </option>
+                  </select>
+                </div>
+                <div class="form-group col-md-6">
+                  <label class="form-label" for="id_job_place">جهة العمل</label>
+                  <select name="job_place" class="form-select" required id="id_job_place" fdprocessedid="jp2iza">
+                    {% if job_places %}
+                    {% for job_place in job_places %}
+                    <option value="{{job_place.id}}">
+                      {{job_place}}
+                    </option>
+                    {% endfor %}
+                    {% else %}
+                    <option value="{{user.profile.job_place.id}}">
+                      {{user.profile.job_place}}
+                    </option>
+                    {% endif %}
+                  </select>
+                </div>
+              </div>
+              <div class="form-row col-12 mt-4">
+                <div class="col-md-6">
+                  <button type="button" class="btn btn-danger w-100" data-bs-dismiss="modal">
+                    رجوع <i class="fas fa-chevron-circle-right ml-3"></i>
+                  </button>
+                </div>
+                <div class="col-md-6">
+                  <button type="submit" id="submitBtn" class="btn btn-success w-100">
+                    اضافة <i class="fas fa-plus-circle ml-3"></i>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer bg-gradient bg-navy"></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="successMsg" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header bg-success bg-gradient">
+            <h5 class="modal-title" id="exampleModalLabel">رسالة</h5>
+            <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body text-center bg-dark">
+            <div class="modal-image">
+              <svg viewBox="1 0 30 40" style="fill: #48db71">
+                <path d="M1 14 L5 10 L13 18 L27 4 L31 8 L13 26 z"></path>
+              </svg>
+            </div>
+            <h1>تمت العملية بنجاح !</h1>
+            <p></p>
+          </div>
+          <div class="modal-footer bg-success bg-gradient"></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="errorMsg" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header bg-danger bg-gradient">
+            <h5 class="modal-title" id="exampleModalLabel">رسالة</h5>
+            <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body text-center bg-dark text-light">
+            <img src="{% static 'dist/img/error.png' %}" class="w-25 h-25 mb-3" alt="" />
+            <h1>لم تتم العملية بنجاح !</h1>
+            <p></p>
+          </div>
+          <div class="modal-footer bg-danger bg-gradient"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %} {% block scripts %}
+<script>
+  const successMsg = new bootstrap.Modal(document.getElementById('successMsg'));
+  const errorMsg = new bootstrap.Modal(document.getElementById('errorMsg'));
+
+  let parameters = {
+    count: false,
+    letters: false,
+    numbers: false,
+    special: false,
+  };
+  let strengthBar = document.getElementById("strength-bar");
+
+  function strengthChecker() {
+    let password = document.getElementById("id_password1").value;
+
+    parameters.letters = /[A-Za-z]+/.test(password) ? true : false;
+    parameters.numbers = /[0-9]+/.test(password) ? true : false;
+    parameters.special = /[!\"$%&/()=?@~`\\.\';:+=^*_-]+/.test(password)
+      ? true
+      : false;
+    parameters.count = password.length > 7 ? true : false;
+
+    let barLength = Object.values(parameters).filter((value) => value);
+
+    console.log(Object.values(parameters), barLength);
+
+    strengthBar.innerHTML = "";
+    for (let i in barLength) {
+      let span = document.createElement("span");
+      span.classList.add("strength");
+      strengthBar.appendChild(span);
+    }
+
+    let spanRef = document.getElementsByClassName("strength");
+    for (let i = 0; i < spanRef.length; i++) {
+      switch (spanRef.length - 1) {
+        case 0:
+          spanRef[i].style.background = "#ff3e36";
+          break;
+        case 1:
+          spanRef[i].style.background = "#ff691f";
+          break;
+        case 2:
+          spanRef[i].style.background = "#ffda36";
+          break;
+        case 3:
+          spanRef[i].style.background = "#0be881";
+          break;
+      }
+    }
+  }
+  function toggle() {
+    let password = document.getElementById("id_password1");
+    let eye = document.getElementById("toggle");
+
+    if (password.getAttribute("type") == "password") {
+      password.setAttribute("type", "text");
+      eye.style.color = "#062b61";
+    } else {
+      password.setAttribute("type", "password");
+      eye.style.color = "#6b6868";
+    }
+  }
+  $("#UserForm").submit(function (event) {
+    event.preventDefault();
+    var formData = new FormData(this);
+    $.ajax({
+      url: '{% url "profiles" %}', // Update the URL endpoint
+      type: "POST",
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function (data) {
+        $("#successMsg .modal-body p").text(data["success"]);
+        successMsg.show();
+        $("#successMsg").on("hidden.bs.modal", function (event) {
+          location.reload();
+        });
+      },
+      error: function (data) {
+        var errorData = JSON.parse(data.responseText); // Parse the responseText as JSON
+        $("#errorMsg .modal-body p").text(errorData["error"]);
+        errorMsg.show();
+      },
+    });
+  });
+
+  function checkMatch() {
+    let password = document.getElementById("id_password1");
+    let password2 = document.getElementById("id_password2");
+    if (password.value !== password2.value) {
+      password2.classList.remove("is-valid");
+      password2.classList.add("is-invalid");
+    } else {
+      password2.classList.remove("is-invalid");
+      password2.classList.add("is-valid");
+    }
+  }
+</script>
+{% endblock scripts %}

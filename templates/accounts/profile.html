@@ -1,0 +1,103 @@
+{% extends 'base.html' %} {% load static %}
+
+{% block title %}
+صفحة الملف الشخصي 
+{% endblock title %}
+
+{% block sub_title %}
+صفحة الملف الشخصي 
+{% endblock %}
+
+{% block content %}
+<div style="direction: rtl" class="wrapper">
+  <div class="content-wrapper bg-dark">
+    <div class="content bg-dark">
+      <div class="container-fluid bg-dark">
+        <hr class="mt-0 mb-4" />
+        <div class="row">
+          <div class="col-xl-4 ">
+            <div class="card mb-4 mb-xl-0 bg-dark">
+              <div class="card-header text-bold">صورة الملف الشخصي</div>
+              <div class="card-body text-center">
+                <img
+                  class="img-account-profile rounded-circle mb-3 h-100 w-100"
+                  src="{% if profile.user_photo %}{{profile.user_photo.url}}{% else %}{% static 'home/default_imges/user-defualt.png' %}{% endif %}"
+                  alt="" />
+                <div class="mb-3">
+                  <label for="group">صلاحيات المستخدم</label>
+                   <div class="text-center">
+                    {{perm}}
+                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-8 bg-dark">
+            <div class="card mb-3 bg-dark">
+              <div class="card-body bg-dark">
+                <div class="row">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">اسم المستخدم</h6>
+                  </div>
+                  <div class="col-sm-9 text-bold">
+                    {{user.username}}
+                  </div>
+                </div>
+                <hr />
+                <div class="row">
+                  <div class="col-sm-3 ">
+                    <h6 class="mb-0">الاسم بالكامل</h6>
+                  </div>
+                  <div class="col-sm-9 text-bold ">
+                    {{user.first_name}} {{user.last_name}}
+                  </div>
+                </div>
+                <hr />
+                <div class="row">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">البريد الالكتروني</h6>
+                  </div>
+                  <div class="col-sm-9  text-bold">{{user.email}}</div>
+                </div>
+                <hr />
+                <div class="row">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">رقم الهاتف</h6>
+                  </div>
+                  <div class="col-sm-9 text-bold">
+                    {{profile.phone_number}}
+                  </div>
+                </div>
+                <hr />
+                <div class="row">
+                  <div class="col-sm-3 ">
+                    <h6 class="mb-0">الرقم الوطني</h6>
+                  </div>
+                  <div class="col-sm-9 text-bold ">
+                    {{profile.national_number}}
+                  </div>
+                </div>
+                <hr />
+                <div class="row">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">العنوان</h6>
+                  </div>
+                  <div class="col-sm-9 text-bold ">{{profile.address}}</div>
+                </div>
+                <hr />
+                <div class="row">
+                  <div class="col-sm-3">
+                    <h6 class="mb-0">مكان العمل</h6>
+                  </div>
+                  <div class="col-sm-9 text-bold ">{{profile.job_place}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+

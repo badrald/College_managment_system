@@ -1,0 +1,127 @@
+{% extends "base.html" %} {% block title %} تعديل مجموعة موجودة {% endblock  %}
+{% block content %}
+<style>
+  .my-custom-scrollbar {
+    position: relative;
+    height: 200px;
+    overflow: auto;
+  }
+  .table-wrapper-scroll-y {
+    display: block;
+  }
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+</style>
+
+<div style="direction: rtl" class="wrapper">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper bg-dark">
+    <!-- Content Header (Page header) -->
+    <div class="content bg-dark">
+      <div class="container-fluid bg-dark">
+        <div class="col-12">
+          <!-- Account details card-->
+          <div class="card card-primary mt-4 bg-dark">
+            <div class="card-body">
+              <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="col-12 mt-3">
+                  <div class="mb-3">
+                      <label for="groupSelect" class="form-label"
+                        >المجموعات</label
+                      >
+                      <select class="form-select" id="groupSelect">
+                        <option value="">......</option>
+                        {% for group in groups %}
+                        <option value="{{ group.id }}">{{ group.name }}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  <div class="my-custom-scrollbar">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th class="text-center">اسم المجموعة</th>
+                          <th class="text-center">من وقت</th>
+                          <th class="text-center">ايام العمل
+                             <th>السبت</th>
+                             <th>الاحد</th>
+                             <th>الاثنين</th>
+                             <th>الثلاثاء</th>
+                             <th>الاربعاء</th>
+                             <th>الخميس</th>
+                             <th>الجمعة</th>
+                          </th>
+                          <th class="text-center">الى وقت</th>
+                          <th class="text-center">الى وقت</th>
+                          
+                        </tr>
+                      </thead>
+                      <tbody id="tbody">
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="col-12 mt-5">
+                    
+                <a onclick="history.back()" class="btn btn-info w-25">رجوع</a>
+
+                   
+                <button class="btn btn-primary w-50" type="submit">تأكيد</button>
+                 
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block scripts %}
+<script>
+
+  function searchTable(searchText) {
+    // Get the table body.
+    const tbody = document.getElementById("tbody");
+
+    const rows = tbody.querySelectorAll("tr");
+    for (const row of rows) {
+      row.style.display = "none";
+    }
+
+    // Filter the rows by the search text.
+    for (const row of rows) {
+      const text = row.textContent;
+      if (text.includes(searchText)) {
+        row.style.display = "";
+      }
+    }
+  }
+
+  $("#search_bar").on("keyup", (e) => {
+    let searchText = $("#search_bar").val();
+    console.log(searchText);
+    searchTable(searchText);
+  });
+
+    // JavaScript to filter employees by group based on the selection
+  const groupSelect = document.getElementById('groupSelect');
+  const tableRows = document.querySelectorAll('tbody tr');
+
+  groupSelect.addEventListener('change', function () {
+    const selectedGroupId = groupSelect.value;
+
+    tableRows.forEach((row) => {
+      const dataGroupId = row.getAttribute('data-group-id');
+      if (selectedGroupId === '' || selectedGroupId === dataGroupId) {
+        row.style.display = 'table-row';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  });
+</script>
+
+{% endblock scripts %}

@@ -1,0 +1,370 @@
+{% extends "base.html" %} {% block title %} أذونات التعاقد {% endblock title %}
+{% block sub_title %} أذونات التعاقد {% endblock %} {% load static %} 
+{% block content %}
+<style>
+  .my-custom-scrollbar {
+    position: relative;
+    height: 200px;
+    overflow: auto;
+  }
+
+  .table-wrapper-scroll-y {
+    display: block;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  .modal-image {
+    width: 70px;
+    height: 70px;
+    margin: auto;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px #48db71;
+    padding: 11px 10px 2px;
+    margin-bottom: 2em;
+  }
+
+  .modal-body h1 {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+  }
+
+  .modal-body p {
+    margin-bottom: 2em;
+    color: #666;
+  }
+</style>
+<div class="d-none d-print-block text-center">
+  <img
+    class="rounded-circle w-25 h-25"
+    style="margin-top: -10px"
+    src="{% static 'dist/img/1.png' %}"
+    alt=""
+  />
+  <p class="mb-1 fs-4">وزارة الــصــحــة</p>
+  <p class="mb-1 fs-4">إدارة الخدمات الصحية قصر بن غشير</p>
+</div>
+
+<div style="direction: rtl" class="wrapper">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper bg-dark">
+    <!-- Content Header (Page header) -->
+    <div class="content bg-dark">
+      <div class="container-fluid bg-dark">
+        <div class="col-12">
+          <!-- Account details card-->
+          <div class="card card-navy mt-4 bg-dark">
+            <div class="card-header d-flex justify-content-center fs-4">
+              أذونات التعاقد
+            </div>
+            <div class="card-body">
+              <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="col-12 mt-3">
+                  <div class="input-group d-print-none">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="search_bar"
+                      placeholder="البحث عن موظف "
+                    />
+                    <span class="input-group-text">
+                      <i class="fas fa-search"></i>
+                    </span>
+                  </div>
+                  <div class="my-custom-scrollbar">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th class="text-center">الرقم الإشاري</th>
+                          <th class="text-center">تم الإضافة بواسطة</th>
+                          <th class="text-center">الجهة المرسلة</th>
+                          <th class="text-center">اسم الموظف</th>
+                          <th class="text-center">جهة العمل</th>
+                          <th class="text-center">الجهة المخاطبة</th>
+                          <th class="text-center d-print-none">الاجراءات</th>
+                        </tr>
+                      </thead>
+                      <tbody id="tbody">
+                        {% for job_placement in job_placements %}
+                        <tr id="{{ job_placement.id }}">
+                          <td class="text-center">
+                            {{ job_placement.index_number }}
+                          </td>
+                          <td class="text-center">
+                            {{ job_placement.added_by.profile }}
+                          </td>
+                          <td class="text-center">
+                            {{ job_placement.added_by.profile.job_place }}
+                          </td>
+                          <td class="text-center">
+                            {{ job_placement.employee_name }}
+                          </td>
+                          <td class="text-center" id="{{employee.id}}">
+                            {{ job_placement.job_place }}
+                          </td>
+                          <td class="text-center" id="{{employee.id}}">
+                            {{ job_placement.send_to }}
+                          </td>
+                          <td class="text-center">
+                            <div class="dropdown">
+                              <button
+                                class="btn bg-navy dropdown-toggle d-print-none"
+                                type="button"
+                                id="`actionsDropdown${employee.id}`"
+                                data-bs-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                              >
+                                الإجراءات
+                              </button>
+                              <div
+                                class="dropdown-menu"
+                                aria-labelledby="`actionsDropdown${employee.id}`"
+                              >
+                                <a
+                                  class="dropdown-item"
+                                  href='{% url "add_employee_id" job_placement.id %}'
+                                  >إضافة الموظف</a
+                                >
+                                <a
+                                  class="dropdown-item"
+                                  href='{% url "show_job_placement" job_placement.id %}'
+                                  >عرض اذن التعاقد</a
+                                >
+                                <a
+                                  class="dropdown-item"
+                                  href='{% url "edit_job_placement" job_placement.id %}'
+                                  >تعديل اذن التعاقد</a
+                                >
+                                <a
+                                  class="dropdown-item"
+                                  onclick="UpdateEmployeeName(this.parentElement.parentElement.parentElement.parentElement)"
+                                  class="dropdown-item"
+                                  data-bs-toggle="modal"
+                                  data-bs-target="#message"
+                                  >حذف إذن التعاقد</a
+                                >
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div class="col-12 mt-5 d-print-none">
+                  <button
+                    onclick="history.back()"
+                    type="button"
+                    class="btn btn-danger w-25 h-25"
+                  >
+                    رجوع <i class="fa fa-undo-alt fa-rotate-180 ml-3"></i>
+                  </button>
+                  <button
+                    onclick="print()"
+                    type="button"
+                    class="btn btn-success w-25 h-25"
+                  >
+                    طباعة <i class="fa fa-print ml-3"></i>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="modal fade"
+    id="successMsg"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg bg-dark">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button
+            type="button"
+            class="btn-close m-0"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body text-center">
+          <div class="modal-image">
+            <svg viewBox="1 0 30 40" style="fill: #48db71">
+              <path d="M1 14 L5 10 L13 18 L27 4 L31 8 L13 26 z"></path>
+            </svg>
+          </div>
+          <h1>تمت العملية بنجاح !</h1>
+          <p>تمت عملية تحديث بنجاح</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="modal fade"
+    id="errorMsg"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg bg-dark">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button
+            type="button"
+            class="btn-close m-0"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body text-center">
+          <img
+            src="{% static 'dist/img/error.png' %}"
+            class="w-25 h-25 mb-3"
+            alt=""
+          />
+          <h1>لم تتم عملية بنجاح !</h1>
+          <p>تأكد من الاتصال او إدخال البيانات بشكل صحيح</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="message" tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content bg-dark bg-dark">
+        <div class="modal-header">
+          <h5 class="modal-title" id="">حذف اذن التعاقد</h5>
+          <button
+            type="button"
+            class="btn-close m-0 bg-white"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-body text-center">
+            <img
+              src="{% static 'dist/img/alert-icon.png' %}"
+              class="w-25 h-25 mb-3"
+              alt=""
+            />
+            <h1>هل انت متأكد انك تريد حذف هذا الموظف ؟</h1>
+            <p id="employeeNameWarrning"></p>
+          </div>
+          <form id="deleteFromGroup" method="POST">
+            {% csrf_token %}
+            <input type="number" name="id" class="d-none" value="" />
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-info w-25"
+                data-bs-dismiss="modal"
+              >
+                رجوع
+              </button>
+              <button type="submit" class="btn btn-danger w-25">تأكيد</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<footer class="main-footer d-none d-print-block fixed-bottom">
+  <strong
+    >تم طباعته بواسطة منظومة إدارة شؤون الموظفين عبر الموظف {{user.first_name}}
+    {{user.last_name}}</strong
+  >
+  <div class="float-right d-none d-sm-inline-block">
+    بتاريخ اليوم : {% now "d-m-Y" %}
+  </div>
+</footer>
+{% endblock %} {% block scripts %}
+<script>
+  jQuery(function () {
+    $.ajaxSetup({
+      headers: {
+        "X-CSRFToken": "{{ csrf_token }}",
+      },
+    });
+  });
+  const successMsg = new bootstrap.Modal(document.getElementById("successMsg"));
+  const errorMsg = new bootstrap.Modal(document.getElementById("errorMsg"));
+  const massage = new bootstrap.Modal(document.getElementById("message"));
+  function searchTable(searchText, table_id) {
+    // Get the table body.
+    const tbody = document.getElementById(table_id);
+
+    const rows = tbody.querySelectorAll("tr");
+    for (const row of rows) {
+      row.style.display = "none";
+    }
+
+    // Filter the rows by the search text.
+    for (const row of rows) {
+      const text = row.textContent;
+      if (text.includes(searchText)) {
+        row.style.display = "";
+      }
+    }
+  }
+
+  $("#search_bar").on("keyup", (e) => {
+    let searchText = $("#search_bar").val();
+    console.log(searchText);
+    searchTable(searchText, "tbody");
+  });
+
+  $("#search_bar_employee").on("keyup", (e) => {
+    let searchText = $("#search_bar_employee").val();
+    console.log(searchText);
+    searchTable(searchText, "tbodyEmployee");
+  });
+
+  function UpdateEmployeeName(text) {
+    var Id = text.id;
+    console.log(Id);
+    let groupName = text.childNodes[1].innerText;
+    let employeeName = text.childNodes[3].innerText;
+    $("#employeeNameWarrning").text(
+      `سيتم حذف إذن التعاقد للموظف ${employeeName}`
+    );
+    $("#deleteFromGroup [name='id']").val(`${Id}`);
+  }
+  $("#deleteFromGroup").on("submit", function (e) {
+    e.preventDefault();
+    var formData = new FormData(document.getElementById("deleteFromGroup"));
+    $.ajax({
+      url: '{% url "new_job_placements" %}', // Update the URL endpoint
+      type: "POST",
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function (data) {
+        massage.hide();
+        successMsg.show();
+        setTimeout(function () {
+          window.location.reload();
+        }, 3000);
+      },
+      error: function (error) {
+        massage.hide();
+        errorMsg.show();
+        setTimeout(function () {
+          errorMsg.hide();
+        }, 3000);
+      },
+    });
+  });
+</script>
+{% endblock scripts %}

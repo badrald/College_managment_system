@@ -1,0 +1,30 @@
+{% extends 'base.html' %} {% load static %} {% block custom_css %}
+<link rel="stylesheet" href="{% static 'home/css/pageNotFound.css' %}" />
+{% endblock custom_css %} {% block title %} الرجاء  تحميل الملف{% endblock %}
+{% block sub_title %} الرجاء  تحميل الملف{% endblock %}
+{% block content %}
+<div style="direction: rtl" class="wrapper bg-dark">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper bg-dark">
+    <!-- Content Header (Page header) -->
+    <section id="not-found" class="bg-dark">
+      <div id="title" class="bg-dark"> &bull; لم يتعم العثور على الملف</div>
+      <div class="circles bg-dark">
+        <p>
+          404<br />
+          <small>لم يتم العثور على الملف</small>
+        </p>
+        <a onclick="history.back()" class="btn btn-primary text-white text-lg">رجوع </a>
+        <a href='{% url "edit_employee" employee %}' class="btn btn-primary text-white text-lg">رفع الملف </a>
+        <span class="circle big"></span>
+        <span class="circle med"></span>
+        <span class="circle small"></span>
+      </div>
+    </section>
+    
+    <!-- Main content -->
+  </div>
+  <!-- /.content-wrapper -->
+</div>
+<!-- ./wrapper -->
+{% endblock content %}

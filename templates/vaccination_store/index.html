@@ -1,0 +1,87 @@
+{% extends 'base.html' %} {% load static %} {% block custom_css %}
+<link rel="stylesheet" href="{% static 'home/css/settings.css' %}" />
+{% endblock custom_css %}
+ {% block title%}التطعيمات{% endblock title %}
+ {% block sub_title %} التطعيمات{% endblock %}
+  {% block content %}
+
+<div style="direction: rtl" class="wrapper">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper bg-dark">
+    <!-- Content Header (Page header) -->
+    <div class="content bg-dark">
+      <div class="container-fluid bg-dark">
+        <!-- form add employee -->
+        <div class="row">
+          <div class="col-xl-3 col-lg-4 col-md-5 col-sm-6 mt-4 mb-4">
+            <a href="{% url 'vaccination_info' %}">
+              <div
+                class="card jBounceIn shadow-lg rounded"
+                style="width: 18rem">
+                <img
+                  src="{% static 'vaccination_store/imges/information.png' %}"
+                  class="card-img-top bg-white"
+                  alt="..." />
+                <div class="card-body bg-navy">
+                  <p class="card-text text-center fs-4">
+                    الاستعلام عن التطعيمات
+                  </p>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-xl-3 col-lg-4 col-md-5 col-sm-6 mt-4 mb-4">
+            <a href="{% url 'vaccination_order' %}">
+              <div
+                class="card jBounceIn shadow-lg rounded"
+                style="width: 18rem; background-color: #88c3ff; color: white">
+                <img
+                  src="{% static 'vaccination_store/imges/cargo.png' %}"
+                  class="card-img-top bg-white"
+                  alt="..." />
+                <div class="card-body bg-navy">
+                  <p class="card-text text-center fs-4">إصدار طلبية</p>
+                </div>
+              </div>
+            </a>
+          </div>
+          {% if user.is_staff %}
+          <div class="col-xl-3 col-lg-4 col-md-5 col-sm-6 mt-4 mb-4">
+            <a href="#">
+              <div
+                class="card jBounceIn shadow-lg rounded"
+                style="width: 18rem">
+                <img
+                  src="{% static 'vaccination_store/imges/receiver.png' %}"
+                  class="card-img-top bg-white"
+                  alt="..." />
+                <div class="card-body bg-navy">
+                  <p class="card-text text-center fs-4">إستلام الطلبية</p>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-xl-3 col-lg-4 col-md-5 col-sm-6 mt-4 mb-4">
+            <a href="{% url 'vaccination_store' %}">
+              <div
+                class="card jBounceIn shadow-lg rounded"
+                style="width: 18rem">
+                <img
+                  src="{% static 'vaccination_store/imges/vaccine.png' %}"
+                  class="card-img-top bg-white"
+                  alt="..." />
+                <div class="card-body bg-navy">
+                  <p class="card-text text-center fs-4">المخزن</p>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          {% endif %}
+        </div>
+        <!-- Modal -->
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

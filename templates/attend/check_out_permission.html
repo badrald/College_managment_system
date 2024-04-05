@@ -1,0 +1,233 @@
+{% extends 'base.html' %} {% load static %} {% block title%} تسجيل إذن خروج
+{%endblock title %} {% block sub_title %} تسجيل إذن خروج {%endblock %} 
+{% block content %}
+<style>
+  .modal-image {
+    width: 70px;
+    height: 70px;
+    margin: auto;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px #48db71;
+    padding: 11px 10px 2px;
+    margin-bottom: 2em;
+  }
+
+  .modal-body h1 {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+  }
+
+  .modal-body p {
+    margin-bottom: 2em;
+    color: #666;
+  }
+  @media print {
+    /* Ensure background colors are printed */
+    body {
+      color:black;
+    }
+
+    /* Other print-specific styles if needed */
+  }
+</style>
+<div class="d-none d-print-block text-center">
+  <img
+    class="rounded-circle w-25 h-25"
+    style="margin-top: -10px"
+    src="{% static 'dist/img/1.png' %}"
+    alt="" />
+  <p class="mb-1 fs-4">وزارة الــصــحــة</p>
+  <p class="mb-1 fs-4">إدارة الخدمات الصحية قصر بن غشير</p>
+  <p class="mb-1 fs-4">{% if user.profile.job_place.id != 1  %} 
+{{user.profile.job_place.name }}  {% endif %}
+</p>
+</div>
+
+<div style="direction: rtl" class="wrapper bg-dark">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper bg-dark">
+    <div class="content bg-dark">
+      <div class="container-fluid bg-dark">
+        <div class="card card-navy mt-4 bg-dark">
+          <div class="card-header d-flex justify-content-center fs-5 text-bold">تسجيل إذن خروج</div>
+          <div class="card-body">
+            <div class="row">
+              <audio
+                src="{% static 'sounds/short-success.mp3' %}"
+                id="success_sound"
+                class="d-none"></audio>
+              <audio
+                src="{% static 'sounds/short-error.mp3' %}"
+                id="error_sound"
+                class="d-none"></audio>
+              <div class="d-flex justify-content-center mb-3 d-print-none">
+                <div id="qrReader" class="w-50 h-50 d-flex  justify-content-center align-content-center"></div>
+              </div>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th class="text-center">اسم الوردية</th>
+                    <th class="text-center">اسم الموظف</th>
+                    <th class="text-center">وقت نهاية الوردية</th>
+                    <th class="text-center">وقت الوصول</th>
+                    <th class="text-center">وقت الخروج</th>
+                    <th class="text-center">ملاحظة</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody">
+                  {% for record in attendance %}
+                  <tr id="EMP_ID_{{record.employee.id}}" class="{% if not record.check_out_time  %} d-print-none {% endif %}">
+                    <td class="text-center">{{record.schedule.name}}</td>
+                    <td class="text-center">{{record.employee.name}}</td>
+                    <td class="text-center">{{record.schedule.end_time}}</td>
+                    <td class="text-center">{{record.check_in_time|time:"h:i"}}</td>
+                    <td class="text-center">{% if record.check_out_time  %}{{record.check_out_time|time:"h:i"}}{% else %}..................{% endif %}</td>
+                    <td class="text-center">{% if record.note %}{{record.note}}{% else %}........................{% endif %}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              <div class="row col-12 d-print-none">
+                <button
+                  onclick="history.back()"
+                  type="button"
+                  class="ml-2 btn btn-danger w-25">
+                  رجوع <i class="fas fa-undo fa-rotate-180 ml-3"></i>
+                </button>
+                <button
+                  onclick="print()"
+                  type="button"
+                  class="ml-2 btn btn-success w-25">
+                  طباعة <i class="fas fa-print ml-3"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- /.card -->
+            <div
+              class="modal fade"
+              id="successMsg"
+              tabindex="-1"
+              aria-labelledby="exampleModalLabel"
+              aria-hidden="true">
+              <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                  <div class="modal-header bg-gradient bg-success">
+                    <button
+                      type="button"
+                      class="btn-close m-0 bg-white"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body text-center bg-dark">
+                    <div class="modal-image">
+                      <svg viewBox="1 0 30 40" style="fill: #48db71">
+                        <path
+                          d="M1 14 L5 10 L13 18 L27 4 L31 8 L13 26 z"></path>
+                      </svg>
+                    </div>
+                    <h1>تمت العملية بنجاح !</h1>
+                    <p id="employeeName"></p>
+                  </div>
+                  <div class="modal-footer bg-gradient bg-success"></div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="modal fade"
+              id="errorMsg"
+              tabindex="-1"
+              aria-labelledby="exampleModalLabel"
+              aria-hidden="true">
+              <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                  <div class="modal-header bg-gradient bg-danger">
+                    <button
+                      type="button"
+                      class="btn-close m-0 bg-white"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body text-center bg-dark">
+                    <img
+                      src="{% static 'dist/img/error.png' %}"
+                      class="w-25 h-25 mb-3"
+                      alt="" />
+                    <h1>هذا الموظف ليس ضمن الوردية !</h1>
+                    <p>تأكد من تحديد الوردية بشكل صحيح</p>
+                  </div>
+                  <div class="modal-footer bg-gradient bg-danger"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<strong class="d-none d-print-block text-center">
+  التوقيع او الختم المناوب
+</strong>
+<strong class="d-none d-print-block text-center mt-3">
+  .................................
+</strong>
+<footer class="main-footer d-none d-print-block fixed-bottom">
+  <strong
+    >تم طباعته بواسطة منظومة إدارة شؤون الموظفين عبر الموظف {{user.first_name}}
+    {{user.last_name}} بمكان العمل {{user.profile.job_place.name}}</strong
+  >
+  <div class="float-right d-none d-sm-inline-block">
+    بتاريخ اليوم : {% now "d-m-Y" %}
+  </div>
+</footer>
+{% endblock content %} {% block scripts %}
+<script src="{% static 'plugins/html5-qrcode/html5-qrcode.min.js' %}"></script>
+<script>
+  const successMsg = new bootstrap.Modal(document.getElementById("successMsg"));
+  const errorMsg = new bootstrap.Modal(document.getElementById("errorMsg"));
+  $("#groupSelect").on("change", (e) => {
+    let schedule_name = $("#groupSelect option:selected").text();
+    schedule_id = $("#groupSelect option:selected").val();
+    searchTable(schedule_name);
+  });
+  function domReady(fn) {
+    if (
+      document.readyState === "complate" ||
+      document.readyState === "interactive"
+    ) {
+      setTimeout(fn, 1);
+    } else document.addEventListener("DOMContentLoaded", fn);
+  }
+
+  domReady(() => {
+    function onScanSuccess(result) {
+      $.ajax({
+        type: "GET",
+        url: '{% url "check_out_permission" %}',
+        data: { national_number: result },
+        success: function (data) {
+          $(`#EMP_ID_${data.data.id}`).removeClass("d-print-none").addClass("text-success ");
+          $(`#EMP_ID_${data.data.id} td:nth-child(5)`).text(`${data.data.time}`);
+          $(`#EMP_ID_${data.data.id} td:nth-child(6)`).text("إذن خروج");
+          document.getElementById("success_sound").play();
+          $("#employeeName").text(`تم تسجيل إذن خروج الموظف ${data.data.name}`);
+          successMsg.show();
+        },
+        error: function (data) {
+          document.getElementById("error_sound").play();
+          if(data.status == 400){
+            let errorData = JSON.parse(data.responseText);
+            $("#errorMsg .modal-body p").text(errorData['error']);
+          }
+          errorMsg.show();
+        },
+      });
+    }
+
+    var qrScanner = new Html5QrcodeScanner("qrReader", { fps: 30 });
+    qrScanner.render(onScanSuccess);
+  });
+</script>
+{% endblock scripts %}

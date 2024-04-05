@@ -1,0 +1,250 @@
+{% extends 'base.html' %} {% load static %} {% block custom_css %}
+<link rel="stylesheet" href='{% static "home/css/searchEmployee.css" %}' />
+{% endblock custom_css %} {% block title %}إدارة الموظفين{% endblock %}
+{% block sub_title %}إدارة الموظفين{% endblock %}
+{% block content %}
+<style>
+  @media print {
+    body * {
+      color: black;
+    }
+
+    table {
+      box-shadow: none !important;
+    }
+  }
+</style>
+<div class="d-none d-print-block text-center">
+  <img class="rounded-circle w-25 h-25" style="margin-top: -10px" src="{% static 'dist/img/1.png' %}" alt="" />
+  <p class="mb-1 fs-4">وزارة الــصــحــة</p>
+  <p class="mb-1 fs-4">إدارة الخدمات الصحية قصر بن غشير</p>
+  {% if user.profile.job_place.id != 1 %}<p class="mb-1 fs-4">{{user.profile.job_place.name}}</p>{% endif %}
+</div>
+
+<div style="direction: rtl" class="wrapper">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper bg-dark">
+    <!-- Content Header (Page header) -->
+    <div class="content bg-dark">
+      <div class="container-fluid bg-dark">
+      <div class="d-flex justify-content-center align-items-center bg-dark d-print-none">
+        <div class="card card-navy card-size mt-5 mb-5 text-center shadow-lg p-3 rounded bg-dark">
+          <div class="card-header d-flex justify-content-center">
+            <h3 class="card-title fs-4">البحث عن موظف</h3>
+          </div>
+          <div class="card-body bg-dark">
+            <form id="searchForm">
+              <div class="card-body">
+                <div class="form-row">
+                  <div class="form-group col-md-12">
+                    <div class="search_box bg-dark">
+                      <div class="search_field">
+                        <input type="text" class="input" id="searchBar" required placeholder="بحث...." />
+                        <i class="fas fa-search"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-center fs-5 w-100 fst-italic text-bold">
+                    بحث بواسطة
+                  </div>
+                  <div class="dropdown bg-dark text-end w-75">
+                    <div class="default_option text-bold fs-4 bg-dark" id="type">
+                      الاسم
+                    </div>
+                    <ul>
+                      <li value="1">الاسم</li>
+                      <li value="2">الرقم الوطني</li>
+                    </ul>
+                  </div>
+                  <div class="w-25">
+                    <button class="myBtn btn bg-navy btn-lg mb-4" type="submit" id="searchBtn">
+                      بحث<i class="fas fa-search m-1"></i>
+                    </button>
+                  </div>
+                  {% if job_places %}
+                  <div class="form-group col-12">
+                    <label>المركز الصحية</label>
+                    <select class="form-select" id="id_job_place" aria-label="Select Health Center">
+                      <option value=" ">الكل</option>
+                      {% for job_place in job_places  %}
+                      <option value="{{job_place.id}}">{{job_place}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  {% else %}
+                    <input type="hidden" name="job_place" id="id_job_place" value="{{user.profile.job_place.id}}">
+                  </div>
+                {% endif %}
+
+                  <div class="w-100">
+                    <button
+                      class="btn w-75 mt-5 fst-italic fs-5 bg-navy text-center shadow-lg rounded d-print-none dropDown"
+                      id="backBtn">
+                      الرجوع <i class="fas fa-undo fa-rotate-180 ml-5"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex justify-content-center"></div>
+
+      <div class="card card-navy d-print-table-row bg-dark">
+        <div class="card-header">قائمة الموظفين</div>
+        <div class="card-body bg-dark">
+          <div class="d-flex justify-content-center">
+            <button id="printSelectedBtn" class="btn bg-navy d-print-none shadow-lg rounded mb-3">
+              طباعة المحدد <i class="fa fa-print ml-3"></i>
+            </button>
+          </div>
+          <div class="table-responsive">
+            <table class="table d-print-table shadow-lg bg-white rounded">
+              <thead>
+                <tr>
+                  <th class="text-center">
+                    <input type="checkbox" id="selectAll" class="d-print-none" />
+                  </th>
+                  <th>الاسم</th>
+                  <th>الرقم الوطني</th>
+                  <th class="d-print-none">الجنسية</th>
+                  <th>مؤهل العلمي</th>
+                  <th>التخصص</th>
+                  <th>تاريخ التخرج</th>
+                  <th>تاريخ المباشرة</th>
+                  <th>جهة العمل</th>
+                  <th class="d-print-none">قرار التعين</th>
+                  <th class="d-print-none">الدرجة الوظيفة</th>
+                  <th class="d-print-none">رقم الملف</th>
+                  <th>مستمر في العمل</th>
+                  <th>الملاحظة</th>
+                  <th class="table-actions text-center d-print-none">
+                    الإجراءات
+                  </th>
+                </tr>
+              </thead>
+              <tbody id="tbody" class="bg-dark"></tbody>
+            </table>
+            <div class="pagination justify-content-center mt-3" id="pagination">
+              <!-- Pagination links will be inserted here -->
+            </div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-center align-items-center mb-5">
+          <p id="loader"></p>
+        </div>
+        <div id="notFound" class="text-danger h4 text-center">
+          لا يوجد بيانات لهذا الموظف
+        </div>
+      </div>
+    </div>
+    <strong class="d-none d-print-block text-center">
+      التوقيع او الختم مدير الوحدة الصحية
+    </strong>
+    <strong class="d-none d-print-block text-center mt-3">
+      .................................
+    </strong>
+    <!-- /.card -->
+  </div>
+  {% if user.is_staff %}
+    
+  <div class="modal fade" id="message" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content bg-dark bg-dark">
+        <div class="modal-header bg-gradient bg-fuchsia">
+          <h5 class="modal-title" id=""> رسالة حذف</h5>
+          <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body bg-dark">
+          <div class="text-center">
+            <img src="{% static 'dist/img/alert-icon.png' %}" class="w-25 h-25 mb-3" alt="" />
+            <h4>سيتم حذف الموظف هل انت متأكد ؟</h4>
+            <p ></p>
+          </div>
+          <form action="" method="post" id="deleteEmployee">
+            {% csrf_token %}
+            <input type="hidden" name="id">
+            <div class="col-12 form-row">
+              <div class="col-6">
+                <button type="button" class="btn btn-info w-100" data-bs-dismiss="modal">
+                  رجوع <i class="fas fa-undo fa-rotate-180 ml-3"></i>
+                </button>
+              </div>
+              <div class="col-6">
+                <button type="submit" class="btn btn-danger w-100" id="confirmButton">
+                  تأكيد
+                  <i class="fas fa-trash ml-3"></i>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer bg-gradient bg-fuchsia">
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal fade" id="successMsg" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-gradient bg-success">
+          <h5 class="modal-title" id="exampleModalLabel">
+            رسالة
+          </h5>
+          <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center bg-dark">
+          <div class="modal-image">
+            <svg viewBox="1 0 30 40" style="fill: #48db71">
+              <path d="M1 14 L5 10 L13 18 L27 4 L31 8 L13 26 z"></path>
+            </svg>
+          </div>
+          <h1>تمت العملية بنجاح !</h1>
+          <p></p>
+        </div>
+        <div class="modal-footer bg-gradient bg-success"></div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal fade" id="errorMsg" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-danger bg-gradient">
+          <h5 class="modal-title" id="exampleModalLabel">رسالة خطأ</h5>
+          <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center bg-dark">
+          <img src="{% static 'dist/img/error.png' %}" class="w-25 h-25 mb-3" alt="" />
+          <h1>لم تتم عملية بنجاح !</h1>
+          <p></p>
+        </div>
+        <div class="modal-footer bg-danger bg-gradient"></div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<footer class="main-footer d-none d-print-block fixed-bottom">
+  <strong>تم طباعته بواسطة منظومة إدارة شؤون الموظفين عبر الموظف {{user.first_name}}
+    {{user.last_name}}</strong>
+  <div class="float-right d-none d-sm-inline-block">
+    بتاريخ اليوم : {% now "d-m-Y" %}
+  </div>
+</footer>
+
+{% endblock %} {% block scripts %}
+<script>
+  let job_place = "{{user.profile.job_place}}";
+  {% if user.is_staff %}
+  const successMsg = new bootstrap.Modal(document.getElementById("successMsg"));
+  const errorMsg = new bootstrap.Modal(document.getElementById("errorMsg"));
+  const message = new bootstrap.Modal(document.getElementById("message"));
+  {% endif %}
+</script>
+<script src="{% static 'home/js/search-employee.js' %}"></script>
+{% endblock scripts %}

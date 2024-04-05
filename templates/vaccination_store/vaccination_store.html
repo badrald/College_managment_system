@@ -1,0 +1,495 @@
+{% extends "base.html" %} {% block title %}المخزن{% endblock title %}
+{% block sub_title %}المخزن{% endblock %}
+{% load static %}
+{% block content %}
+
+<div style="direction: rtl" class="wrapper">
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper bg-dark">
+        <!-- Content Header (Page header) -->
+        <div class="content bg-dark">
+            <div class="container-fluid bg-dark">
+                <div class="col-12">
+                    <!-- Account details card-->
+                    <div class="card card-navy mt-4 bg-dark">
+                        <div class="card-header d-flex justify-content-center fs-4">
+                            الاصناف
+                        </div>
+                        <div class="card-body">
+                            <div class="col-12">
+                                <div class="my-custom-scrollbar">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">رقم الصنف</th>
+                                            <th class="text-center">اسم الصنف</th>
+                                            <th class="text-center"> نوع الصنف</th>
+                                            <th class="text-center">الكمية المتوفرة في المخزن</th>
+                                            <th class="text-center">تاريخ الانتهاء الصلاحية</th>
+                                            <th class="text-center">رقم التشغيلة</th>
+                                            <th class="text-center d-print-none">معلومات عامة</th>
+                                            <th class="text-center d-print-none">الاجراءات</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody">
+                                        {% for vaccine in vaccinations %}
+                                        <tr id="{{vaccine.id}}">
+                                            <td class="text-center">{{ vaccine.vaccine_id }}</td>
+                                            <td class="text-center">{{ vaccine.name }}</td>
+                                            <td class="text-center">{{ vaccine.vaccine_type }}</td>
+                                            <td class="text-center">{{ vaccine.available_doses }}</td>
+                                            <td class="text-center">{{ vaccine.expired_date|date:"Y-m-d" }}</td>
+                                            <td class="text-center">{{ vaccine.serial_number }}</td>
+
+                                            <td class="text-center d-print-none">
+                                                {{ vaccine.description }}
+                                            </td>
+                                            <td class="text-center">
+                                                <div class="dropdown">
+                                                    <button class="btn bg-navy dropdown-toggle d-print-none"
+                                                        type="button" id="`actionsDropdown${employee.id}`"
+                                                        data-bs-toggle="dropdown" aria-haspopup="true"
+                                                        aria-expanded="false">
+                                                        الإجراءات
+                                                    </button>
+                                                    <div class="dropdown-menu"
+                                                        aria-labelledby="`actionsDropdown${employee.id}`">
+                                                        <a class="dropdown-item" data-bs-toggle="modal"
+                                                            onclick='updateEditForm(this.closest("tr"))'
+                                                            href="#EditVaccineModal">تعديل صنف</a>
+                                                        <a class="dropdown-item"
+                                                            onclick="UpdateEmployeeName(this.parentElement.parentElement.parentElement.parentElement)"
+                                                            class="dropdown-item" data-bs-toggle="modal"
+                                                            data-bs-target="#message">حذف صنف</a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                </div>
+                            </div>
+                            <div class="form-row col-12 mt-5 d-print-none">
+                                <div class="col-md-6">
+                                    <a href="{% url 'vaccination_index' %}" type="button" class="btn btn-danger w-100 ">
+                                        رجوع <i class="fa fa-undo-alt fa-rotate-180 ml-3"></i>
+                                    </a>
+                                </div>
+                                <div class="col-md-6">
+                                    <button data-bs-toggle="modal" data-bs-target="#AddVaccineModal" type="button"
+                                        class="btn btn-success w-100">
+                                        إضافة صنف جديد <i class="fas fa-syringe  ml-3"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="AddVaccineModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content bg-dark bg-dark">
+                <div class="modal-header bg-gradient bg-navy">
+                    <h5 class="modal-title" id="exampleModalLabel">إضافة صنف</h5>
+                    <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="AddVaccine" method="POST">
+                        {% csrf_token %}
+                        <div class="form-row">
+
+                            <div class="form-group col-md-6">
+                                <label for="id_vaccine_id">رقم الصنف:</label>
+                                <input type="text" name="vaccine_id" class="form-control" maxlength="50" required=""
+                                    id="id_vaccine_id">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="id_name">اسم الصنف:</label>
+                                <input type="text" name="name" class="form-control" maxlength="255" required=""
+                                    id="id_name">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="id_vaccine_type">نوع الصنف:</label>
+                                <select name="vaccine_type" class="form-select" required="" id="id_vaccine_type">
+                                    <option value="" selected="">---------</option>
+
+                                    <option value="B.C.G">B.C.G</option>
+
+                                    <option value="D.PT">D.PT</option>
+
+                                    <option value="DT">DT</option>
+
+                                    <option value="H.BV_10mg_0.5ml">H.BV 10mg (0.5ml)</option>
+
+                                    <option value="H.BV_20mg_0.5ml">H.BV 20mg (0.5ml)</option>
+
+                                    <option value="M.M.R">M.M.R</option>
+
+                                    <option value="MENINGOCOCAL_A+C+W-Y135">MENINGOCOCAL (A+C+W-Y135)</option>
+
+                                    <option value="POLIO">POLIO</option>
+
+                                    <option value="TERANUSANTIOXIN_1500">TERANUSANTIOXIN (1500)</option>
+
+                                    <option value="TETANUS TI">TETANUS TI</option>
+
+                                    <option value="ANTISNAKE">ANTISNAKE</option>
+
+                                    <option value="ANTISCORPION">ANTISCORPION</option>
+
+                                    <option value="ROTA">ROTA</option>
+
+                                    <option value="PNEU">PNEUMO</option>
+
+                                    <option value="PNEU .23">PNEUMO .23</option>
+
+                                    <option value="HIP">HIP</option>
+
+                                    <option value="Syringe_0.5">سرنجة 0.5</option>
+
+                                    <option value="Syringe_ml_0.05">سرنجة ml0.05</option>
+
+                                    <option value="سرنجة 0.5">سرنجة 0.5</option>
+
+                                    <option value="كحول swap">كحول swap</option>
+
+                                    <option value="saftey_Box">saftey Box</option>
+
+                                    <option value="varicella virus vaccine">varicella virus vaccine</option>
+
+                                    <option value="HEPATTIS-A-VACCINE">HEPATTIS-A-VACCINE</option>
+
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="id_available_doses">عدد الجرعات المتاحة:</label>
+                                <input type="number" name="available_doses" class="form-control" required=""
+                                    id="id_available_doses">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="id_expired_date">تاريخ انتهاء الصلاحية:</label>
+                                <input type="date" name="expired_date" class="form-control" required=""
+                                    id="id_expired_date">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="id_serial_number">رقم التشغيلة:</label>
+                                <input type="text" name="serial_number" class='form-control' maxlength="50" required=""
+                                    id="id_serial_number">
+                            </div>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label for="id_description">وصف الصنف:</label>
+                            <textarea name="description" class="form-control" cols="80" rows="5" required=""
+                                id="id_description"></textarea>
+                        </div>
+                        <div class="form-row col-12">
+                            <div class="col-md-6">
+                                <button type="button" class="btn btn-outline-danger w-100" data-bs-dismiss="modal">
+                                    أغلاق <i class="fas fa-undo ml-3 "></i>
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    حفظ <i class="fas fa-save ml-3"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer bg-gradient bg-navy">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="EditVaccineModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content bg-dark bg-dark">
+                <div class="modal-header bg-gradient bg-dark">
+                    <h5 class="modal-title" id="exampleModalLabel">تعديل صنف</h5>
+                    <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="EditVaccine" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="edit_vaccine" val=".">
+                        <input type="hidden" name="id">
+                        <div class="form-row">
+
+                            <div class="form-group col-md-6">
+                                <label for="id_vaccine_id">رقم الصنف:</label>
+                                <input type="text" name="vaccine_id" class="form-control" maxlength="50" required=""
+                                    id="id_vaccine_id">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="id_name">اسم الصنف:</label>
+                                <input type="text" name="name" class="form-control" maxlength="255" required=""
+                                    id="id_name">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="id_vaccine_type">نوع الصنف:</label>
+                                <select name="vaccine_type" class="form-select" required="" id="id_vaccine_type">
+                                    <option value="" selected="">---------</option>
+
+                                    <option value="B.C.G">B.C.G</option>
+
+                                    <option value="D.PT">D.PT</option>
+
+                                    <option value="DT">DT</option>
+
+                                    <option value="H.BV_10mg_0.5ml">H.BV 10mg (0.5ml)</option>
+
+                                    <option value="H.BV_20mg_0.5ml">H.BV 20mg (0.5ml)</option>
+
+                                    <option value="M.M.R">M.M.R</option>
+
+                                    <option value="MENINGOCOCAL_A+C+W-Y135">MENINGOCOCAL (A+C+W-Y135)</option>
+
+                                    <option value="POLIO">POLIO</option>
+
+                                    <option value="TERANUSANTIOXIN_1500">TERANUSANTIOXIN (1500)</option>
+
+                                    <option value="TETANUS TI">TETANUS TI</option>
+
+                                    <option value="ANTISNAKE">ANTISNAKE</option>
+
+                                    <option value="ANTISCORPION">ANTISCORPION</option>
+
+                                    <option value="ROTA">ROTA</option>
+
+                                    <option value="PNEU">PNEUMO</option>
+
+                                    <option value="PNEU .23">PNEUMO .23</option>
+
+                                    <option value="HIP">HIP</option>
+
+                                    <option value="Syringe_0.5">سرنجة 0.5</option>
+
+                                    <option value="Syringe_ml_0.05">سرنجة ml0.05</option>
+
+                                    <option value="سرنجة 0.5">سرنجة 0.5</option>
+
+                                    <option value="كحول swap">كحول swap</option>
+
+                                    <option value="saftey_Box">saftey Box</option>
+
+                                    <option value="varicella virus vaccine">varicella virus vaccine</option>
+
+                                    <option value="HEPATTIS-A-VACCINE">HEPATTIS-A-VACCINE</option>
+
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="id_available_doses">عدد الجرعات المتاحة:</label>
+                                <input type="number" name="available_doses" class="form-control" required=""
+                                    id="id_available_doses">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="id_expired_date">تاريخ انتهاء الصلاحية:</label>
+                                <input type="date" name="expired_date" class="form-control" required=""
+                                    id="id_expired_date">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="id_serial_number">رقم التشغيلة:</label>
+                                <input type="text" name="serial_number" class='form-control' maxlength="50" required=""
+                                    id="id_serial_number">
+                            </div>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label for="id_description">وصف الصنف:</label>
+                            <textarea name="description" class="form-control" cols="80" rows="5" required=""
+                                id="id_description"></textarea>
+                        </div>
+                        <div class="form-row col-12">
+                            <div class="col-md-6">
+                                <button type="button" class="btn btn-outline-danger w-100" data-bs-dismiss="modal">
+                                    أغلاق <i class="fas fa-undo ml-3 "></i>
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    تعديل <i class="fas fa-exchange ml-3"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer bg-gradient bg-dark">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="message" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content bg-dark bg-dark">
+                <div class="modal-header bg-gradient bg-fuchsia">
+                    <h5 class="modal-title" id="">حذف الصنف</h5>
+                    <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body bg-dark">
+                    <div class="text-center">
+                        <img src="{% static 'dist/img/alert-icon.png' %}" class="w-25 h-25 mb-3" alt="" />
+                        <h1>هل انت متأكد انك تريد هذا الصنف ؟</h1>
+                        <p id="employeeNameWarrning"></p>
+                    </div>
+                    <form id="deleteJobPlace" method="POST">
+                        {% csrf_token %}
+                        <input type="number" name="id" class="d-none" value="" />
+                        <div class="form-row col-12">
+                            <div class="col-md-6">
+                                <button type="button" class="btn btn-info w-100" data-bs-dismiss="modal">
+                                    رجوع
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <button type="submit" class="btn btn-danger w-100">تأكيد</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer bg-fuchsia bg-gradient"></div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="errorMsg" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg bg-dark">
+            <div class="modal-content">
+                <div class="modal-header bg-gradient bg-danger">
+                    <h5 class="modal-title">رسالة</h5>
+                    <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img src="{% static 'dist/img/error.png' %}" class="w-25 h-25 mb-3" alt="" />
+                    <h1>لم تتم عملية بنجاح !</h1>
+                    <p>تأكد من الاتصال او إدخال البيانات بشكل صحيح</p>
+                </div>
+                <div class="modal-footer bg-gradient bg-danger"></div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="successMsg" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg bg-dark">
+            <div class="modal-content">
+                <div class="modal-header bg-gradient bg-success">
+                    <h5 class="modal-title">رسالة</h5>
+                    <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center bg-dark">
+                    <div class="modal-image">
+                        <svg viewBox="1 0 30 40" style="fill: #48db71">
+                            <path d="M1 14 L5 10 L13 18 L27 4 L31 8 L13 26 z"></path>
+                        </svg>
+                    </div>
+                    <h1>تمت العملية بنجاح !</h1>
+                    <p></p>
+                </div>
+                <div class="modal-footer bg-gradient bg-success"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock content %}
+{% block scripts %}
+<script>
+    const successMsg = new bootstrap.Modal(document.getElementById("successMsg"));
+    const errorMsg = new bootstrap.Modal(document.getElementById("errorMsg"));
+
+    $("#AddVaccine").on("submit", function (event) {
+        event.preventDefault();
+        let form = new FormData(this);
+        $.ajax({
+            url: "/vaccination/Store/",
+            type: "POST",
+            data: form,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                $("#successMsg .modal-body p").text(data['success']);
+                successMsg.show();
+                $("#successMsg").on('hidden.bs.modal', function (event) {
+                    location.reload();
+                })
+            },
+            error: function (data) {
+                if (data.status == 400) {
+                    var errorData = JSON.parse(data.responseText)
+                    $("#errorMsg .modal-body p").text(errorData['error']);
+                }
+                errorMsg.show();
+            }
+
+        })
+    })
+
+    function updateEditForm(rowElement) {
+        let data = rowElement.children;
+        let id = rowElement.id;
+        // Accessing data from the row
+        console.log(data);
+        let vaccineId = data[0].innerText;
+        let name = data[1].innerText;
+        let vaccineType = data[2].innerText;
+        let availableDoses = data[3].innerText;
+        let expiredDate = data[4].innerText;
+        let serialNumber = data[5].innerText;
+        let description = data[6].innerText;
+
+        // Updating form fields with the extracted values
+        $("#EditVaccine input[name='id']").val(id);
+        $("#EditVaccine input[name='vaccine_id']").val(vaccineId);
+        $("#EditVaccine input[name='name']").val(name);
+        $("#EditVaccine select[name='vaccine_type']").val(vaccineType);
+        $("#EditVaccine input[name='available_doses']").val(availableDoses);
+        $("#EditVaccine input[name='expired_date']").val(expiredDate);
+        $("#EditVaccine input[name='serial_number']").val(serialNumber);
+        $("#EditVaccine textarea[name='description']").val(description);
+    }
+    $("#EditVaccine").on("submit", function (event) {
+        event.preventDefault();
+        let form = new FormData(this);
+        $.ajax({
+            url: "/vaccination/Store/",
+            type: "POST",
+            data: form,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                $("#successMsg .modal-body p").text(data['success']);
+                successMsg.show()
+                $("#successMsg").on("hidden.bs.modal", function (event) {
+                    location.reload();
+                })
+            },
+            error: function (data) {
+                if (data.status == 400) {
+                    var errorData = JSON.parse(data.responseText)
+                    $("#errorMsg .modal-body p").text(errorData['error']);
+                }
+                errorMsg.show();
+            }
+        })
+    })
+
+</script>
+{% endblock scripts %}

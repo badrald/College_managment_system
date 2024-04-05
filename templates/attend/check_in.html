@@ -1,0 +1,266 @@
+{% extends 'base.html' %} {% load static %}
+{% block title%} تسجيل الحضور {%endblock title %}
+{% block sub_title %} تسجيل الحضور {% endblock %}
+{% block content %}
+<style>
+  .modal-image {
+    width: 70px;
+    height: 70px;
+    margin: auto;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px #48db71;
+    padding: 11px 10px 2px;
+    margin-bottom: 2em;
+  }
+
+  .modal-body h1 {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+  }
+
+  .modal-body p {
+    margin-bottom: 2em;
+    color: #666;
+  }
+
+  @media print {
+
+    /* Ensure background colors are printed */
+    .card-navy {
+      -webkit-print-color-adjust: exact;
+    }
+
+    /* Other print-specific styles if needed */
+  }
+</style>
+
+<div class="d-none d-print-block text-center">
+  <img class="rounded-circle w-25 h-25" style="margin-top: -10px" src="{% static 'dist/img/1.png' %}" alt="" />
+  <p class="mb-1 fs-4">وزارة الــصــحــة</p>
+  <p class="mb-1 fs-4">إدارة الخدمات الصحية قصر بن غشير</p>
+</div>
+<div style="direction: rtl" class="wrapper">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper bg-dark">
+    <div class="content bg-dark">
+      <div class="container-fluid bg-dark">
+        <div class="card card-navy mt-4 bg-dark">
+          <div class="card-header">تسجيل حضور موظفين</div>
+          <div class="card-body">
+            <div class="row">
+              <audio src="{% static 'sounds/short-success.mp3' %}" id="success_sound" class="d-none"></audio>
+              <audio src="{% static 'sounds/short-error.mp3' %}" id="error_sound" class="d-none"></audio>
+              <div class="col-6 mb-3 ">
+                <label for="scheduleSelect" class="form-label">اسم  الوردية</label>
+                <select class="form-select " id="scheduleSelect">
+                  <option value="">--------------</option>
+                  {% for schedule in schedules %}
+                  <option value="{{ schedule.id }}">{{ schedule.name }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="col-6 mb-3">
+                <label for="groupSelect" class="form-label">اسم  المجموعة</label>
+                <select class="form-select" id="groupSelect">
+                  
+                </select>
+              </div>
+              <div class="d-flex justify-content-center mb-3 d-print-none">
+                <div id="qrReader" class="w-50 h-50 d-flex  justify-content-center align-content-center"></div>
+              </div>
+
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th class="text-center">اسم الوردية</th>
+                    <th class="text-center">اسم الموظف</th>
+                    <th class="text-center">مجموعة</th>
+                    <th class="text-center">وقت بداية الوردية</th>
+                    <th class="text-center">وقت الوصول</th>
+                    <th class="text-center">ملاحظة</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody">
+                </tbody>
+              </table>
+              <div class="row col-12 d-print-none">
+                <a href="{% url 'attends' %}" type="button" class="ml-2 btn btn-danger w-25">
+                  رجوع <i class="fas fa-undo fa-rotate-180 ml-3"></i>
+                </a>
+                <button type="button" class="ml-2 btn bg-gradient-navy w-25">
+                  تسجيل اليوم <i class="fas fa-sign ml-3"></i>
+                </button>
+                <button onclick="print()" type="button" class="ml-2 btn btn-success w-25">
+                  طباعة <i class="fas fa-print ml-3"></i>
+                </button>
+              </div>
+            </div>
+            <strong class="d-none d-print-block text-center">
+              التوقيع او الختم المناوب
+            </strong>
+            <strong class="d-none d-print-block text-center mt-3">
+              .................................
+            </strong>
+            <!-- /.card -->
+            <div class="modal fade" id="successMsg" tabindex="-1" aria-labelledby="exampleModalLabel"
+              aria-hidden="true">
+              <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                  <div class="modal-header bg-success bg-gradient">
+                    <h5 class="modal-title" id="exampleModalLabel">تم بنجاح!</h5>
+                    <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body text-center bg-dark">
+                    <div class="modal-image">
+                      <svg viewBox="1 0 30 40" style="fill: #48db71">
+                        <path d="M1 14 L5 10 L13 18 L27 4 L31 8 L13 26 z"></path>
+                      </svg>
+                    </div>
+                    <h1>تمت العملية بنجاح !</h1>
+                    <p id="employeeName"></p>
+                  </div>
+                  <div class="modal-footer bg-success bg-gradient"></div>
+                </div>
+              </div>
+            </div>
+            <div class="modal fade" id="errorMsg" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body text-center">
+                    <img src="{% static 'dist/img/error.png' %}" class="w-25 h-25 mb-3" alt="" />
+                    <h1>هذا الموظف ليس ضمن الوردية !</h1>
+                    <p>تأكد من تحديد الوردية بشكل صحيح</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<footer class="main-footer d-none d-print-block fixed-bottom">
+  <strong>تم طباعته بواسطة منظومة إدارة شؤون الموظفين عبر الموظف {{user.first_name}}
+    {{user.last_name}}</strong>
+  <div class="float-right d-none d-sm-inline-block">
+    بتاريخ اليوم : {% now "d-m-Y" %}
+  </div>
+</footer>
+{% endblock content %}
+{% block scripts %}
+<script src="{% static 'plugins/html5-qrcode/html5-qrcode.min.js' %}"></script>
+<script>
+  const successMsg = new bootstrap.Modal(document.getElementById("successMsg"));
+  const errorMsg = new bootstrap.Modal(document.getElementById("errorMsg"));
+  let schedule_id = "";
+  let group_id = '';
+  jQuery(function () {
+    const tbody = document.getElementById("tbody");
+    const rows = tbody.querySelectorAll("tr");
+    for (const row of rows) {
+      row.style.display = "none";
+    }
+  });
+  $("#scheduleSelect").on("change",function(event){
+    schedule_id = $("#scheduleSelect :selected").val();
+    $("#groupSelect").empty();
+    $("#groupSelect").append('<option value="" selected>-----------------</option>')
+    updateGroup(schedule_id);
+  })
+
+  $("#groupSelect").on("change", (e) => {
+    group_id = $("#groupSelect :selected").val();
+    getEmployee(schedule_id,group_id)
+  });
+
+
+  function updateGroup(id) {
+    
+    $.ajax({
+      url: '{% url "check_in" %}',
+      type: "get",
+      data: { schedule_id: id, getGroup: "." },
+      success: function (data) {
+        $.each(data['groups'], function (index, group) {
+          $("#groupSelect").append(
+            `<option value="${group.id}">${group.name}</option>`
+          );
+        })
+        console.log(data['groups']);
+      },
+      error:function(data){
+        console.log(data);
+      }
+    })
+  }
+  function getEmployee(schedule_id,group_id){
+      $.ajax({
+      url: '{% url "check_in" %}',
+      type: "get",
+      data: { schedule_id: schedule_id, group_id: group_id,getEmployees:'.' },
+      success: function (data) {
+        console.log(data['employees']);
+        $("#tbody").empty();
+        $.each(data['employees'], function (index, employee) {
+          $("#tbody").append(
+            `<tr id="EMP_ID_${employee.id}">
+              <td class='text-center'>${employee.schedule_name} </td>
+              <td class='text-center'>${employee.name} ${employee.supervisor ? "(مسؤول المجموعة)" : ""}</td>
+              <td class='text-center'>${employee.group_name}</td>
+              <td class='text-center'>${employee.schedule_start_time}</td>
+              <td class='text-center'>..........</td>
+              <td class='text-center'>..........</td>
+            </tr>`
+          );
+        })
+        console.log(data['groups']);
+      },
+      error:function(data){
+        console.log(data);
+      }
+    })
+  }
+
+  function domReady(fn) {
+    if (
+      document.readyState === "complate" ||
+      document.readyState === "interactive"
+    ) {
+      setTimeout(fn, 1);
+    } else document.addEventListener("DOMContentLoaded", fn);
+  }
+  domReady(() => {
+    function onScanSuccess(result) {
+      $.ajax({
+        type: "GET",
+        url: '{% url "check_in" %}',
+        data: { national_number: result, schedule_id: schedule_id,group_id: group_id },
+        success: function (data) {
+          let myData = data.data;
+          $(`#EMP_ID_${myData.id} td:nth-child(5)`).addClass(`${myData.is_late ? 'text-danger':'text-success'}`).text(myData.time);
+          $(`#EMP_ID_${myData.id} td:nth-child(6)`).addClass(`${myData.is_late ? 'text-danger':'text-success'}`).text('متأخر');
+          document.getElementById("success_sound").play();
+          $("#employeeName").text(`تم تسجيل حظور الموظف ${myData.name}`);
+          successMsg.show();
+        },
+        error: function (data) {
+          document.getElementById("error_sound").play();
+          if(data.status == 400){
+            let errorData = JSON.parse(data.responseText);
+            $("#errorMsg .modal-body p").text(errorData['error']);
+          }
+          errorMsg.show();
+        },
+      });
+    }
+
+    var qrScanner = new Html5QrcodeScanner("qrReader", { fps: 15 });
+    qrScanner.render(onScanSuccess);
+  });
+</script>
+{% endblock scripts %}

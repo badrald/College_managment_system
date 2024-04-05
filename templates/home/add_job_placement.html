@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block sub_title %}نـموذج التنسيب{% endblock %}
+{% block title %}نـموذج التنسيب{% endblock %}
+{% block content %}
+<style>
+  .modal-image {
+    width: 70px;
+    height: 70px;
+    margin: auto;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px #48db71;
+    padding: 11px 10px 2px;
+    margin-bottom: 2em;
+  }
+
+  .modal-body h1 {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+  }
+
+  .modal-body p {
+    margin-bottom: 2em;
+    color: #666;
+  }
+
+  :root {
+    --defualt-idr: 0.3s;
+  }
+
+  .pulse-grow {
+    display: inline-block;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    /* Hide Tap Highlight Color */
+    transform: translateZ(0);
+    /* Hardware Acceleration */
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  }
+
+  .pulse-grow:hover {
+    /* Improve Anti-Aliasing */
+    animation-name: pulse-grow;
+    /* Pulse Grow Keyframes */
+    animation-duration: var(--defualt-idr);
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+  }
+
+  @keyframes pulse-grow {
+    to {
+      transform: scale(1.1);
+    }
+  }
+</style>
+<div style="direction: rtl" class="wrapper bg-dark">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper bg-dark">
+    <!-- Content Header (Page header) -->
+    <!--اظافة اذن تنسيب-->
+    <div class="content bg-dark">
+      <div class="container-fluid bg-dark">
+        <!-- form add job placemenet -->
+        <div class="card card-navy mt-2">
+          <div class="card-header d-flex justify-content-center">
+            <h3 class="card-title d-flex justify-content-center fs-3">
+              إضافة إذن تعاقد
+            </h3>
+          </div>
+          <!-- form start -->
+
+          <form method="POST" enctype="multipart/form-data" id="addJobPlacement">
+            {% csrf_token %}
+            <div class="card-body bg-dark">
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="id_name"> الاسم الرباعي</label>
+                  <input type="text" name="employee_name" maxlength="100" class="form-control"
+                    placeholder="الرجاء ادخال الاسم الرباعي" required id="id_employee_name" />
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="employee_sex">الجنس</label>
+                  <select name="employee_sex" class="form-select right" id="id_employee_sex">
+                    <option value="True" selected>ذكر</option>
+                    <option value="False">انثى</option>
+                  </select>
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="index_number">الرقم الإشاري</label>
+                  <input type="number" name="index_number" class="form-control"
+                    placeholder="الرجاء إدخال الرقم الإشاري " id="id_index_number" />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="job_title">التخصص</label>
+                  <input type="text" name="job_title" maxlength="100" class="form-control"
+                    placeholder="الرجاء ادخال التخصص" required id="id_job_title" fdprocessedid="zlfr5h" />
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="id_graduation_date">رقم إذن التعاقد</label>
+                  <input type="number" name="appointment_code" class="form-control"
+                    placeholder="الرجاء ادخال  رقم إذن التعاقد" id="id_appointment_code" />
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="appointment_date">تاريخ إذن التعاقد</label>
+                  <input type="date" name="appointment_date" class="form-control" required id="id_appointment_date" />
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="id_date_start">مكان العمل</label>
+                  <select name="job_place" class="form-select" required id="id_job_place" fdprocessedid="jp2iza">
+                    <option selected>-----------------</option>
+                    {% for job_place in job_places  %}
+                    <option value="{{job_place.id}}">
+                      {{job_place}}
+                    </option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="id_send_to">الجيهة المخاطبة </label>
+                  <select name="send_to" class="form-select" required id="id_send_to" fdprocessedid="jp2iza">
+                    <option selected>-----------------</option>
+                    {% for job_place in job_places  %}
+                    <option value="{{job_place.id}}">
+                      {{job_place}}
+                    </option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="form-group col-md-6">
+                  <label class="" for="description">الملاحظات</label>
+                  <textarea name="description" class="form-control" placeholder="الرجاء إدخال اذا كان هناك اي ملاحظات"
+                    id="id_description"></textarea>
+                </div>
+              </div>
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer bg-dark">
+              <button onclick="history.back()" type="button" class="btn btn-danger w-25 ">
+                رجوع <i class="fa fa-undo-alt fa-rotate-180 ml-3"></i>
+              </button>
+              <button type="submit" class="btn bg-navy w-50 fs-5  ml-3">
+                اضافة<i class="fa fa-plus ml-3"></i>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- /.card -->
+      </div>
+      <div class="modal fade" id="successMsg" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg ">
+          <div class="modal-content bg-dark">
+            <div class="modal-header">
+              <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center ">
+              <div class="modal-image">
+                <svg viewBox="1 0 30 40" style="fill: #48db71">
+                  <path d="M1 14 L5 10 L13 18 L27 4 L31 8 L13 26 z"></path>
+                </svg>
+              </div>
+              <h1>تمت العملية بنجاح !</h1>
+              <p>تمت عملية اضافة رسالة التنسيب بنجاح</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                إغلاق النافذة
+              </button>
+              <a href="#" id="showJobPlacement" class="btn btn-success">
+                إظهار اذن التعاقد
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade" id="errorMsg" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg ">
+          <div class="modal-content bg-dark">
+            <div class="modal-header">
+              <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body  text-center bg-dark">
+              <img src="{% static 'dist/img/error.png' %}" class="w-25 h-25 mb-3" alt="" />
+              <h1>لم تتم عملية بنجاح !</h1>
+              <p>تأكد من الاتصال او إدخال البيانات بشكل صحيح</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{%endblock%} {% block scripts %}
+<script>
+
+  let addUrl = '{% url "add_job_placement" %}';
+
+</script>
+<script src="{% static 'home/js/add_job_placement.js' %}"></script>
+{% endblock scripts %}

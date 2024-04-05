@@ -1,0 +1,131 @@
+{% extends 'base.html' %} {% load static %} {% block custom_css %}
+<link rel="stylesheet" href='{% static "home/css/searchEmployee.css" %}' />
+{% endblock custom_css %} {% block title %}إســــتعــلام عن الإجــــازات{% endblock %}
+{% block sub_title %}إســــتعــلام عن الإجــــازات{% endblock %}
+{% block content %}
+<div class="d-none d-print-block text-center">
+  <img class="rounded-circle w-25 h-25" style="margin-top: -10px" src="{% static 'dist/img/1.png' %}" alt="" />
+  <p class="mb-1 fs-4">وزارة الــصــحــة</p>
+  <p class="mb-1 fs-4">إدارة الخدمات الصحية قصر بن غشير</p>
+</div>
+
+<div style="direction: rtl" class="wrapper">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper bg-dark">
+    <!-- Content Header (Page header) -->
+    <div class="content bg-dark">
+      <div class="container-fluid bg-dark">
+        <div class="d-flex justify-content-center align-items-center bg-dark">
+          <div class="card card-navy card-size mt-5 mb-5 text-center shadow-lg p-3 rounded bg-dark">
+            <div class="card-header d-flex justify-content-center">
+              <h3 class="card-title fs-4">البحث عن موظف</h3>
+            </div>
+            <div class="card-body bg-dark">
+              <form id="searchForm">
+                <div class="card-body">
+                  <div class="form-row">
+                    <div class="form-group col-md-12">
+                      <div class="search_box bg-dark">
+                        <div class="search_field">
+                          <input type="text" class="input" id="searchBar" required placeholder="بحث...." />
+                          <i class="fas fa-search"></i>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="d-flex justify-content-center fs-5 w-100 fst-italic text-bold">
+                      بحث بواسطة
+                    </div>
+                    <div class="dropdown bg-dark text-end w-75">
+                      <div class="default_option text-bold fs-4 bg-dark" id="type">الاسم</div>
+                      <ul>
+                        <li value="1">الاسم</li>
+                        <li value="2">الرقم الوطني</li>
+                      </ul>
+                    </div>
+                    <div class="w-25">
+                      <button class="myBtn btn bg-navy btn-lg mb-4" type="submit" id="searchBtn">
+                        بحث<i class="fas fa-search m-1"></i>
+                      </button>
+                    </div>
+                {% if user.profile.job_place.id == 1 %}
+                  <div class="form-group col-12">
+                    <label>المركز الصحية</label>
+                    <select class="form-select" id="HealthCenter" aria-label="Select Health Center">
+                      <option value=" ">الكل</option>
+                      <option value="المركز الصحي الشفاء">المركز الصحي الشفاء</option>
+                      <option value="المركز الصحي قصر بن غشير">المركز الصحي قصر بن غشير</option>
+                      <option value="المركز الصحي المرازيق">المركز الصحي المرازيق</option>
+                      <option value="المركز الصحي الكايخ">المركز الصحي الكايخ</option>
+                      <option value="المركز الصحي سوق السبت">المركز الصحي سوق السبت</option>
+                      <option value="وحدة الرعاية الصحية التمائم">وحدة الرعاية الصحية التمائم</option>
+                      <option value="وحدة الرعاية الصحية الحمرونيه">وحدة الرعاية الصحية الحمرونيه</option>
+                      <option value="وحدة الرعاية الصحية القرضبية">وحدة الرعاية الصحية القرضبية</option>
+                    </select>
+                  </div>
+                {% endif %}
+                    <div class="w-100">
+                      <button
+                        class="btn w-75 mt-5 fst-italic fs-5 bg-navy text-center shadow-lg rounded d-print-none dropDown"
+                        id="backBtn">
+                        الرجوع <i class="fas fa-undo fa-rotate-180 ml-5"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <div class="card d-print-table-row bg-dark">
+          <div class="card-header">قائمة الموظفين</div>
+          <div class="card-body">
+            <table class="table d-print-table shadow-lg bg-white rounded">
+              <thead>
+                <tr>
+                  <th class="text-center">
+                    <input type="checkbox" id="selectAll" class="d-print-none" />
+                  </th>
+                  <th>الاسم</th>
+                  <th>الرقم الوطني</th>
+                  <th class="d-print-none">الجنسية</th>
+                  <th>التخصص</th>
+                  <th>حهة العمل</th>
+                  <th>الإجــــازات</th>
+                </tr>
+              </thead>
+              <tbody id="tbody" class="bg-dark"></tbody>
+            </table>
+            <div class="pagination justify-content-center mt-3" id="pagination"></div>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex justify-content-center align-items-center mb-5">
+        <p id="loader"></p>
+      </div>
+      <div id="notFound" class="text-danger h4 text-center">
+        لا يوجد بيانات لهذا الموظف
+      </div>
+    </div>
+    <strong class="d-none d-print-block text-center">
+      التوقيع او الختم
+    </strong>
+    <strong class="d-none d-print-block text-center mt-3">
+      .................................
+    </strong>
+    <!-- /.card -->
+  </div>
+</div>
+</div>
+<footer class="main-footer d-none d-print-block fixed-bottom">
+  <strong>تم طباعته بواسطة منظومة إدارة شؤون الموظفين عبر الموظف {{user.first_name}}
+    {{user.last_name}}</strong>
+  <div class="float-right d-none d-sm-inline-block">
+    بتاريخ اليوم : {% now "d-m-Y" %}
+  </div>
+</footer>
+
+{% endblock %} {% block scripts %}
+<script src="{% static 'home/js/search-Holidays.js' %}"></script>
+{% endblock scripts %}

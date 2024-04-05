@@ -1,0 +1,206 @@
+{% extends 'base.html' %} {% load static %} {% block title %} صــــفــــحــــة
+تــــعــــديــــل مــــوظــــف {% endblock title %}
+{% block sub_title %}تــــعــــديــــل مــــوظــــف {% endblock  %} {% block content %}
+<style>
+  .modal-image {
+    width: 70px;
+    height: 70px;
+    margin: auto;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px #48DB71;
+    padding: 11px 10px 2px;
+    margin-bottom: 2em;
+  }
+
+  .modal-body h1 {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: .5em;
+  }
+
+  .modal-body p {
+    margin-bottom: 2em;
+    color: #666;
+  }
+</style>
+<div style="direction: rtl" class="wrapper bg-dark">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper bg-dark">
+    <!-- Content Header (Page header) -->
+    <div class="card card-navy mt-2">
+      <div class="card-header d-flex justify-content-center">
+        <h3 class="card-title fst-italic fs-4 text-bold">تعديل موظف</h3>
+      </div>
+      <!-- /.card-header -->
+      <!-- form start -->
+      <form method="POST" enctype="multipart/form-data" id="editForm">
+        {% csrf_token %}
+        <div class="card-body bg-dark">
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="id_name">الاسم</label>
+              <input type="text" class="form-control" value="{{employee.name}}" required name="name" id="id_name"
+                placeholder="ادخل الاسم" />
+            </div>
+            <div class="form-group col-md-6">
+              <label for="id_national_number">الرقم الوطني / رقم الهوية</label>
+              <input type="text" name="national_number" value="{{employee.national_number}}" required
+                class="form-control" id="id_national_number" placeholder="ادخل الرقم الوطني / رقم الهوية" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="sex">الجنس</label>
+              <select name="sex" class="form-select right" id="id_sex">
+                <option value="True" {% if employee.sex %}
+                  selected
+                {% endif %} > ذكر</option>
+                <option value="False" {% if not employee.sex %}
+                  selected
+                {% endif %}>انثى</option>
+              </select>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="nationality">الجنسية</label>
+              <input type="text" name="nationality" value="{{employee.nationality}}" required class="form-control"
+                id="nationality" placeholder="ادخل الجنسية" />
+            </div>
+            
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="id_qualification">المؤهل العلمي</label>
+              <input type="text" class="form-control" name="qualification" required value="{{employee.qualification}}"
+                id="id_qualification" placeholder="ادخل المؤهل العلمي" />
+            </div>
+            <div class="form-group col-md-6">
+              <label for="id_specialization">التخصص</label>
+              <input type="text" class="form-control" name="specialization" required value="{{employee.specialization}}"
+                id="id_specialization" placeholder="ادخل التخصص" />
+            </div>
+
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="id_graduation_date">تاريخ التخرج</label>
+              <input type="text" class="form-control" name="graduation_date" required
+                value="{{employee.graduation_date|date:'Y-m-d'}}" id="id_graduation_date" placeholder="ادخل تاريخ التخرج" />
+            </div>
+            <div class="form-group col-md-6">
+              <label for="id_job_place">جهة العمل</label>
+              {% if job_places %}
+              <select name="job_place" class="form-select right" id="id_job_place">
+                <option value="{{employee.job_place.id}}" selected>{{employee.job_place.name}}</option>
+                {% for job_place in job_places %}
+                <option value="{{job_place.id}}">{{job_place.name}}</option>
+                {% endfor %}     
+              </select>
+              {% else %}
+              <input type="hidden" name="job_place" value="{{employee.job_place.id}}">
+              <input type="text" class="form-control" required readonly value="{{employee.job_place}}" />
+              {% endif %}
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="id_date_start">تاريخ المباشرة</label>
+              <input type="text" name="date_start" class="form-control" required id="id_date_start"
+                placeholder="ادخل تاريخ المباشرة" value="{{ employee.date_start|date:'Y-m-d' }}" />
+            </div>
+            <div class="form-group col-md-6">
+              <label for="id_attendees"> حالة الحضور</label>
+              <input type="checkbox" class="btn-check d-none" id="id_attendees" name="attendees" {% if employee.attendees %} checked {% endif %} autocomplete="off" />
+              <label class="btn btn-outline-success col-md-12" for="id_attendees">مستمر في العمل</label>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="id_date_start">الدرجة </label>
+              <input type="text" name="degree" class="form-control" id="id_date_start"
+                value="{% if employee.degree %}{{employee.degree}}{% endif %}" placeholder="إدخل الدرجة" />
+            </div>
+            <div class="form-group col-md-6">
+              <label for="id_folder_number">رقم الملف </label>
+              <input type="number" name="folder_number" class="form-control" id="id_folder_number"
+                value="{% if employee.folder_number %}{{employee.folder_number}}{% endif %}"
+                placeholder="إدخل رقم الملف" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label class="" for="appointment_number" name="appointment_record">قرار التعين</label>
+              <input type="text" class="form-control" name="appointment_record" id="appointment_record"
+                value="{% if employee.appointment_record  %}{{employee.appointment_record }}{% endif %}"
+                placeholder="ادخل قرار التعين" />
+            </div>
+            <div class="form-group col-md-6">
+              <label for="note" name="note">ملاحظة</label>
+              <input type="text" class="form-control" name="note" id="note"
+                value="{% if employee.note %}{{employee.note}}{% endif %}" placeholder="ادخل اذا كان هناك هي ملاحظة" />
+            </div>
+          </div>
+           <div class="form-row">
+                <div class="form-group col-md-12">
+                  <label for="id_job_placement">إذن التعاقد</label>
+                  <select name="job_placement" class="form-control" id="id_job_placement">
+                    <option value="{{employee.job_placement.id}}" selected>{{employee.job_placement}}</option>
+                  </select>
+                </div>
+              </div>
+          <div class="form-row">
+            <div class="form-group col-12">
+              <div id="fileStatus"></div>
+              <label>رفع المستند</label>
+              <label class="btn btn-outline-danger form-control-file" for="upload-file">رفع المستند</label>
+              <input type="file" class="custom-file-input d-none" id="upload-file" name="docs" />
+            </div>
+          </div>
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer bg-dark">
+          <a href="{% url 'search' %}" class="btn bg-danger w-25 ">رجوع <i class="fa fa-undo fa-rotate-180 ml-3" ></i>
+          </a>
+          <button type="submit" class="btn btn-success w-50">تعديل <i class="fa fa-exchange-alt ml-3"></i></button>
+        </div>
+      </form>
+    </div>
+    <div class="modal fade" id="successMsg" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header bg-dark">
+            <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body text-center bg-dark">
+            <div class="modal-image ">
+              <svg viewBox="1 0 30 40" style="fill:#48DB71">
+                <path d="M1 14 L5 10 L13 18 L27 4 L31 8 L13 26 z"></path>
+              </svg>
+            </div>
+            <h1>تمت العملية بنجاح !</h1>
+            <p>تمت عملية تحديث البيانات بنجاح</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="errorMsg" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header bg-dark">
+            <button type="button" class="btn-close m-0 " data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body text-center bg-dark">
+            <img src="{% static 'dist/img/error.png' %}" class="w-25 h-25 mb-3 " alt="">
+            <h1>لم تتم عملية بنجاح !</h1>
+            <p>تأكد من الاتصال او إدخال البيانات بشكل صحيح</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block scripts %}
+<script>
+  let employeeId = {{ employee.id }};
+</script>
+<script src="{% static 'home/js/edit_employee.js' %}"></script>
+{% endblock %}

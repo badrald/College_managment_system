@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    {% load static %}
+    <link rel="shortcut icon" href="{% static 'dist/img/logo_hr.png' %}" class="rounded-circle" type="image/x-icon">
+    <title>منظومة شؤون الموظفين</title>
+    <link rel="stylesheet" href="{% static 'plugins/fontawesome-free/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'dist/css/homePage.css' %}">
+    {% block costume_css %}{% endblock costume_css %}
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="{% static 'plugins/jquery/jquery-ui.css' %}">
+    <!-- IonIcons -->
+    <link rel="stylesheet" href=" http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{% static 'dist/css/adminlte_ar.min.css' %}">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+</head>
+
+<body dir="rtl" class="hold-transition sidebar-mini">
+    {% block content %}
+    {% endblock %}
+    <div class="position-absolute p-3 text-white   text-bold" style="bottom: 0; right: 0;">
+        تم التصميم بواسطة
+        <a href="https://www.facebook.com/accuracyworld/?locale=ar_AR" target="_blank" class="text-white text-bold">
+            شركة عالم الدقة الحديثة
+        </a>
+    </div>
+    <div class="position-absolute p-3 text-white   text-bold" style="bottom: 0; left: 0;">
+        <a href="{% url 'restoredatabase' %}" target="_blank" class="text-white text-bold">
+            مركز الصيانة
+        </a>
+    </div>
+    </div>
+  <!-- REQUIRED SCRIPTS -->
+  <script src="{% static 'plugins/jquery/jquery_ui.js' %}"></script>
+  <!-- jQuery -->
+  <script src="{% static 'plugins/jquery/dist/jquery.js' %}" ></script>
+  <!-- Bootstrap -->
+  <script src="{% static 'plugins/bootstrap/js/bootstrap_bundle_min.js' %}"></script>
+  <!-- OPTIONAL SCRIPTS -->
+    {% block scripts %}
+    {% endblock scripts %}
+</body>
+
+</html>

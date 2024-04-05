@@ -1,0 +1,627 @@
+{% extends 'base.html' %} {% load static %} {% block custom_css %}
+<link rel="stylesheet" href="{% static 'home/css/settings.css' %}" />
+{% endblock custom_css %} {% block title%} المجموعات{% endblock title %} 
+{% block sub_title %} المجموعات{% endblock %}
+{% block content %}
+
+
+<div class="d-none d-print-block text-center">
+  <img class="rounded-circle w-25 h-25" style="margin-top: -10px" src="{% static 'dist/img/1.png' %}" alt="" />
+  <p class="mb-1 fs-4">وزارة الــصــحــة</p>
+  <p class="mb-1 fs-4">إدارة الخدمات الصحية قصر بن غشير</p>
+  {% if user.profile.job_place.id != 1 %}<p class="mb-1 fs-4">{{user.profile.job_place.name}}</p>{% endif %}
+</div>
+
+
+
+<div style="direction: rtl" class="wrapper">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper bg-dark">
+    <!-- Content Header (Page header) -->
+    <!--اظافة موظف-->
+    <div class="content bg-dark">
+      <div class="container-fluid bg-dark">
+        <!-- form add employee -->
+        <div class="card card-navy mt-3 bg-dark d-print-none">
+          <div class="card-header d-flex justify-content-center fs-4 fst-italic">
+            اجراءات المجموعات
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-lg-3 mt-4 mb-4">
+                <a href="{% url 'attends' %}">
+                  <div class="card bg-white pulse-grow shadow-lg rounded" style="width: 18rem">
+                    <img src="{% static 'home/default_imges/back.png' %}" class="card-img-top" alt="..." />
+                    <div class="card-body bg-navy">
+                      <p class="card-text text-center fs-4">الرجوع</p>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              {% if user.is_staff %}
+              <div class="col-lg-3 mt-4 mb-4">
+                <a href="#GroupAdd" data-bs-toggle="modal">
+                  <div class="card bg-white pulse-grow shadow-lg rounded" style="width: 18rem">
+                    <img src="{% static 'attends/imges/add_Group.png' %}" class="card-img-top" alt="..." />
+                    <div class="card-body bg-navy">
+                      <p class="card-text text-center fs-4">إضــافــة مجموعة</p>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              <div class="col-lg-3 mt-4 mb-4">
+                <a href="#GroupEditMenu" data-bs-toggle="modal">
+                  <div class="card bg-white pulse-grow shadow-lg rounded" style="width: 18rem">
+                    <img src="{% static 'attends/imges/edit_group.png' %}" class="card-img-top" alt="..." />
+                    <div class="card-body bg-navy">
+                      <p class="card-text text-center fs-4" styel="c">
+                        تعديل مجموعة
+                      </p>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              <div class="col-lg-3 mt-4 mb-4">
+                <a href="#GroupDelete" data-bs-toggle="modal">
+                  <div class="card bg-white pulse-grow shadow-lg rounded" style="width: 18rem">
+                    <img src="{% static 'attends/imges/delete-group.png' %}" class="card-img-top" alt="..." />
+                    <div class="card-body bg-navy">
+                      <p class="card-text text-center fs-4">حــذف مجموعة</p>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              <div class="col-lg-3 mt-4 mb-4">
+                {% endif %}
+                <a href="#employeeHodliays" data-bs-toggle="collapse">
+                  <div class="card bg-white pulse-grow shadow-lg rounded" style="width: 18rem">
+                    <img src="{% static 'attends/imges/group.png' %}" class="card-img-top" alt="..." />
+                    <div class="card-body bg-navy">
+                      <p class="card-text text-center fs-4">إظهار المجموعات</p>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /.container-fluid -->
+      <div class="card card-navy d-print-table-row table-responsive collapse" id="employeeHodliays">
+        <div class="card-header text-center">
+          المجموعات
+        </div>
+        <div class="card-body bg-dark">
+          <div>
+            <button id="printSelectedBtn" class="btn btn-primary d-print-none">
+              طباعة المحدد
+            </button>
+          </div>
+          <table class="table d-print-table d-xl-table">
+            <thead>
+              <tr>
+                <th>
+                  <input type="checkbox" id="selectAll" class="d-print-none" />
+                </th>
+                <th class="text-center">اسم المجموعة</th>
+                <th class="text-center">المشرف على المجموعة</th>
+                <th class="text-center">جهة العمل</th>
+                <th class="text-center">عدد الموظفين في المجموعة</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for group in groups%}
+              <tr>
+                <td>
+                  <input type="checkbox" class="employee-checkbox d-print-none" />
+                </td>
+                <td class="text-center">{{group.name}}</td>
+                <td class="text-center">
+                  {{group.supervisor.name}}
+                </td>
+                <td class="text-center">
+                  {{group.job_place.name}}
+                </td>
+                <td class="text-center">
+                  {{ group.employees.all.count }}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    
+
+    <div class="modal fade" id="GroupAdd" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content bg-dark">
+          <div class="modal-header bg-gradient-primary">
+            <!--عنوان النافذة المنبثقة-->
+            <h5 class="modal-title">إنشاء مجموعة جديدة</h5>
+            <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <!--محتوى النافذة المنبثقة-->
+          <div class="modal-body">
+            <form method="POST" enctype="multipart/form-data" id="addForm">
+              {% csrf_token %}
+              <div class="form-row">
+                <div class="col-md-6">
+                  <label class="form-label" for="id_name">إسم المجموعة</label><input type="text" name="name"
+                    maxlength="50" class="form-control" placeholder="رجاء ادخال اسم المجموعة" required="" id="id_name"
+                    fdprocessedid="eliuq" />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label" for="id_supervisor">المشرف على المجموعة:</label>
+                  <select name="supervisor" required id="id_supervisor" class="form-select" fdprocessedid="s2qpno">
+                    <option value="" selected="">---------</option>
+                    {% for employee in employees %}
+                    <option value="{{employee.id}}">
+                      {{employee.name}} // {{employee.specialization}}
+                    </option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="col-12">
+                  <label class="form-label" for="id_job_place">جهة العمل:</label>
+                  <select name="job_place" required="" id="id_job_place" class="form-select" fdprocessedid="x8zntv">
+                    {% if job_places %}
+                    <option value="" selected>---------</option>
+                    {% for job_place in job_places %}
+                    <option value="{{ job_place.id }}">
+                      {{ job_place.name }}
+                    </option>
+                    {% endfor %} {% else %}
+                    <option value="{{user.profile.job_place.id}}" selected readonly>
+                      {{user.profile.job_place.name}}
+                    </option>
+                    {% endif %}
+                  </select>
+                </div>
+              </div>
+              <div class="col-12 mt-3">
+                <div class="input-group">
+                  <input type="text" class="form-control" id="search_bar" placeholder="البحث عن موظف " />
+                  <span class="input-group-text">
+                    <i class="fas fa-search"></i>
+                  </span>
+                </div>
+                <div class="my-custom-scrollbar">
+                  <table class="table ">
+                    <thead class="sticky-top bg-light">
+                      <tr>
+                        <th>
+                          <input type="checkbox" id="check_all" />
+                        </th>
+                        <th>اسم الموظف</th>
+                        <th>المؤهل العلمي</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tbody">
+                      {% for employee in employees %}
+                      <tr>
+                        <td>
+                          <input type="checkbox" name="employees" value="{{employee.id}}" />
+                        </td>
+                        <td {% if not employee.available %} class="text-danger" {% endif%}>
+                          {{employee}}
+                        </td>
+                        <td>{{employee.specialization}}</td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="form-row mt-3">
+                <div class="col-6">
+                  <button type="button" class="btn btn-danger w-100" data-bs-dismiss="modal">
+                    رجوع
+                    <i class="fas fa-undo fa-rotate-180  ml-3"></i>
+                  </button>
+                </div>
+                <div class="col-6">
+                  <button class="btn btn-primary w-100" type="submit">
+                    إضافة
+                    <i class="fas fa-plus ml-3"></i>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer bg-gradient-primary">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="GroupEditMenu" tabindex="-1" aria-labelledby="HolidayMenu" aria-hidden="true">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content bg-dark">
+          <div class="modal-header bg-gradient-navy">
+            <!--عنوان النافذة المنبثقة-->
+            <h5 class="modal-title">قائمة مجموعات</h5>
+            <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <!--محتوى النافذة المنبثقة-->
+          <div class="modal-body">
+            <div class="my-custom-scrollbar">
+              <table class="table d-print-table">
+                <thead>
+                  <tr>
+                    <th>
+                      <input type="checkbox" id="selectAll" class="d-print-none" />
+                    </th>
+                    <th class="text-center">اسم المجموعة</th>
+                    <th class="text-center">المشرف على المجموعة</th>
+                    <th class="text-center">جهة العمل</th>
+                    <th class="text-center">عدد الموظفين في المجموعة</th>
+                    <th class="text-center">الاجراءات</th>
+
+                  </tr>
+                </thead>
+                <tbody id="tbody">
+                  {% for group in groups%}
+                  <tr>
+                    <td>
+                      <input type="checkbox" class="employee-checkbox d-print-none" />
+                    </td>
+                    <td class="text-center">{{group.name}}</td>
+                    <td class="text-center">
+                      {{group.supervisor.name}}
+                    </td>
+                    <td class="text-center">
+                      {{group.job_place.name}}
+                    </td>
+                    <td class="text-center">
+                      {{ group.employees.all.count }}
+                    </td>
+                    <td class="text-center">
+                      <a href="#" onclick="groupInfo({{group.id}})" class="btn btn-primary d-print-none ">
+                        تعديل</a>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="modal-footer bg-gradient-navy">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="GroupEditForm" tabindex="-1" aria-labelledby="GroupEditForm" aria-hidden="true">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content bg-dark">
+          <div class="modal-header bg-gradient-navy">
+            <!--عنوان النافذة المنبثقة-->
+            <h5 class="modal-title"></h5>
+            <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <!--محتوى النافذة المنبثقة-->
+          <div class="modal-body">
+            <form method="POST" enctype="multipart/form-data" id="EditForm">
+              {% csrf_token %}
+              <input type="hidden" name="group_id" value="">
+              <input type="hidden" name="groupEdit" value=".">
+              <div class="form-row">
+                <div class="col-md-6">
+                  <label class="form-label" for="id_name">إسم المجموعة</label>
+                  <input type="text" name="name" maxlength="50" class="form-control"
+                    placeholder="رجاء ادخال اسم المجموعة" required="" id="id_name" fdprocessedid="eliuq" />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label" for="id_supervisor">المشرف على المجموعة:</label>
+                  <select name="supervisor" required id="id_supervisor" class="form-select" fdprocessedid="s2qpno">
+                   <option value=""></option>
+                   <option value="">---------------------</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="col-12">
+                  <label class="form-label" for="id_job_place">جهة العمل:</label>
+                  <select name="job_place" required="" id="id_job_place" class="form-select" fdprocessedid="x8zntv">
+                    {% if job_places %}
+                    <option value="" selected>---------</option>
+                    {% for job_place in job_places %}
+                    <option value="{{ job_place.id }}">
+                      {{ job_place.name }}
+                    </option>
+                    {% endfor %} {% else %}
+                    <option value="{{user.profile.job_place.id}}" selected readonly>
+                      {{user.profile.job_place.name}}
+                    </option>
+                    {% endif %}
+                  </select>
+                </div>
+              </div>
+              <div class="col-12 mt-3 my-custom-scrollbar">
+                <table class="table ">
+                  <thead class="sticky-top bg-light">
+                    <tr>
+                      <th class="text-center">اسم الموظف</th>
+                      <th class="text-center">التخصص</th>
+                      <th class="text-center">الاجراءات</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbodyGroupEdit">
+                    <tr id="spinnerContainer" style="display: none;">
+                      <td colspan="6" class="text-center">
+                        <div class="d-flex justify-content-center">
+                          <div class="spinner-border text-primary" role="status" style="width: 6rem;height: 6rem;">
+                            <span class="visually-hidden">Loading...</span>
+                          </div>
+                        </div>
+                      </th>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="col-12 form-row mt-5">
+                <div class="col-4">
+                  <button type="button" class="btn btn-danger w-100" data-bs-dismiss="modal"
+                    aria-label="Close">رجوع <i class="fas fa-chevron-circle-right ml-3"></i></button>
+                </div>
+                <div class="col-4">
+                  <button class="btn btn-primary w-100" type="submit">التعديل <i class="fas fa-edit ml-3"></i></button>
+                </div>
+                <div class="col-4">
+                  <a href="#" data-bs-toggle="modal" data-bs-target="#addToGroup" class="btn bg-info w-100">إضافة
+                    موظفين الى مجموعة  <i class="fas fa-plus-circle ml-3"></i></a>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer bg-gradient-navy">
+          </div>
+          <!-- /.card-body -->
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="GroupDelete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content bg-dark">
+          <div class="modal-header bg-gradient-danger">
+            <!--عنوان النافذة المنبثقة-->
+            <h5 class="modal-title">حــذف مجموعة</h5>
+            <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <!--محتوى النافذة المنبثقة-->
+          <div class="modal-body">
+            <table class="table d-print-table">
+              <thead>
+                <tr>
+                  <th>
+                    <input type="checkbox" id="selectAll" class="d-print-none" />
+                  </th>
+                  <th class="text-center">اسم المجموعة</th>
+                  <th class="text-center">المشرف على المجموعة</th>
+                  <th class="text-center">جهة العمل</th>
+                  <th class="text-center">عدد الموظفين في المجموعة</th>
+                  <th class="text-center">الاجراءات</th>
+                </tr>
+              </thead>
+              <tbody id="tbody">
+                {% for group in groups%}
+                <tr>
+                  <td>
+                    <input type="checkbox" class="employee-checkbox d-print-none" />
+                  </td>
+                  <td class="text-center">{{group.name}}</td>
+                  <td class="text-center">
+                    {{group.supervisor.name}}
+                  </td>
+                  <td class="text-center">
+                    {{group.job_place.name}}
+                  </td>
+                  <td class="text-center">
+                    {{ group.employees.all.count }}
+                  </td>
+                  <td class="text-center">
+                    <a href="#" onclick="updateDelete(1,'{{group.name}}','{{group.id}}')"
+                      class="btn btn-sm btn-outline-danger d-print-none" data-bs-toggle="modal"
+                      data-bs-target="#message">
+                      حذف</a>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            <div class="col-12">
+              <button type="button" class="btn btn-danger w-50" data-bs-dismiss="modal" aria-label="Close">
+                اغلاق <i class="fas fa-chevron-circle-right ml-3"></i>
+              </button>
+            </div>
+          </div>
+          <div class="modal-footer bg-gradient-danger">
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="modal fade" id="addToGroup" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content bg-dark bg-dark">
+          <div class="modal-header bg-gradient-navy">
+            <h5 class="modal-title" id="exampleModalLabel">
+              إضافة موظفين إلى مجموعة
+            </h5>
+            <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body ">
+            <form id="groupAdd" method="POST">
+              {% csrf_token %}
+              <div class="form-row">
+                <input type="hidden" name="group_id">
+                <input type="hidden" name="AddToGroup" value=".">
+                <div class="col-12 mt-3">
+                  <div class="input-group">
+                    <input type="text" class="form-control" id="search_bar_employee" placeholder="البحث عن موظف " />
+                    <span class="input-group-text">
+                      <i class="fas fa-search"></i>
+                    </span>
+                  </div>
+                  <div class="my-custom-scrollbar">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th>
+                            <input type="checkbox" id="check_all" />
+                          </th>
+                          <th>اسم الموظف</th>
+                          <th>التخصص</th>
+                        </tr>
+                      </thead>
+                      <tbody id="tbodyEmployee">
+                        {% for employee in employees %}
+                        <tr>
+                          <td>
+                            <input type="checkbox" name="employees" value="{{employee.id}}" />
+                          </td>
+                          <td {% if not employee.available %} class="text-danger" {% endif %}>
+                            {{employee}} {% if not employee.available %}(في اجازة){% endif %}
+                          </td>
+                          <td>{{employee.specialization}}</td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 form-row">
+                <div class="col-6">
+                  <button type="button" class="btn btn-danger w-100" data-bs-dismiss="modal">
+                    رجوع <i class="fas fa-chevron-circle-right ml-3"></i>
+                  </button>
+                </div>
+                <div class="col-6">
+                  <button type="submit" class="btn btn-primary w-100">
+                    حفظ التغيرات
+                    <i class="fas fa-plus-circle ml-3"></i>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer bg-gradient-navy">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="message" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content bg-dark bg-dark">
+          <div class="modal-header bg-gradient-danger">
+            <h5 class="modal-title" id=""> رسالة حذف</h5>
+            <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="text-center">
+              <img src="{% static 'dist/img/alert-icon.png' %}" class="w-25 h-25 mb-3" alt="" />
+              <h4 id="deleteText"></h4>
+              <p id="deletedEmployee"></p>
+            </div>
+            <form action="" method="post" id="deleteFromGroup">
+              {% csrf_token %}
+              <input type="hidden" name="deleteEmployee">
+              <input type="hidden" name="deleteGroup">
+              <input type="hidden" name="employee_id">
+              <input type="hidden" name="group_id">
+              <div class="col-12 form-row">
+                <div class="col-6">
+                  <button type="button" class="btn btn-info w-100" data-bs-dismiss="modal">
+                    رجوع
+                  </button>
+                </div>
+                <div class="col-6">
+                  <button type="submit" class="btn btn-danger w-100" id="confirmButton">
+                    تأكيد
+                    <i class="fas fa-trash ml-3"></i>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer bg-gradient-danger">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="successMsg" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark">
+          <div class="modal-header bg-gradient-success">
+            <h5 class="modal-title">
+              رسالة
+            </h5>
+            <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body text-center bg-dark">
+            <div class="modal-image">
+              <svg viewBox="1 0 30 40" style="fill: #48db71">
+                <path d="M1 14 L5 10 L13 18 L27 4 L31 8 L13 26 z"></path>
+              </svg>
+            </div>
+            <h1>تمت العملية بنجاح !</h1>
+            <p id="successText"></p>
+          </div>
+          <div class="modal-footer bg-gradient-success"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="errorMsg" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg bg-dark">
+        <div class="modal-content bg-dark">
+          <div class="modal-header bg-gradient-danger">
+            <h5 class="modal-title">رسالة خطأ </h5>
+            <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body text-center bg-dark">
+            <img src="{% static 'dist/img/error.png' %}" class="w-25 h-25 mb-3" alt="" />
+            <h1>لم تتم عملية بنجاح !</h1>
+            <p id="errorText">تأكد من الاتصال او إدخال البيانات بشكل صحيح</p>
+          </div>
+          <div class="modal-footer bg-gradient-danger"></div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+  </div>
+
+
+
+
+</div>
+
+<footer class="main-footer d-none d-print-block fixed-bottom">
+  <strong
+    >تم طباعته بواسطة منظومة إدارة شؤون الموظفين عبر الموظف {{user.first_name}}
+    {{user.last_name}}</strong
+  >
+  <div class="float-right d-none d-sm-inline-block">
+    بتاريخ اليوم : {% now "d-m-Y" %}
+  </div>
+</footer>
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'attends/js/group_index.js' %}"></script>
+{% endblock scripts %}

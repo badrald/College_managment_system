@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+تقرير الحظور و الانصراف
+{% endblock title %}
+{% block sub_title %}
+تقرير الحظور و الانصراف
+{% endblock  %}
+{% block content %}
+<style>
+    .modal-image {
+    width: 70px;
+    height: 70px;
+    margin: auto;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px #48db71;
+    padding: 11px 10px 2px;
+    margin-bottom: 2em;
+  }
+
+  .modal-body h1 {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+  }
+
+  .modal-body p {
+    margin-bottom: 2em;
+    color: #666;
+  }
+  @media print{
+    body *{
+      color:black;
+      
+    }
+  }
+</style>
+<div class="d-none d-print-block text-center">
+  <img
+    class="rounded-circle w-25 h-25"
+    style="margin-top: -10px"
+    src="{% static 'dist/img/1.png' %}"
+    alt="" />
+  <p class="mb-1 fs-4">وزارة الــصــحــة</p>
+  <p class="mb-1 fs-4">إدارة الخدمات الصحية قصر بن غشير</p>
+</div>
+<div style="direction: rtl" class="wrapper bg-dark">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper bg-dark">
+    <div class="content bg-dark">
+      <div class="container-fluid bg-dark">
+        <div class="card card-navy mt-4 bg-dark">
+          <div class="card-header">تقرير حضور و إنصراف الموظفين</div>
+          <div class="card-body">
+            <div class="row">
+
+              <form action="" method="post" id="date_form">
+                {% csrf_token %}
+                <div class="form-row d-print-none">
+                  <div class="form-group col-md-6">
+                    <label for="start_date">تاريخ البداية</label>
+                    <input type="date" name="start_date" class="form-control" id="id_start_date" required>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label for="start_date">تاريخ النهاية</label>
+                    <input type="date" name="end_date" class="form-control" id="id_end_date" required>
+                  </div>
+                </div>
+                <div class="d-flex justify-content-center d-print-none">
+                  <button type="submit" class="btn bg-gradient-navy w-50 mb-4 fs-4">بحث<i class='fa fa-search ml-3'></i></button>
+                </div>
+              </form>
+
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>التاريخ</th>
+                    <th>اسم الموظف</th>
+                    <th>اسم الوردية</th>
+                    <th>اسم المجموعة</th>
+                    <th>وقت بداية الوردية</th>
+                    <th>وقت نهاية الوردية</th>
+                    <th>وقت الوصول</th>
+                    <th>وقت الخروج</th>
+                    <th>ملاحظة</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody">
+                </tbody>
+              </table>
+              <div class="row col-12 d-print-none">
+                <button onclick="history.back()" type="button" class="ml-2 btn btn-danger w-25">
+                  رجوع <i class="fas fa-undo fa-rotate-180 ml-3"></i>
+                </button>
+                <button onclick="print()" type="button" class="ml-2 btn btn-success w-25">
+                  طباعة <i class="fa fa-print ml-3" ></i>
+                </button>
+              </div>
+            </div>
+            <strong class="d-none d-print-block text-center">
+              التوقيع او الختم المناوب
+            </strong>
+            <strong class="d-none d-print-block text-center mt-3">
+              .................................
+            </strong>
+            <!-- /.card -->
+            <div class="modal fade" id="errorMsg" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body text-center">
+                    <img src="{% static 'dist/img/error.png' %}" class="w-25 h-25 mb-3" alt="" />
+                    <h1>حدث خطأ في الاتصال !</h1>
+                    <p>تأكد من ادخال التواريخ بشكل صحيح</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal fade" id="message" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-xl">
+                <div class="modal-content bg-dark bg-dark">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="">
+                      رسالة
+                    </h5>
+                    <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body ">
+                    <div class="modal-body text-center">
+                      <img src="{% static 'dist/img/alert-icon.png' %}" class="w-25 h-25 mb-3 " alt="">
+                      <h1>لم يتم العثور على اي نتائج</h1>
+                      <p >لم يتم العثور على اي نتائج تطابق معاير البحث </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<footer class="main-footer d-none d-print-block fixed-bottom">
+  <strong>تم طباعته بواسطة منظومة إدارة شؤون الموظفين عبر الموظف {{user.first_name}}
+    {{user.last_name}}</strong>
+  <div class="float-right d-none d-sm-inline-block">
+    بتاريخ اليوم : {% now "d-m-Y" %}
+  </div>
+</footer>
+{% endblock content %}
+{% block scripts %}
+<script>
+  jQuery(()=>{
+    $.ajaxSetup({
+      headers: {
+        "X-CSRFToken": "{{ csrf_token }}",
+      },
+    });
+  })
+  const massage = new bootstrap.Modal(document.getElementById("message"));
+  const errorMsg = new bootstrap.Modal(document.getElementById("errorMsg"));
+  function updateTable(data) {
+    $("#tbody").empty();
+    if (data.data.length === 0) {
+       massage.show();
+       setTimeout(()=>{
+        massage.hide();
+       },4000)
+    } else {
+
+      $.each(data.data, function (index, record) {
+        let row = $("<tr>");
+        // Append the cells to the row using jQuery chaining
+        row.append($("<td>", { text: record.created_date }));
+        row.append($("<td>", { text: record.employee_name }));
+        row.append($("<td>", { text: record.schedule_name }));
+        row.append($("<td>", { text: record.group_name }));
+        row.append($("<td>", { text: record.start_time }));
+        row.append($("<td>", { text: record.end_time }));
+        row.append($("<td>", { text: record.check_in_time }));
+        row.append($("<td>", { text: record.check_out_time }));
+        row.append($("<td>", { text: record.note }));
+        // Append the buttons to the row
+        row.appendTo("#tbody");
+      });
+
+    }
+  }
+
+  $("#date_form").on("submit", e => {
+    e.preventDefault();
+    let start_date = $("#id_start_date").val();
+    let end_date = $("#id_end_date").val();
+    $.ajax({
+      url: '{% url "attendance_report" %}',
+      type: "POST",
+      data: {"start_date":start_date,"end_date":end_date},
+      success: (data) => {
+        updateTable(data);
+      },
+      error: (error) => {
+        errorMsg.show()
+        setTimeout((e) => {
+          errorMsg.hide();
+        }, 3000);
+      }
+    })
+  })
+</script>
+{% endblock scripts %}

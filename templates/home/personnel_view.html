@@ -1,0 +1,115 @@
+{% extends 'base.html' %} {% load static %} {% block custom_css %}
+<link rel="stylesheet" href="{% static 'home/css/settings.css' %}" />
+{% endblock custom_css %} {% block title%}شؤون الموظفين{% endblock title %}
+{% block sub_title %} شؤون الموظفين{% endblock %}
+{% block content %}
+
+<div style="direction: rtl" class="wrapper">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper bg-dark">
+    <!-- Content Header (Page header) -->
+    <div class="content bg-dark">
+      <div class="container-fluid bg-dark">
+        <!-- form add employee -->
+        <div class="row">
+          <div class="col-xl-3 col-lg-4 col-md-5 col-sm-6 mt-4 mb-4">
+            <a href="{% url 'search' %}">
+              <div
+                class="card  jBounceIn shadow-lg rounded"
+                style="width: 18rem;">
+                <img
+                  src="{% static 'home/default_imges/team-configuration.png' %}"
+                  class="card-img-top bg-white"
+                  alt="..." />
+                <div class="card-body bg-navy ">
+                  <p class="card-text text-center fs-4">
+                    إدارة الموظفين
+                  </p>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-xl-3 col-lg-4 col-md-5 col-sm-6 mt-4 mb-4">
+            <a href="{% url 'holidays_views' %}">
+              <div
+                class="card  jBounceIn shadow-lg rounded"
+                style="width: 18rem;background-color:#88c3ff;color:white;">
+                <img
+                  src="{% static 'home/default_imges/holiday_index.png' %}"
+                  class="card-img-top bg-white"
+                  alt="..." />
+                <div class="card-body bg-navy">
+                  <p class="card-text text-center fs-4">صفحة الاجازات</p>
+                </div>
+              </div>
+            </a>
+          </div>
+          {% if user.is_staff %}
+          <div class="col-xl-3 col-lg-4 col-md-5 col-sm-6 mt-4 mb-4">
+            <a href="{% url 'add_employee' %}">
+              <div
+                class="card jBounceIn shadow-lg rounded"
+                style="width: 18rem;">
+                <img
+                  src="{% static 'home/default_imges/add-employee-2.png' %}"
+                  class="card-img-top bg-white"
+                  alt="..." />
+                <div class="card-body bg-navy ">
+                  <p class="card-text text-center fs-4">اضافة موظف</p>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-xl-3 col-lg-4 col-md-5 col-sm-6 mt-4 mb-4">
+            <a href="{% url 'under_develop' %}">
+              <div
+                class="card  jBounceIn shadow-lg rounded"
+                style="width: 18rem;background-color:#88c3ff;color:white;">
+                <img
+                  src="{% static 'home/default_imges/level_icon.png' %}"
+                  class="card-img-top bg-white"
+                  alt="..." />
+                <div class="card-body bg-navy">
+                  <p class="card-text text-center fs-4">الدرجات و العلاوات</p>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-xl-3 col-lg-4 col-md-5 col-sm-6 mt-4 mb-4">
+            <a href="{% url 'job_placement' %}">
+              <div
+                class="card  jBounceIn shadow-lg rounded"
+                style="width: 18rem;background-color:#88c3ff;color:white;">
+                <img
+                  src="{% static 'home/default_imges/job_placement.png' %}"
+                  class="card-img-top bg-white"
+                  alt="..." />
+                <div class="card-body bg-navy">
+                  <p class="card-text text-center fs-4"> أذونات  التعاقد و التنسيب </p>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-xl-3 col-lg-4 col-md-5 col-sm-6 mt-4 mb-4">
+            <a href="{% url 'job_place' %}">
+              <div
+                class="card  jBounceIn shadow-lg rounded"
+                style="width: 18rem;background-color:#88c3ff;color:white;">
+                <img
+                  src="{% static 'home/default_imges/job_place.png' %}"
+                  class="card-img-top bg-white"
+                  alt="..." />
+                <div class="card-body bg-navy">
+                  <p class="card-text text-center fs-4"> جهات العمل </p>
+                </div>
+              </div>
+            </a>
+          </div>
+          {% endif %}
+        </div>
+        <!-- Modal -->
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

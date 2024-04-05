@@ -1,0 +1,838 @@
+{% extends "base.html" %} {% load django_bootstrap5 %} {% load static %} 
+{% block title %}الورديات{% endblock title %} 
+{% block sub_title %}الورديات{% endblock %}
+{% block content %}
+<style>
+  .my-custom-scrollbar {
+    position: relative;
+    height: 200px;
+    overflow: auto;
+  }
+
+  .table-wrapper-scroll-y {
+    display: block;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  .modal-image {
+    width: 70px;
+    height: 70px;
+    margin: auto;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px #48db71;
+    padding: 11px 10px 2px;
+    margin-bottom: 2em;
+  }
+
+  .modal-body h1 {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+  }
+
+  .modal-body p {
+    margin-bottom: 2em;
+    color: #666;
+  }
+</style>
+<div class="d-none d-print-block text-center">
+  <img
+    class="rounded-circle w-25 h-25"
+    style="margin-top: -10px"
+    src="{% static 'dist/img/1.png' %}"
+    alt="" />
+  <p class="mb-1 fs-4">وزارة الــصــحــة</p>
+  <p class="mb-1 fs-4">إدارة الخدمات الصحية قصر بن غشير</p>
+</div>
+<div style="direction: rtl" class="wrapper">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper bg-dark">
+    <!-- Content Header (Page header) -->
+    <div class="content bg-dark">
+      <div class="container-fluid bg-dark">
+        <div class="row">
+          <!-- Account details card-->
+          <div class="card card-primary mt-4 bg-dark">
+            <div class="card-body">
+              <div class="col-12 mt-3">
+                <div class="my-custom-scrollbar">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="text-center" rowspan="2">#</th>
+                        <th class="text-center" rowspan="2">اسم الوردية</th>
+                        <th class="text-center" rowspan="4">المجموعات</th>
+                        <th class="text-center" rowspan="2">من وقت</th>
+                        <th class="text-center" rowspan="2">الى وقت</th>
+                        <th class="text-center" colspan="7">ايام العمل</th>
+                        <th class="text-center" rowspan="2">تاريخ البداية</th>
+                        <th class="text-center" rowspan="2">الاجراءات</th>
+                      </tr>
+                      <tr>
+                        <th class="text-center">السبت</th>
+                        <th class="text-center">الاحد</th>
+                        <th class="text-center">الاثنين</th>
+                        <th class="text-center">الثلاثاء</th>
+                        <th class="text-center">الاربعاء</th>
+                        <th class="text-center">الخميس</th>
+                        <th class="text-center">الجمعة</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tbody">
+                      {% for schedule in schedules %}
+                      <tr class="text-center">
+                        <td>{{ schedule.id }}</td>
+                        <td>{{ schedule.name }}</td>
+                        <td>
+                          {% for group in schedule.group.all %} {{group.name}}
+                          {% endfor %}
+                        </td>
+                        <td>{{ schedule.start_time|time:"H:i" }}</td>
+                        <td>{{ schedule.end_time|time:"H:i" }}</td>
+                        <td>
+                          <input
+                            type="checkbox"
+                            {% if schedule.saturday %}
+                            checked
+                            {% endif %} />
+                        </td>
+                        <td>
+                          <input
+                            type="checkbox"
+                            {% if schedule.sunday %}
+                            checked
+                            {% endif %} />
+                        </td>
+                        <td>
+                          <input
+                            type="checkbox"
+                            {% if schedule.monday %}
+                            checked
+                            {% endif %} />
+                        </td>
+                        <td>
+                          <input
+                            type="checkbox"
+                            {% if schedule.tuesday %}
+                            checked
+                            {% endif %} />
+                        </td>
+                        <td>
+                          <input
+                            type="checkbox"
+                            {% if schedule.wednesday %}
+                            checked
+                            {% endif %} />
+                        </td>
+                        <td>
+                          <input
+                            type="checkbox"
+                            {% if schedule.thursday %}
+                            checked
+                            {% endif %} />
+                        </td>
+                        <td>
+                          <input
+                            type="checkbox"
+                            {% if schedule.friday %}
+                            checked
+                            {% endif %} />
+                        </td>
+                        <td>{{schedule.created_at|date:'Y-m-d'}}</td>
+                        <td class="text-center">
+                          <div class="dropdown">
+                            <button
+                              class="btn bg-navy dropdown-toggle d-print-none"
+                              type="button"
+                              id="`actionsDropdown${employee.id}`"
+                              data-bs-toggle="dropdown"
+                              aria-haspopup="true"
+                              aria-expanded="false">
+                              الإجراءات
+                            </button>
+                            <div
+                              class="dropdown-menu"
+                              aria-labelledby="`actionsDropdown${employee.id}`">
+                              <a
+                                class="dropdown-item"
+                                href="#"
+                                data-bs-toggle="modal"
+                                onclick="updateEdit(this.parentElement.parentElement.parentElement.parentElement)"
+                                data-bs-target="#ScheduleEdit"
+                                >تعديل الوردية</a
+                              >
+                              <a
+                                class="dropdown-item"
+                                onclick="updateMessage(this.parentElement.parentElement.parentElement.parentElement)"
+                                class="dropdown-item"
+                                data-bs-toggle="modal"
+                                data-bs-target="#message"
+                                >حذف الوردية</a
+                              >
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="col-12">
+                <a
+                  onclick="history.back()"
+                  class="btn bg-cyan"
+                  style="width: 25%"
+                  >رجوع <i class="fas fa-undo fa-rotate-180 ml-3"></i
+                ></a>
+                <a
+                  href="#"
+                  data-bs-toggle="modal"
+                  data-bs-target="#scheduleForm"
+                  class="btn bg-gradient-primary w-25">
+                  اضافة وردية جديدة <i class="fas fa-plus-square ml-3"></i
+                ></a>
+                <a
+                  href="{% url 'schedule_view' %}"
+                  class="btn bg-gradient-navy"
+                  style="width: 49%"
+                  >عرض الجدول <i class="fas fa-calendar fa-1x ml-3"></i
+                ></a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="modal fade"
+          id="scheduleForm"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog modal-xl">
+            <div class="modal-content bg-dark bg-dark">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                  إظافة وردية جديدة
+                </h5>
+                <button
+                  type="button"
+                  class="btn-close m-0 bg-white"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form id="shiftForm" method="POST">
+                  {% csrf_token %}
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <label class="form-label" for="id_group"
+                        >اسم المجموعة</label
+                      >
+                      <select
+                        name="group"
+                        class="form-select"
+                        required
+                        multiple
+                        id="id_group"
+                        fdprocessedid="dusjyb">
+                        <option value="" selected="">---------</option>
+                        {% for group in groups %}
+                        <option value="{{group.id}}">{{group.name}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label class="form-label" for="id_name">اسم الوردية</label
+                      ><input
+                        type="text"
+                        name="name"
+                        maxlength="255"
+                        class="form-control"
+                        placeholder="الرجاء ادخال اسم الوردية ............."
+                        required=""
+                        id="id_name"
+                        fdprocessedid="7ypsr" />
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <label class="form-label" for="id_start_time"
+                        >من وقت</label
+                      ><input
+                        type="time"
+                        name="start_time"
+                        class="form-control"
+                        placeholder=""
+                        required
+                        id="id_start_time"
+                        fdprocessedid="bia3pg" />
+                    </div>
+
+                    <div class="form-group col-md-6">
+                      <label class="form-label" for="id_end_time">الى وقت</label
+                      ><input
+                        type="time"
+                        name="end_time"
+                        class="form-control"
+                        placeholder=""
+                        required
+                        id="id_end_time"
+                        fdprocessedid="simani" />
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <label class="form-label" for="id_description"
+                        >وصف للوردية</label
+                      ><textarea
+                        name="description"
+                        class="form-control"
+                        placeholder="الرجاء ادخال وصف للوردية ................"
+                        id="id_description"></textarea>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                      <label>المركز الصحية</label>
+                      <select
+                        class="form-select"
+                        name="job_place"
+                        id="HealthCenter"
+                        aria-label="Select Health Center">
+                        {% if job_places %}
+                        <option selected>---------------</option>
+                        {% for job_place in job_places %}
+                        <option value="{{job_place.id}}" selected>
+                          {{job_place.name}}
+                        </option>
+                        {% endfor %} {% else %}
+                        <option value="{{user.profile.job_place.id}}" selected>
+                          {{user.profile.job_place}}
+                        </option>
+                        {% endif %}
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <label for="">ايام الاسبوع</label>
+                  </div>
+                  <div class="form-row mt-2 mb-3">
+                    <div class="form-check">
+                      <input
+                        type="checkbox"
+                        name="saturday"
+                        class="form-check-input"
+                        id="id_saturday" />
+                      <label class="form-check-label" for="id_saturday"
+                        >السبت</label
+                      >
+                    </div>
+                    <div class="form-check">
+                      <input
+                        type="checkbox"
+                        name="sunday"
+                        class="form-check-input"
+                        id="id_sunday" />
+                      <label class="form-check-label" for="id_sunday"
+                        >الأحد</label
+                      >
+                    </div>
+                    <div class="form-check">
+                      <input
+                        type="checkbox"
+                        name="monday"
+                        class="form-check-input"
+                        id="id_monday" />
+                      <label class="form-check-label" for="id_monday"
+                        >الاثنين</label
+                      >
+                    </div>
+                    <div class="form-check">
+                      <input
+                        type="checkbox"
+                        name="tuesday"
+                        class="form-check-input"
+                        id="id_tuesday" />
+                      <label class="form-check-label" for="id_tuesday"
+                        >الثلاثاء</label
+                      >
+                    </div>
+                    <div class="form-check">
+                      <input
+                        type="checkbox"
+                        name="wednesday"
+                        class="form-check-input"
+                        id="id_wednesday" />
+                      <label class="form-check-label" for="id_wednesday"
+                        >الأربعاء</label
+                      >
+                    </div>
+                    <div class="form-check">
+                      <input
+                        type="checkbox"
+                        name="thursday"
+                        class="form-check-input"
+                        id="id_thursday" />
+                      <label class="form-check-label" for="id_thursday"
+                        >الخميس</label
+                      >
+                    </div>
+                    <div class="form-check">
+                      <input
+                        type="checkbox"
+                        name="friday"
+                        class="form-check-input"
+                        id="id_friday" />
+                      <label class="form-check-label" for="id_friday"
+                        >الجمعة</label
+                      >
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-danger"
+                      data-bs-dismiss="modal">
+                      رجوع
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                      حفظ التغيرات
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="modal fade"
+          id="message"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog modal-xl">
+            <div class="modal-content bg-dark bg-dark">
+              <div class="modal-header">
+                <h5 class="modal-title" id="">حذف الوردية</h5>
+                <button
+                  type="button"
+                  class="btn-close m-0 bg-white"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="modal-body text-center">
+                  <img
+                    src="{% static 'dist/img/alert-icon.png' %}"
+                    class="w-25 h-25 mb-3"
+                    alt="" />
+                  <h1>هل انت متأكد انك تريد حذف هذه الوردية ؟</h1>
+                  <p id="employeeNameWarrning"></p>
+                </div>
+                <form id="deleteShift" method="POST">
+                  {% csrf_token %}
+                  <input type="hidden" name="deleteShift" />
+                  <input type="number" name="id" class="d-none" value="" />
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-info w-25"
+                      data-bs-dismiss="modal">
+                      رجوع
+                    </button>
+                    <button type="submit" class="btn btn-danger w-25">
+                      تأكيد
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="modal fade"
+          id="ScheduleEdit"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog modal-xl">
+            <div class="modal-content bg-dark bg-dark">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">تعديل وردية</h5>
+                <button
+                  type="button"
+                  class="btn-close m-0 bg-white"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form id="EditForm" method="POST">
+                  {% csrf_token %}
+                  <input type="hidden" name="EditForm" />
+                  <div class="form-row">
+                    <input
+                      type="number"
+                      class="d-none"
+                      name="scheduleId"
+                      value="" />
+                    <div class="form-group col-md-6">
+                      <label class="form-label" for="id_group"
+                        >اسم المجموعة</label
+                      >
+                      <select
+                        name="group"
+                        class="form-select"
+                        required
+                        multiple
+                        id="id_group"
+                        fdprocessedid="dusjyb">
+                        <option value="" selected="">---------</option>
+                        {% for group in groups %}
+                        <option value="{{group.id}}">{{group.name}}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label class="form-label" for="id_name">اسم الوردية</label
+                      ><input
+                        type="text"
+                        name="name"
+                        maxlength="255"
+                        class="form-control"
+                        placeholder="الرجاء ادخال اسم الوردية ............."
+                        required=""
+                        id="id_name"
+                        fdprocessedid="7ypsr" />
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <label class="form-label" for="id_start_time"
+                        >من وقت</label
+                      ><input
+                        type="time"
+                        name="start_time"
+                        class="form-control"
+                        placeholder=""
+                        required
+                        id="id_start_time"
+                        fdprocessedid="bia3pg" />
+                    </div>
+
+                    <div class="form-group col-md-6">
+                      <label class="form-label" for="id_end_time">الى وقت</label
+                      ><input
+                        type="time"
+                        name="end_time"
+                        class="form-control"
+                        placeholder=""
+                        required
+                        id="id_end_time"
+                        fdprocessedid="simani" />
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <label class="form-label" for="id_description"
+                        >وصف للوردية</label
+                      ><textarea
+                        name="description"
+                        class="form-control"
+                        placeholder="الرجاء ادخال وصف للوردية ................"
+                        id="id_description"></textarea>
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label>المركز الصحية</label>
+                      <select
+                        class="form-select"
+                        name="job_place"
+                        id="HealthCenter"
+                        aria-label="Select Health Center">
+                        {% if job_places %}
+                        <option selected>---------------</option>
+                        {% for job_place in job_places %}
+                        <option value="{{job_place.id}}">
+                          {{job_place.name}}
+                        </option>
+                        {% endfor %} {% else %}
+                        <option value="{{user.profile.job_place.id}}" selected>
+                          {{user.profile.job_place}}
+                        </option>
+                        {% endif %}
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <label for="">ايام الاسبوع</label>
+                  </div>
+                  <div class="form-row mt-2 mb-3">
+                    <div class="form-check">
+                      <input
+                        type="checkbox"
+                        name="saturday"
+                        class="form-check-input"
+                        id="id_saturday" />
+                      <label class="form-check-label" for="id_saturday"
+                        >السبت</label
+                      >
+                    </div>
+                    <div class="form-check">
+                      <input
+                        type="checkbox"
+                        name="sunday"
+                        class="form-check-input"
+                        id="id_sunday" />
+                      <label class="form-check-label" for="id_sunday"
+                        >الأحد</label
+                      >
+                    </div>
+                    <div class="form-check">
+                      <input
+                        type="checkbox"
+                        name="monday"
+                        class="form-check-input"
+                        id="id_monday" />
+                      <label class="form-check-label" for="id_monday"
+                        >الاثنين</label
+                      >
+                    </div>
+                    <div class="form-check">
+                      <input
+                        type="checkbox"
+                        name="tuesday"
+                        class="form-check-input"
+                        id="id_tuesday" />
+                      <label class="form-check-label" for="id_tuesday"
+                        >الثلاثاء</label
+                      >
+                    </div>
+                    <div class="form-check">
+                      <input
+                        type="checkbox"
+                        name="wednesday"
+                        class="form-check-input"
+                        id="id_wednesday" />
+                      <label class="form-check-label" for="id_wednesday"
+                        >الأربعاء</label
+                      >
+                    </div>
+                    <div class="form-check">
+                      <input
+                        type="checkbox"
+                        name="thursday"
+                        class="form-check-input"
+                        id="id_thursday" />
+                      <label class="form-check-label" for="id_thursday"
+                        >الخميس</label
+                      >
+                    </div>
+                    <div class="form-check">
+                      <input
+                        type="checkbox"
+                        name="friday"
+                        class="form-check-input"
+                        id="id_friday" />
+                      <label class="form-check-label" for="id_friday"
+                        >الجمعة</label
+                      >
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-danger"
+                      data-bs-dismiss="modal">
+                      رجوع
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                      حفظ التغيرات
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="modal fade"
+          id="successMsg"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog modal-lg bg-dark">
+            <div class="modal-content">
+              <div class="modal-header bg-dark">
+                <button
+                  type="button"
+                  class="btn-close m-0 bg-white"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"></button>
+              </div>
+              <div class="modal-body bg-dark text-center">
+                <div class="modal-image">
+                  <svg viewBox="1 0 30 40" style="fill: #48db71">
+                    <path d="M1 14 L5 10 L13 18 L27 4 L31 8 L13 26 z"></path>
+                  </svg>
+                </div>
+                <h1>تمت العملية بنجاح !</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="modal fade"
+          id="errorMsg"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog modal-lg bg-dark">
+            <div class="modal-content bg-dark">
+              <div class="modal-header">
+                <button
+                  type="button"
+                  class="btn-close m-0 bg-white"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"></button>
+              </div>
+              <div class="modal-body bg-dark text-center">
+                <img
+                  src="{% static 'dist/img/error.png' %}"
+                  class="w-25 h-25 mb-3"
+                  alt="" />
+                <h1>لم تتم عملية بنجاح !</h1>
+                <p>تأكد من الاتصال او إدخال البيانات بشكل صحيح</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block scripts %}
+<script>
+  const successMsg = new bootstrap.Modal(document.getElementById("successMsg"));
+  const errorMsg = new bootstrap.Modal(document.getElementById("errorMsg"));
+  jQuery(function () {
+    $.ajaxSetup({
+      headers: {
+        "X-CSRFToken": "{{ csrf_token }}",
+      },
+    });
+  });
+
+  function updateMessage(text) {
+    var Id = text.childNodes[1].innerText;
+    console.log(Id);
+    let shift_name = text.childNodes[3].innerText;
+    $("#employeeNameWarrning").text(`سيتم حذف هذه الوردية ${shift_name}`);
+    $("#deleteShift [name='id']").val(`${Id}`);
+  }
+
+  function updateEdit(text) {
+    // Extract values from the table row
+    const scheduleId = text.childNodes[1].innerText;
+    console.log(scheduleId);
+    const groupId = text.childNodes[5].id;
+    const name = text.childNodes[3].innerText;
+    const start_time = text.childNodes[7].innerText;
+    const end_time = text.childNodes[9].innerText;
+
+    // Update the form input fields
+    $("#EditForm [name='scheduleId']").val(scheduleId);
+    $("#EditForm [name='name']").val(name);
+    $("#EditForm [name='start_time']").val(start_time);
+    $("#EditForm [name='end_time']").val(end_time);
+
+    // Update the checkboxes
+    const checkboxes = text.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach((checkbox, index) => {
+      // Check the corresponding checkbox in the form based on the checked status in the table row
+      const isChecked = checkbox.checked;
+      $("#EditForm [name='" + getCheckboxNameByIndex(index) + "']").prop(
+        "checked",
+        isChecked
+      );
+    });
+  }
+
+  // Helper function to map checkbox index to the form field name
+  function getCheckboxNameByIndex(index) {
+    const days = [
+      "saturday",
+      "sunday",
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+    ];
+    return days[index];
+  }
+  $("#EditForm").on("submit", function (e) {
+    e.preventDefault();
+    var formData = new FormData(this); // Use the 'this' keyword to reference the form element
+
+    $.ajax({
+      url: "{% url 'shifts_index' %}", // Update the URL endpoint
+      type: "POST",
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function (data) {
+        successMsg.show();
+        setTimeout(() => {
+          location.reload();
+        }, 2000);
+      },
+      error: function (error) {
+        errorMsg.show();
+      },
+    });
+  });
+  $("#deleteShift").on("submit", function (e) {
+    e.preventDefault();
+    var formData = new FormData(this); // Use the 'this' keyword to reference the form element
+
+    $.ajax({
+      url: "{% url 'shifts_index' %}", // Update the URL endpoint
+      type: "POST",
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function (data) {
+        successMsg.show();
+        setTimeout(() => {
+          location.reload();
+        }, 2000);
+      },
+      error: function (error) {
+        errorMsg.show();
+      },
+    });
+  });
+  $("#shiftForm").on("submit", function (event) {
+    event.preventDefault();
+    var formData = new FormData(this);
+    $.ajax({
+      url: "{% url 'shifts_index' %}", // Update the URL endpoint
+      type: "POST",
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function (data) {
+        successMsg.show();
+        setTimeout(() => {
+          location.reload();
+        }, 2000);
+      },
+      error: function (error) {
+        errorMsg.show();
+      },
+    });
+  });
+</script>
+
+{% endblock scripts %}

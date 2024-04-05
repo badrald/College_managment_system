@@ -1,0 +1,64 @@
+{% extends 'base.html' %} {% load static %} {% block custom_css %}
+<link rel="stylesheet" href="{% static 'settings/css/support.css' %}" />
+{% endblock custom_css %} {% block title %}مركز الدعم التقني{% endblock %}
+{% block sub_title %}مركز الدعم التقني{% endblock %} {% block content%}
+<div style="direction: rtl" class="wrapper">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper bg-dark">
+    <!-- Content Header (Page header) -->
+    <!--اظافة موظف-->
+    <div class="content bg-dark">
+      <div class="container-fluid bg-dark">
+        <div class="card mt-3 mb-5 bg-dark shadow-lg p-3 rounded">
+          <div class="card-header d-flex justify-content-center bg-gradient-navy">
+            <h3>دعم الفني</h3>
+          </div>
+          <div class="card-body row">
+            <div class="col-md-6">
+              <p>إذا كان لديك أي أسئلة أو مخاوف، فلا تتردد في الاتصال بنا. نحن هنا للمساعدة!</p>
+              <form action="/submit_contact_form" method="post">
+                <div class="form-group">
+                  <label for="email">البريد الإلكتروني:</label>
+                  <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                  <label for="message">الرسالة:</label>
+                  <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn bg-navy mb-3 w-100">أرسل<i class="fas fa-paper-plane ml-3"></i></button>
+              </form>
+            </div>
+            <div class="col-md-6 border-left border-5">
+              <div class="from-group d-flex justify-content-center">
+                <img src="{% static 'settings/Company.jpg' %}" style="width:250px;height:250px;" alt="Company ">
+              </div>
+              <hr class="hr hr-blurry" />
+              <div class="from-group text-cneter d-flex justify-content-center">
+                <div class="text-cneter">لا تتردد في الاتصال بنا على .</div>
+              </div>
+              <ul class="list-group-flush text-center " style="list-style: none;">
+                <li class="fs-6">م.بدر الدين عبد الله : 0927493684
+                  <a href="https://www.facebook.com/badr.alden.374"><i class="fab fa-facebook ml-3"></i></a>
+                  <a href="https://wa.me/218927493684"><i class="fab fa-whatsapp "></i></a>
+                  <a href="#"><i class="fas fa-envelope "></i></a>
+                </li>
+                <li class="fs-6">م.هشام مبروك الورفلي :0928696855
+                  <a href="https://www.facebook.com/profile.php?id=100008020875857"><i class="fab fa-facebook ml-3"></i></a>
+                  <a href="https://wa.me/218928696855"><i class="fab fa-whatsapp "></i></a>
+                  <a href="#"><i class="fas fa-envelope"></i></a>
+                </li>
+              </ul>
+              <div class="from-group text-cneter d-flex justify-content-center">
+                <div class="text-cneter"></div>
+              </div>
+
+            </div>
+          </div>
+          <div class="card-header d-flex justify-content-center align-content-center bg-gradient-navy">
+            <p class="fs-5 fw-bolder fst-italic">تمت علمية التطوير و البرمجة بواسطة شركة عالم الدقة - قصر بن غشير</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endblock %}

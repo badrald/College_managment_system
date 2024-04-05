@@ -1,0 +1,205 @@
+{% extends 'base.html' %} {% block title %}الإحــــصــــائــــيــــات 
+{% endblock %} 
+{% block sub_title %}الإحــــصــــائــــيــــات{% endblock %} 
+{% load static %} 
+{% block content %}
+<div class="d-none d-print-block text-center">
+  <img
+    class="rounded-circle w-25 h-25"
+    style="margin-top: -10px"
+    src="{% static 'dist/img/1.png' %}"
+    alt="" />
+  <p class="mb-1 fs-4">إدارة الخدمات الصحية قصر بن غشير</p>
+</div>
+
+<div style="direction: rtl" class="wrapper">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <div class="content bg-dark">
+      <div class="container-fluid bg-dark">
+        <div class="col-md-12 mt-4 mb-4">
+          <div class="card card-primary shadow-lg rounded">
+            <div class="card-header">
+              <div class="d-flex justify-content-center">
+                <h3 class="card-title fs-3 fw-bold">إحصائيات عامة</h3>
+              </div>
+              <div class="card-body">
+                <div class="form-row">
+                  <div class="form-group col-3 fs-5">
+                    <label>إجمالي عدد الموظفين</label>
+                    <input
+                      type="number"
+                      name=""
+                      value="{{total_employee}}"
+                      readonly
+                      class="form-control bg-white text-danger" />
+                  </div>
+                  <div class="form-group col-3 fs-5">
+                    <label for="id_date_start">عدد الإناث </label>
+                    <input
+                      type="number"
+                      name=""
+                      value="{{total_females}}"
+                      readonly
+                      class="form-control text-danger bg-white" />
+                  </div>
+                  <div class="form-group col-3 fs-5">
+                    <label for="id_date_start ">عدد الذكور</label>
+                    <input
+                      type="number"
+                      name=""
+                      value="{{total_males}}"
+                      readonly
+                      class="form-control text-danger bg-white" />
+                  </div>
+                  <div class="form-group col-3 fs-5">
+                    <label for="id_date_start"> عدد المراكز الصحية</label>
+                    <input
+                      type="number"
+                      name=""
+                      value="{{ job_places_len }}"
+                      readonly
+                      class="form-control text-danger bg-white" />
+                  </div>
+                </div>
+                <div class="form-row d-flex justify-content-center">
+                  <div class="card-title fs-4 fw-bold mt-3 mb-3">
+                    احصائيات المراكز الصحية
+                  </div>
+                </div>
+                <div class="form-row">
+                  {% for val,key in job_places.items %}
+                  <div class="form-group col-3 fs-5">
+                    <label>{{val}}</label>
+                    <input
+                      type="number"
+                      name=""
+                      value="{{key}}"
+                      readonly
+                      class="form-control bg-white text-danger" />
+                  </div>
+                  {% endfor %}
+                </div>
+                <div class="d-flex justify-content-center mt-5">
+                  <button
+                    class="btn btn-flat bg-navy w-25 h-25 d-print-none"
+                    onclick=" print() ">
+                    طباعة الاحصائيات
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row col-sm-12">
+          <div class="card">
+            <div class="card-header border-0">
+              <div class="d-flex justify-content-between">
+                <h3 class="card-title">احصائيات الحضور و الانقطاع</h3>
+              </div>
+              <div class="card-body">
+                <div class="d-flex justify-content-center">
+                  <canvas id="bar-chart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row col-sm-12">
+          <div class="col-6">
+            <div class="card">
+              <div class="card-header border-0">
+                <div class="d-flex justify-content-between">
+                  <h3 class="card-title">احصائيات التخصصات</h3>
+                </div>
+                <div class="card-body">
+                  <canvas id="lineChart1"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="card">
+              <div class="card-header border-0">
+                <div class="d-flex justify-content-between">
+                  <h3 class="card-title">إحصائيات المؤهلات</h3>
+                </div>
+              </div>
+              <div class="card-body">
+                <canvas id="lineChart2"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row col-12">
+          <div class="col-6">
+            <div class="card">
+              <div class="card-header border-0">
+                <div class="d-flex justify-content-between">
+                  <h3 class="card-title">إحصائيات الجنس</h3>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="d-flex justify-content-center">
+                  <p class="d-flex justify-content-center">
+                    <canvas id="gender"></canvas>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="card">
+              <div class="card-header border-0">
+                <div class="d-flex justify-content-between">
+                  <h3 class="card-title">إحصائيات مراكز الصحية</h3>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="d-flex justify-content-center">
+                  <p class="d-flex justify-content-center">
+                    <canvas id="job_place"></canvas>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<footer class="main-footer d-none d-print-block fixed-bottom">
+  <strong
+    >تم طباعته بواسطة منظومة إدارة شؤون الموظفين عبر الموظف {{user.first_name}}
+    {{user.last_name}}</strong
+  >
+  <div class="float-right d-none d-sm-inline-block">
+    بتاريخ اليوم : {% now "d-m-Y" %}
+  </div>
+</footer>
+{% endblock content %} 
+{% block scripts %}
+<script src="{% static 'home/js/chartjs/dist/chart.umd.js' %}"></script>
+<script>
+  let myColorArray = ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"];
+  var specializations = [
+    {% for key, val in specialization.items %}
+  { label: '{{ key }}', value: {{ val }} },
+  {% endfor %}
+    ];
+  var jobPlacesData = [];
+  {% for key, val in job_places.items %}
+  jobPlacesData.push({
+    label: '{{ key }}',
+    value: {{ val }},
+    backgroundColor: myColorArray[jobPlacesData.length % 5]
+    });
+  {% endfor %}
+
+  let line_Chart_data = [{% for i in qualifs_numbers %} {{ i }}, {% endfor %} {{ non_upove }}];
+  let gender_data = [{{ total_females }}, {{ total_males }}];
+  var Bar_chart_data = [{{ attends }}, {{ not_attends }}];
+</script>
+<script src="{% static 'home/js/statistics.js'%}"></script>
+{% endblock scripts %}

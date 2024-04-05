@@ -1,0 +1,699 @@
+{% extends 'base.html' %} {% block title %}اجراءات إجازة موظف{% endblock %}
+{% block sub_title %}اجراءات إجازة موظف{% endblock %}
+{% load static %}
+{% block content%}
+
+<style>
+  .modal-image {
+    width: 70px;
+    height: 70px;
+    margin: auto;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px #48db71;
+    padding: 11px 10px 2px;
+    margin-bottom: 2em;
+  }
+
+  .modal-body h1 {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+  }
+
+  .modal-body p {
+    margin-bottom: 2em;
+    color: #666;
+  }
+
+  :root {
+    --defualt-idr: 0.3s;
+  }
+
+  .pulse-grow {
+    display: inline-block;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    /* Hide Tap Highlight Color */
+    transform: translateZ(0);
+    /* Hardware Acceleration */
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  }
+
+  .pulse-grow:hover {
+    /* Improve Anti-Aliasing */
+    animation-name: pulse-grow;
+    /* Pulse Grow Keyframes */
+    animation-duration: var(--defualt-idr);
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+  }
+
+  @keyframes pulse-grow {
+    to {
+      transform: scale(1.1);
+    }
+  }
+
+  @media print {
+    body * {
+      color: black;
+    }
+  }
+</style>
+
+<div style="direction: rtl" class="wrapper">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper bg-dark">
+    <!-- Content Header (Page header) -->
+    <!--اظافة موظف-->
+    <div class="content bg-dark">
+      <div class="container-fluid bg-dark">
+        <!-- form add employee -->
+        {% if user.is_staff or user.is_staff %}
+        <div class="card card-navy mt-3 bg-dark d-print-none">
+          <div class="card-header d-flex justify-content-center fs-4 fst-italic">
+            اجراءات إجازة موظف
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-lg-3 mt-4 mb-4">
+                <a href="#" onclick="history.back()">
+                  <div class="card bg-white pulse-grow shadow-lg rounded" style="width: 18rem">
+                    <img src="{% static 'home/default_imges/back.png' %}" class="card-img-top" alt="..." />
+                    <div class="card-body bg-navy">
+                      <p class="card-text text-center fs-4">الرجوع</p>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              <div class="col-lg-3 mt-4 mb-4">
+                <a href="#holidayAdd" data-bs-toggle="modal">
+                  <div class="card bg-white pulse-grow shadow-lg rounded" style="width: 18rem">
+                    <img src="{% static 'home/default_imges/holiday_add.png' %}" class="card-img-top" alt="..." />
+                    <div class="card-body bg-navy">
+                      <p class="card-text text-center fs-4">إضــافــة أجازة</p>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              <div class="col-lg-3 mt-4 mb-4">
+                <a href="#holidayEditMenu" data-bs-toggle="modal">
+                  <div class="card bg-white pulse-grow shadow-lg rounded" style="width: 18rem">
+                    <img src="{% static 'home/default_imges/holiday_edit.png' %}" class="card-img-top" alt="..." />
+                    <div class="card-body bg-navy">
+                      <p class="card-text text-center fs-4" styel="c">
+                        تعديل اجازة
+                      </p>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              <div class="col-lg-3 mt-4 mb-4">
+                <a href="#holidayDelete" data-bs-toggle="modal">
+                  <div class="card bg-white pulse-grow shadow-lg rounded" style="width: 18rem">
+                    <img src="{% static 'home/default_imges/holiday_delete.png' %}" class="card-img-top" alt="..." />
+                    <div class="card-body bg-navy">
+                      <p class="card-text text-center fs-4">حــذف اجــازة</p>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              <div class="col-lg-3 mt-4 mb-4">
+                <a href="#employeeHodliays" data-bs-toggle="collapse">
+                  <div class="card bg-white pulse-grow shadow-lg rounded" style="width: 18rem">
+                    <img src="{% static 'home/default_imges/table_show.png' %}" class="card-img-top" alt="..." />
+                    <div class="card-body bg-navy">
+                      <p class="card-text text-center fs-4">
+                        إظهار إجازات الموظف
+                      </p>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card card-navy d-print-table-row table-responsive collapse" id="employeeHodliays">
+          <div class="card-header text-center">
+            قائمة الإجازات للموظف {{employee.name}}
+          </div>
+          <div class="card-body bg-dark">
+            <div>
+              <button id="printSelectedBtn" class="btn btn-primary d-print-none">
+                طباعة المحدد
+              </button>
+            </div>
+            <table class="table d-print-table">
+              <thead>
+                <tr>
+                  <th>
+                    <input type="checkbox" id="selectAll" class="d-print-none" />
+                  </th>
+                  <th class="text-center">نوع الإجازة</th>
+                  <th class="text-center">تاريخ بدء</th>
+                  <th class="text-center">تاريخ الانتهاء</th>
+                  <th class="text-center">تاريخ التسجيل</th>
+                  <th class="text-center">رصيد قبل الخصم</th>
+                  <th class="text-center">الرصيد بعد الخصم</th>
+                  <th class="text-center">الملاحظات</th>
+                  <th class="text-center">مستندات</th>
+                </tr>
+              </thead>
+              <tbody id="tbody">
+                {% for holiday in employee.holiday_records.all%}
+                <tr>
+                  <td>
+                    <input type="checkbox" class="employee-checkbox d-print-none" />
+                  </td>
+                  <td class="text-center">{{holiday.holiday_type}}</td>
+                  <td class="text-center">
+                    {{ holiday.start_date|date:"Y-m-d" }}
+                  </td>
+                  <td class="text-center">
+                    {{ holiday.end_date|date:"Y-m-d" }}
+                  </td>
+                  <td class="text-center">
+                    {{ holiday.created_date|date:"Y-m-d" }}
+                  </td>
+                  <td class="text-center">{{holiday.holiday_used_days}}</td>
+                  <td class="text-center">{{holiday.holiday_left_days}}</td>
+                  <td class="text-center">{{holiday.holiday_note}}</td>
+                  {% if holiday.holiday_document %}
+                  <td class="text-center">
+                    <a href="{{ holiday.holiday_document.url }}" class="btn btn-sm btn-secondary d-print-none">
+                      عرض المستند</a>
+                  </td>
+                  {% else %}
+                  <td class="text-center">
+                    <a class="btn btn-sm bg-primary d-print-none">
+                      لا يوجد مستند
+                    </a>
+                  </td>
+                  {% endif %}
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        {% endif %}
+        <div>
+          <div class="modal fade" id="holidayAdd" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+              <div class="modal-content bg-dark">
+                <div class="modal-header bg-gradient-primary">
+                  <!--عنوان النافذة المنبثقة-->
+                  <h5 class="modal-title">إضافة اجازة</h5>
+                  <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+                </div>
+                <!--محتوى النافذة المنبثقة-->
+                <div class="modal-body">
+                  <div class="form-row">
+                    <div class="form-group col-3">
+                      <label>رصيد الايام بعد الخصم</label>
+                      <input type="number" name="" value="" readonly class="form-control bg-white text-danger"
+                        id="holidays_taken" />
+                    </div>
+                    <div class="form-group col-3">
+                      <label for="id_date_start">رصيد الإجازات السنوي</label>
+                      <input type="number" name="" value="100" readonly class="form-control text-danger bg-white" />
+                    </div>
+                    <div class="form-group col-3">
+                      <label for="id_date_start">رصيد الإجازات المتبقية</label>
+                      <input type="number" name="" value="{{employee.total_holiday_days}}" readonly
+                        class="form-control text-danger bg-white" />
+                    </div>
+                    <div class="form-group col-3">
+                      <label for="id_date_start">رصيد الإجازات المرضية</label>
+                      <input type="number" name="" value="{{employee.total_holiday_days}}" readonly
+                        class="form-control text-danger bg-white" />
+                    </div>
+                  </div>
+                  <form method="POST" enctype="multipart/form-data" id="add_Holiday">
+                    {% csrf_token %}
+                    <div class="card-body">
+                      <div class="form-row">
+                        <div class="form-group col-4">
+                          <label for="id_holiday_type">نوع الإجازة</label>
+                          <select name="holiday_type" class="form-select right" id="id_holiday_type">
+                            <option value="إجازة عادية" selected>
+                              إجازة عادية
+                            </option>
+                            <option value=" إجازة طارئة">إجازة طارئة</option>
+                            <option value="إجازة مرضية">إجازة مرضية</option>
+                          </select>
+                        </div>
+                        <div class="form-group col-4">
+                          <label for="id_date_start">تاريخ بداية الاجازة</label>
+                          <input type="date" name="start_date" required class="form-control" id="id_date_start"
+                            placeholder="إدخل تاريخ بداية الاجازة" />
+                        </div>
+                        <div class="form-group col-4">
+                          <label for="id_date_end">تاريخ نهاية الاجازة</label>
+                          <input type="date" name="end_date" required class="form-control" id="id_date_end"
+                            placeholder="إدخل تاريخ نهاية الاجازة" />
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-6">
+                          <label for="id_goverment_holiday">أيام العطل :</label>
+                          <select name="goverment_holiday" id="id_goverment_holiday" class="form-select">
+                            <option selected>-----------------------</option>
+                            <option value="17_FEBRUARY">
+                              عيد ثورة 17 فبراير
+                            </option>
+                            <option value="1_MAY">عيد العمال العالمي</option>
+                            <option value="16_SEPTEMBER">
+                              عيد الشهيد (ليبيا)
+                            </option>
+                            <option value="23_OCTOBER">
+                              عيد التحرير (ليبيا)
+                            </option>
+                            <option value="24_DECEMBER">عيد الاستقلال</option>
+                            <option value="1_MUHARRAM">
+                              رأس السنة الهجرية
+                            </option>
+                            <option value="12_RABI_AL_AWAL">
+                              المولد النبوي الشريف
+                            </option>
+                            <option value="1_SHAWWAL">عيد الفطر</option>
+                            <option value="9_DHUL_HIJJAH">يوم عرفة</option>
+                            <option value="10_DHUL_HIJJAH">عيد الأضحى</option>
+                          </select>
+                        </div>
+                        <div class="form-group col-6">
+                          <label for="id_date_end">ملاحظات</label>
+                          <input type="text" name="holiday_note" class="form-control" id="holdiay_note"
+                            placeholder="رجاء الادخال إذا كان هناك ملاحظات" />
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-12">
+                          <div id="upload_seccess"></div>
+                          <label>رفع المستند الاجازة</label>
+                          <label class="btn btn-outline-danger form-control-file" for="upload-file">رفع المستند</label>
+                          <input type="file" class="custom-file-input d-none" id="upload-file"
+                            name="holiday_document" />
+                        </div>
+                        <input type="number" class="d-none" name="left" id="left" />
+                      </div>
+                      <!-- /.card-body -->
+                      <div class="card-footer">
+                        <button type="submit" id="submitBtn" class="btn btn-primary w-25 h-25">
+                          اضافة
+                        </button>
+                        <span class="m-2 text-secondary text-l" id="restDays"></span>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="modal fade" id="holidayEditMenu" tabindex="-5" aria-labelledby="HolidayMenu" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+              <div class="modal-content bg-dark">
+                <div class="modal-header bg-gradient-danger">
+                  <!--عنوان النافذة المنبثقة-->
+                  <h5 class="modal-title">تعديل اجازة</h5>
+                  <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+                </div>
+                <!--محتوى النافذة المنبثقة-->
+                <div class="modal-body">
+                  <div class="card-body table-responsive ">
+                    <div class="card card-navy d-print-table-row " id="ُemployee_delete">
+                      <div class="card-header text-center">
+                        قائمة الإجازات للموظف {{employee.name}}
+                      </div>
+                      <div class="card-body bg-dark">
+                        <table class="table table-responsive table-responsive-lg">
+                          <thead>
+                            <tr>
+                              <th>
+                                <input type="checkbox" id="selectAll" class="d-print-none" />
+                              </th>
+                              <th class="text-center">نوع الإجازة</th>
+                              <th class="text-center">تاريخ بدء</th>
+                              <th class="text-center">تاريخ الانتهاء</th>
+                              <th class="text-center">تاريخ التسجيل</th>
+                              <th class="text-center">رصيد قبل الخصم</th>
+                              <th class="text-center">الرصيد بعد الخصم</th>
+                              <th class="text-center">الاجازات الرسيمة</th>
+                              <th class="text-center">الملاحظات</th>
+                              <th class="text-center">اجراءات </th>
+                            </tr>
+                          </thead>
+                          <tbody id="tbody">
+                            {% for holiday in employee.holiday_records.all%}
+                            <tr>
+                              <td>
+                                <input type="checkbox" class="employee-checkbox d-print-none" />
+                              </td>
+                              <td class="text-center">
+                                {{holiday.holiday_type}}
+                              </td>
+                              <td class="text-center">
+                                {{ holiday.start_date|date:"Y-m-d" }}
+                              </td>
+                              <td class="text-center">
+                                {{ holiday.end_date|date:"Y-m-d" }}
+                              </td>
+                              <td class="text-center">
+                                {{ holiday.created_date|date:"Y-m-d" }}
+                              </td>
+                              <td class="text-center">
+                                {{holiday.holiday_used_days}}
+                              </td>
+                              <td class="text-center">
+                                {{holiday.holiday_left_days}}
+                              </td>
+                              <td class="text-center">
+                                {% if holiday.goverment_holiday %}
+                                {{holiday.goverment_holiday}}
+                                {% else %}
+                                لا يوجد
+                                {% endif %}
+                              </td>
+                              <td class="text-center">
+                                {{holiday.holiday_note}}
+                              </td>
+                              <td class="text-center">
+                                <a href="#" onclick="edit_holiday('{{holiday.id}}',this.parentElement.parentElement)"
+                                  class="btn btn-primary d-print-none ">
+                                  تعديل</a>
+                              </td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <!-- /.card-body -->
+                  </div>
+                  <div class="card-footer">
+                    <button type="button" class="btn btn-danger " data-bs-dismiss="modal"
+                      aria-label="Close">اغلاق</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="modal fade" id="holidayEditForm" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+              <div class="modal-content bg-dark">
+                <div class="modal-header bg-gradient-info">
+
+                  <!--عنوان النافذة المنبثقة-->
+                  <h5 class="modal-title">تعديل اجازة</h5>
+                  <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+                </div>
+                <!--محتوى النافذة المنبثقة-->
+                <div class="modal-body">
+                  <div class="form-row">
+                    <div class="form-group col-3" id="dataMap">
+                      <label>رصيد الايام بعد الخصم</label>
+                      <input type="number" name="" value="" readonly class="form-control bg-white text-danger"
+                        id="holidays_taken" />
+                    </div>
+                    <div class="form-group col-3">
+                      <label for="id_date_start">رصيد الإجازات السنوي</label>
+                      <input type="number" name="" value="100" readonly class="form-control text-danger bg-white" />
+                    </div>
+                    <div class="form-group col-3">
+                      <label for="id_date_start">رصيد الإجازات المتبقية</label>
+                      <input type="number" name="" value="{{employee.total_holiday_days}}" readonly
+                        class="form-control text-danger bg-white" />
+                    </div>
+                    <div class="form-group col-3">
+                      <label for="id_date_start">رصيد الإجازات المرضية</label>
+                      <input type="number" name="" value="{{employee.total_holiday_days}}" readonly
+                        class="form-control text-danger bg-white" />
+                    </div>
+                  </div>
+                  <input type="hidden" name="" id="TotalDays2">
+                  <form id="EditForm" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="card-body">
+                      <div class="form-row">
+                        <input type="hidden" name="holiday_edit_id" value="">
+                        <input type="hidden" name="left_days" value="">
+                        <div class="form-group col-4">
+                          <label for="id_holiday_type">نوع الإجازة</label>
+                          <select name="holiday_type" class="form-select right" id="id_holiday_type">
+                            <option value="" selected> </option>
+                            <option value="">-----------------------</option>
+                            <option value="إجازة عادية">
+                              إجازة عادية
+                            </option>
+                            <option value=" إجازة طارئة">إجازة طارئة</option>
+                            <option value="إجازة مرضية">إجازة مرضية</option>
+                          </select>
+                        </div>
+                        <div class="form-group col-4">
+                          <label for="id_date_start">تاريخ بداية الاجازة</label>
+                          <input type="date" name="start_date" required class="form-control" id="id_date_start"
+                            pattern="\d{4}-\d{2}-\d{2}" placeholder="إدخل تاريخ بداية الاجازة" value="" />
+                        </div>
+                        <div class="form-group col-4">
+                          <label for="id_date_end">تاريخ نهاية الاجازة</label>
+                          <input type="date" name="end_date" required class="form-control" id="id_date_end"
+                            placeholder="إدخل تاريخ نهاية الاجازة" value="" />
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-6">
+                          <label for="id_goverment_holiday">أيام العطل :</label>
+                          <select name="goverment_holiday" id="id_goverment_holiday" class="form-select">
+                            <option value="" selected></option>
+                            <option>-----------------------</option>
+                            <option value="17_FEBRUARY">
+                              عيد ثورة 17 فبراير
+                            </option>
+                            <option value="1_MAY">عيد العمال العالمي</option>
+                            <option value="16_SEPTEMBER">
+                              عيد الشهيد (ليبيا)
+                            </option>
+                            <option value="23_OCTOBER">
+                              عيد التحرير (ليبيا)
+                            </option>
+                            <option value="24_DECEMBER">عيد الاستقلال</option>
+                            <option value="1_MUHARRAM">
+                              رأس السنة الهجرية
+                            </option>
+                            <option value="12_RABI_AL_AWAL">
+                              المولد النبوي الشريف
+                            </option>
+                            <option value="1_SHAWWAL">عيد الفطر</option>
+                            <option value="9_DHUL_HIJJAH">يوم عرفة</option>
+                            <option value="10_DHUL_HIJJAH">عيد الأضحى</option>
+                          </select>
+                        </div>
+                        <div class="form-group col-6">
+                          <label for="id_date_end">ملاحظات</label>
+                          <input type="text" name="holiday_note" class="form-control" id="holdiay_note"
+                            placeholder="رجاء الادخال إذا كان هناك ملاحظات" />
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-12">
+                          <div id="upload_seccess2"></div>
+                          <label>رفع المستند الاجازة</label>
+                          <label class="btn btn-outline-danger form-control-file" for="upload-file2">رفع المستند</label>
+                          <input type="file" class="custom-file-input d-none" id="upload-file2"
+                          name="holiday_document" />
+                        </div>
+                        <input type="number" class="d-none" name="left" id="left" />
+                      </div>
+                      <!-- /.card-body -->
+                      <div class="card-footer">
+                        <button type="submit" id="submitBtn2" class="btn btn-primary w-25 h-25">
+                          تعديل
+                        </button>
+                        <span class="m-2 text-secondary text-l" id="restDays2"></span>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="modal fade" id="holidayDelete" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+              <div class="modal-content bg-dark">
+                <div class="modal-header bg-gradient-danger">
+                  <!--عنوان النافذة المنبثقة-->
+                  <h5 class="modal-title">حــذف اجازة</h5>
+                  <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+                </div>
+                <!--محتوى النافذة المنبثقة-->
+                <div class="modal-body">
+                  <div class="card-body table-responsive ">
+                    <div class="card card-navy d-print-table-row " id="ُemployee_delete">
+                      <div class="card-header text-center">
+                        قائمة الإجازات للموظف {{employee.name}}
+                      </div>
+                      <div class="card-body bg-dark">
+                        <table class="table table-responsive table-responsive-lg">
+                          <thead>
+                            <tr>
+                              <th>
+                                <input type="checkbox" id="selectAll" class="d-print-none" />
+                              </th>
+                              <th class="text-center">نوع الإجازة</th>
+                              <th class="text-center">تاريخ بدء</th>
+                              <th class="text-center">تاريخ الانتهاء</th>
+                              <th class="text-center">تاريخ التسجيل</th>
+                              <th class="text-center">رصيد قبل الخصم</th>
+                              <th class="text-center">الرصيد بعد الخصم</th>
+                              <th class="text-center">الاجازات الرسيمة</th>
+                              <th class="text-center">الملاحظات</th>
+                              <th class="text-center">اجراءات </th>
+                            </tr>
+                          </thead>
+                          <tbody id="tbody">
+                            {% for holiday in employee.holiday_records.all%}
+                            <tr>
+                              <td>
+                                <input type="checkbox" class="employee-checkbox d-print-none" />
+                              </td>
+                              <td class="text-center">
+                                {{holiday.holiday_type}}
+                              </td>
+                              <td class="text-center">
+                                {{ holiday.start_date|date:"Y-m-d" }}
+                              </td>
+                              <td class="text-center">
+                                {{ holiday.end_date|date:"Y-m-d" }}
+                              </td>
+                              <td class="text-center">
+                                {{ holiday.created_date|date:"Y-m-d" }}
+                              </td>
+                              <td class="text-center">
+                                {{holiday.holiday_used_days}}
+                              </td>
+                              <td class="text-center">
+                                {{holiday.holiday_left_days}}
+                              </td>
+                              <td class="text-center">
+                                {% if holiday.goverment_holiday %}
+                                {{holiday.goverment_holiday}}
+                                {% else %}
+                                لا يوجد
+                                {% endif %}
+                              </td>
+                              <td class="text-center">
+                                {{holiday.holiday_note}}
+                              </td>
+                              <td class="text-center">
+                                <a href="#" onclick="delete_holiday('{{holiday.id}}',this.parentElement.parentElement)"
+                                  class="btn btn-sm btn-outline-danger d-print-none">
+                                  حذف</a>
+                              </td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <!-- /.card-body -->
+                  </div>
+                  <div class="card-footer">
+                    <button type="button" class="btn btn-danger " data-bs-dismiss="modal"
+                      aria-label="Close">اغلاق</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="modal fade" id="successMsg" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content bg-dark">
+                <div class="modal-header bg-dark">
+                  <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center bg-dark">
+                  <div class="modal-image">
+                    <svg viewBox="1 0 30 40" style="fill: #48db71">
+                      <path d="M1 14 L5 10 L13 18 L27 4 L31 8 L13 26 z"></path>
+                    </svg>
+                  </div>
+                  <h1>تمت العملية بنجاح !</h1>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="modal fade" id="errorMsg" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg bg-dark">
+              <div class="modal-content bg-dark">
+                <div class="modal-header bg-dark">
+                  <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center bg-dark">
+                  <img src="{% static 'dist/img/error.png' %}" class="w-25 h-25 mb-3" alt="" />
+                  <h1>لم تتم عملية بنجاح !</h1>
+                  <p>تأكد من الاتصال او إدخال البيانات بشكل صحيح</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="modal fade" id="message" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+              <div class="modal-content bg-dark bg-dark">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="">حذف إجازة</h5>
+                  <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="modal-body text-center">
+                    <img src="{% static 'dist/img/alert-icon.png' %}" class="w-25 h-25 mb-3" alt="" />
+                    <h4>هل انت متأكد انك تريد حذف هذه الاجازة ؟</h4>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-info w-25" data-bs-dismiss="modal">
+                      رجوع
+                    </button>
+                    <button type="button" class="btn btn-danger w-25" id="confirmButton">تأكيد</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- /.container-fluid -->
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /.content-wrapper -->
+{%endblock%} {% block scripts %}
+
+<script>
+  let id = {{employee.id}};
+  let total =  {{ employee.total_holiday_days }};
+</script>
+<script src="{% static 'home/js/employee_holiday.js' %}"></script>
+
+{% endblock scripts %}

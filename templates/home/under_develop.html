@@ -1,0 +1,31 @@
+{% extends 'base.html' %} {% load static %} 
+{% block custom_css %}
+<link rel="stylesheet" href="{% static 'home/css/pageNotFound.css' %}" />
+{% endblock custom_css %}
+ {% block title %} صفحة قيد التطوير{% endblock title%}
+{% block sub_title %}صفحة قيد التطوير{% endblock%}
+{% block content %}
+<div style="direction: rtl" class="wrapper bg-dark">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper bg-dark">
+    <!-- Content Header (Page header) -->
+    <section id="not-found bg-dark">
+      <div id="title">لم يتم العثور على الصفحة &bull; هذه الصفحة لا تزال تحت التطوير</div>
+      <div class="circles bg-dark">
+        <p>
+         قريبا<br />
+          <small>هذه الصفحة قيد التطوير </small>
+        </p>
+        <a href="#" onclick="history.back()" class="btn bg-navy  text-lg w-50" style="color:white !important;">رجوع <i class="fas fa-undo fa-rotate-180 ml-3"></i></a>
+        <span class="circle big"></span>
+        <span class="circle med"></span>
+        <span class="circle small"></span>
+      </div>
+    </section>
+    
+    <!-- Main content -->
+  </div>
+  <!-- /.content-wrapper -->
+</div>
+<!-- ./wrapper -->
+{% endblock content %}

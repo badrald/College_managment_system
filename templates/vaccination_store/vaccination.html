@@ -1,0 +1,221 @@
+{% extends "base.html" %} {% block title %}التطعيمات{% endblock title %}
+{% load static %}
+{% block content %}
+
+<div style="direction: rtl" class="wrapper">
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper bg-dark">
+        <!-- Content Header (Page header) -->
+        <div class="content bg-dark">
+            <div class="container-fluid bg-dark">
+                <div class="col-12">
+                    <!-- Account details card-->
+                    <div class="card card-navy mt-4 bg-dark">
+                        <div class="card-header d-flex justify-content-center fs-4">
+                            التطعيمات
+                        </div>
+                        <div class="card-body">
+                            <div class="col-12">
+                                <div class="my-custom-scrollbar">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">اسم المطعوم</th>
+                                                <th class="text-center"> نوع المطعوم</th>
+                                                <th class="text-center">الكمية المتوفرة في المخزن</th>
+                                                <th class="text-center">تاريخ الانتهاء</th>
+                                                <th class="text-center">شريحة المستهدفة</th>
+                                                <th class="text-center d-print-none">الاجراءات</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbody">
+                                            {% for vaccine in vaccinations %}
+                                            <tr>
+                                                <td class="text-center">{{ vaccine.name }}</td>
+                                                <td class="text-center">{{ vaccine.vaccine_type }}</td>
+                                                <td class="text-center">{{ vaccine.available_doses }}</td>
+                                                <td class="text-center">{{ vaccine.expired_date }}</td>
+
+                                                <td class="text-center">
+                                                    {{ vaccine.description }}
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="dropdown">
+                                                        <button class="btn bg-navy dropdown-toggle d-print-none"
+                                                            type="button" id="`actionsDropdown${employee.id}`"
+                                                            data-bs-toggle="dropdown" aria-haspopup="true"
+                                                            aria-expanded="false">
+                                                            الإجراءات
+                                                        </button>
+                                                        <div class="dropdown-menu"
+                                                            aria-labelledby="`actionsDropdown${employee.id}`">
+                                                            <a class="dropdown-item" href="#">عرض جهة العمل</a>
+                                                            <a class="dropdown-item" href="#">تعديل جهة العمل</a>
+                                                            <a class="dropdown-item"
+                                                                onclick="UpdateEmployeeName(this.parentElement.parentElement.parentElement.parentElement)"
+                                                                class="dropdown-item" data-bs-toggle="modal"
+                                                                data-bs-target="#message">حذف جهة العمل</a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-12 mt-5 d-print-none">
+                                <button onclick="history.back()" type="button" class="btn btn-danger w-25 h-25">
+                                    رجوع <i class="fa fa-undo-alt fa-rotate-180 ml-3"></i>
+                                </button>
+                                <button data-bs-toggle="modal" data-bs-target="#addJobPlace" type="button"
+                                    class="btn btn-success w-25 h-25">
+                                    إضافة مطعوم جديد <i class="fa-solid fa-syringe fa-beat ml-3"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="successMsg" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg bg-dark">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="modal-image">
+                        <svg viewBox="1 0 30 40" style="fill: #48db71">
+                            <path d="M1 14 L5 10 L13 18 L27 4 L31 8 L13 26 z"></path>
+                        </svg>
+                    </div>
+                    <h1>تمت العملية بنجاح !</h1>
+                    <p></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addJobPlace" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content bg-dark bg-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">إضافة مطعوم</h5>
+                    <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="AddVaccine" method="POST">
+                        {% csrf_token %}
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="id_name">اسم التطعيم:</label>
+                                <input type="text" name="name" class="form-control" maxlength="255" required=""
+                                    id="id_name">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="id_vaccine_type">نوع التطعيم:</label>
+                                <select name="vaccine_type" class="form-select" required="" id="id_vaccine_type">
+                                    <option value="" selected="">---------</option>
+                                    <option value="BCG">تطعيم المواليد - بي سي جي</option>
+                                    <option value="Polio_Newborn">تطعيم المواليد - شلل الأطفال</option>
+                                    <option value="Hexavalent_2Months">تطعيم الشهرين - الطعم السداسي</option>
+                                    <option value="Rotavirus_2Months">تطعيم الشهرين - طعم الروتا</option>
+                                    <option value="Hexavalent_4Months">تطعيم الأربعة شهور - الطعم السداسي</option>
+                                    <option value="Rotavirus_4Months">تطعيم الأربعة شهور - طعم الروتا</option>
+                                    <option value="Hexavalent_6Months">تطعيم الستة شهور - الطعم السداسي</option>
+                                    <option value="Rotavirus_6Months">تطعيم الستة شهور - طعم الروتا</option>
+                                    <option value="Meningococcal_9Months">تطعيم التسعة شهور - تطعيمة التهاب السحايا
+                                        A.C.Y.W135</option>
+                                    <option value="Polio_9Months">تطعيم التسعة شهور - ال</option>
+                                    <option value="Pneumococcal_1Year">تطعيم السنة - طعتطعيمة الوقاية من شلل الأطفم
+                                        الرئوي
+                                        13</option>
+                                    <option value="Pentavalent_1.5Years">تطعيم السنة والنصف - الطعم الخماسي</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="id_available_doses">عدد الجرعات المتاحة:</label>
+                                <input type="number" name="available_doses" class="form-control" required=""
+                                    id="id_available_doses">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="id_expired_date">تاريخ انتهاء الصلاحية:</label>
+                                <input type="date" name="expired_date" class="form-control" required=""
+                                    id="id_expired_date">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="id_description">وصف التطعيم:</label>
+                                <textarea name="description" class='form-control' cols="80" rows="5" required=""
+                                    id="id_description"></textarea>
+                            </div>
+                        </div>
+
+                    </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            أغلاق
+                        </button>
+                        <button type="submit" form="AddVaccine" class="btn btn-primary">
+                            حفظ
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="errorMsg" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg bg-dark">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img src="{% static 'dist/img/error.png' %}" class="w-25 h-25 mb-3" alt="" />
+                    <h1>لم تتم عملية بنجاح !</h1>
+                    <p>تأكد من الاتصال او إدخال البيانات بشكل صحيح</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="message" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content bg-dark bg-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="">حذف جهة العمل</h5>
+                    <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-body text-center">
+                        <img src="{% static 'dist/img/alert-icon.png' %}" class="w-25 h-25 mb-3" alt="" />
+                        <h1>هل انت متأكد انك تريد حذف جهة العمل ؟</h1>
+                        <p id="employeeNameWarrning"></p>
+                    </div>
+                    <form id="deleteJobPlace" method="POST">
+                        {% csrf_token %}
+                        <input type="number" name="id" class="d-none" value="" />
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-info w-25" data-bs-dismiss="modal">
+                                رجوع
+                            </button>
+                            <button type="submit" class="btn btn-danger w-25">تأكيد</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+{% block scripts %}
+{% endblock scripts %}

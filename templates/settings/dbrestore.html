@@ -1,0 +1,389 @@
+{% extends 'base.html' %} {% load static %}
+{% block custom_css %}
+<link rel="stylesheet" href="{% static 'home/css/settings.css' %}" />
+{% endblock custom_css %} {% block title%}مركز الصيانة{% endblock title %}
+{% block sub_title %}مركز الصيانة {% endblock %}
+{% block content %}
+<style>
+  .modal-image {
+    width: 70px;
+    height: 70px;
+    margin: auto;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px #48db71;
+    padding: 11px 10px 2px;
+    margin-bottom: 2em;
+  }
+
+  .modal-body h1 {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+  }
+
+  .modal-body p {
+    margin-bottom: 2em;
+    color: #666;
+  }
+
+  :root {
+    --defualt-idr: .3s;
+  }
+
+  .pulse-grow {
+    display: inline-block;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    /* Hide Tap Highlight Color */
+    transform: translateZ(0);
+    /* Hardware Acceleration */
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+
+  }
+
+  .pulse-grow:hover {
+    /* Improve Anti-Aliasing */
+    animation-name: pulse-grow;
+    /* Pulse Grow Keyframes */
+    animation-duration: var(--defualt-idr);
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+  }
+
+  @keyframes pulse-grow {
+    to {
+      transform: scale(1.1);
+    }
+  }
+</style>
+<div style="direction: rtl" class="wrapper">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper bg-dark">
+    <!-- Content Header (Page header) -->
+    <div class="content bg-dark">
+      <div class="container-fluid bg-dark">
+        <!-- form add employee -->
+        <div class="row">
+          <div class="col-xl-3 col-lg-4 col-md-5 col-sm-6  mt-4 mb-4">
+            <a href="#" data-bs-toggle="modal" data-bs-target="#createUserMaintains">
+              <div class="card bg-gradient-info jBounceIn shadow-lg rounded " style="width: 18rem">
+                <img src="{% static 'settings/software-engineer.png' %}" class="card-img-top bg-gradient bg-white"
+                  alt="..." />
+                <div class="card-body card-info">
+                  <p class="card-text text-center fs-4">
+                    انشاء مستخدم للصيانة
+                  </p>
+                </div>
+              </div>
+            </a>
+          </div>
+          {% if user.username == "Admin" %}
+          <div class="col-xl-3 col-lg-4 col-md-5 col-sm-6  mt-4 mb-4">
+            <a href="#" data-bs-toggle="modal" data-bs-target="#fileForm">
+              <div class="card bg-gradient bg-primary jBounceIn shadow-lg rounded " style="width: 18rem">
+                <img src="{% static 'settings/backup_database.png' %}" class="card-img-top bg-gradient bg-white"
+                  alt="..." />
+                <div class="card-body ">
+                  <p class="card-text text-center fs-4">
+                    استعادة قاعدة البيانات (عبر الملف)
+                  </p>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-xl-3 col-lg-4 col-md-5 col-sm-6  mt-4 mb-4">
+            <a onclick="getFilesOnServer()" href="#" data-bs-toggle="modal" data-bs-target="#serverFiles">
+              <div class="card bg-gradient bg-black jBounceIn shadow-lg rounded " style="width: 18rem">
+                <img src="{% static 'settings/db_restore.png' %}" class="card-img-top bg-gradient bg-white" alt="..." />
+                <div class="card-body ">
+                  <p class="card-text text-center fs-4">
+                    استعادة قاعدة البيانات (السيرفر)
+                  </p>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-xl-3 col-lg-4 col-md-5 col-sm-6 mt-4 mb-4">
+            <a data-bs-toggle="modal" data-bs-target="#comandPrompt">
+              <div class="card bg-gradient bg-navy jBounceIn shadow-lg rounded" style="width: 18rem">
+                <img src="{% static 'settings/cmd.png' %}" class="card-img-top bg-gradient bg-white" alt="..." />
+                <div class="card-body card-info">
+                  <p class="card-text text-center fs-4">موجه الأومر</p>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="col-xl-3 col-lg-4 col-md-5 col-sm-6  mt-4 mb-4">
+          <a data-bs-toggle="modal" data-bs-target="#resetDataBase">
+            <div class="card bg-danger jBounceIn shadow-lg rounded" style="width: 18rem">
+              <img src="{% static 'settings/clean_database.png' %}" class="card-img-top bg-gradient bg-white"
+                alt="..." />
+              <div class="card-body card-info">
+                <p class="card-text text-center fs-4">إعادة تعين قاعدة البيانات</p>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      {% endif %}
+
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+
+<div class="modal fade" id="createUserMaintains" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg ">
+    <div class="modal-content bg-dark ">
+      <div class="modal-header bg-gradient bg-info">
+        <h5 class="modal-title" id="exampleModalLabel">
+          إنشاء حساب صيانة
+        </h5>
+        <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- form start -->
+        <form method="POST" enctype="multipart/form-data" id="createUser">
+          {% csrf_token %}
+          <div class="form-row">
+            <div class="form-group col-md-12">
+              <label class="form-label" for="password">كلمة المرور</label>
+              <input type="password" name="password" maxlength="128" class="form-control"
+                placeholder="رجاء ادخال كلمة مرور " required="" id="id_password1" />
+            </div>
+          </div>
+          <div class="form-row col-12 mt-3">
+            <button type="submit" id="expordBtn" class="btn btn-success w-100">
+              انشاء مستخدم الصيانة <i class="fas fa-user-plus ml-3"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer bg-gradient bg-info"></div>
+    </div>
+  </div>
+</div>
+{% if user.username == "Admin" %}
+<div class="modal fade" id="resetDataBase" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg ">
+    <div class="modal-content bg-dark ">
+      <div class="modal-header bg-gradient bg-danger">
+        <h5 class="modal-title" id="exampleModalLabel">
+          اعادة تعين قاعدة البيانات
+        </h5>
+        <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="p-5 fs-4">
+          هل انت متأكد انك تريد إعادة تعين قاعدة البيانات
+          ؟<span class="text-danger">(سيتم حذف كل شيء في قاعدة البيانات ,هذا الاجراء غير قابل لتراجع)</span>
+        </div>
+        <!-- form start -->
+        <form method="POST" enctype="multipart/form-data" id="resetForm">
+          {% csrf_token %}
+          <input type="checkbox" name="resetDataBase" class="d-none" checked />
+          <div class="col-12 form-row">
+            <div class="col-6">
+              <button type="button" class="btn btn-primary w-100" data-bs-dismiss="modal">
+                رجوع <i class="fas fa-undo fa-rotate-180 ml-3 "></i>
+              </button>
+            </div>
+            <div class="col-6">
+              <button type="submit" class="btn btn-danger w-100">
+                إعادة تعين قاعدة البيانات <i class="fas fa-trash-restore-alt ml-3"></i>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer bg-danger bg-gradient"></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="fileForm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content bg-dark bg-dark">
+      <div class="modal-header bg-gradient bg-primary">
+        <h5 class="modal-title" id="exampleModalLabel">
+          رفع ملف قاعدة البيانات
+        </h5>
+        <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id='FileForm' method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <input type="hidden" name="restore_from_file">
+          <label for="id_json_file" class="drop-container" id="dropcontainer">
+            <span class="drop-title bg-dark">افلات الملف هنا </span>
+            او
+            <input type="file" name="back_up_file" id="id_back_up_file " value="اختر ملف" accept=".pms" required />
+          </label>
+          <div class="form-row col-12 mt-4">
+            <div class="col-6">
+              <button type="button" class="btn btn-danger w-100" data-bs-dismiss="modal">
+                رجوع <i class="fas fa-undo fa-rotate-180 ml-3"></i>
+              </button>
+            </div>
+            <div class="col-6">
+              <button type="submit" onclick="showMenu()" class="btn btn-primary w-100">
+                حفظ التغيرات <i class="fas fa-save ml-3"></i>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer bg-gradient bg-primary"></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="serverFiles" tabindex="-1" aria-label="serverFiles" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content bg-dark bg-dark">
+      <div class="modal-header bg-gradient bg-black">
+        <h5 class="modal-title" id="exampleModalLabel">
+          ملفات السيرفر
+        </h5>
+        <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <table class="table table-striped table-hover table-responsive-md">
+          <thead class="bg-secondary text-light">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">الملف</th>
+              <th scope="col">حذف الملف</th>
+              <th scope="col">استعادة من هذا الملف</th>
+            </tr>
+          </thead>
+          <tbody id="tbody">
+            <tr id="spinnerContainer" style="display: none;">
+              <td colspan="4" class="text-center">
+                <div class="d-flex justify-content-center">
+                  <div class="spinner-border text-primary" role="status" style="width: 6rem;height: 6rem;">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                </div>
+                </th>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer bg-gradient bg-black"></div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="comandPrompt" tabindex="-1" aria-label="serverFiles" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content bg-dark bg-dark">
+      <div class="modal-header bg-gradient bg-black">
+        <h5 class="modal-title" id="exampleModalLabel">
+          موجه الأومر الخاص بالمنظومة
+        </h5>
+        <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center" dir="ltr">
+        <form action="" id="cmdForm">
+          <textarea class="form-control-plaintext bg-black" name="" id="" cols="30" rows="10"></textarea>
+        </form>
+      </div>
+      <div class="modal-footer bg-gradient bg-black"></div>
+    </div>
+  </div>
+</div>
+
+{% endif %}
+<div class="modal fade" id="message" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content bg-dark bg-dark">
+      <div class="modal-header bg-gradient bg-fuchsia">
+        <h5 class="modal-title" id=""> رسالة حذف</h5>
+        <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body bg-dark">
+        <div class="text-center">
+          <img src="{% static 'dist/img/alert-icon.png' %}" class="w-25 h-25 mb-3" alt="" />
+          <h4>سيتم حذف ملف قاعدة البيانات هل انت متأكد ؟</h4>
+          <p id="deletedFile"></p>
+        </div>
+        <form action="" method="post" id="deleteFile">
+          {% csrf_token %}
+          <input type="hidden" name="restore_from_server" value=".">
+          <input type="hidden" name="deleteFromServer" value=".">
+          <input type="hidden" name="file_name">
+          <div class="col-12 form-row">
+            <div class="col-6">
+              <button type="button" class="btn btn-info w-100" data-bs-dismiss="modal">
+                رجوع <i class="fas fa-undo fa-rotate-180 ml-3"></i>
+              </button>
+            </div>
+            <div class="col-6">
+              <button type="submit" class="btn btn-danger w-100" id="confirmButton">
+                تأكيد
+                <i class="fas fa-trash ml-3"></i>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer bg-gradient bg-fuchsia">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal fade" id="successMsg" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-info bg-gradient">
+        <h5 class="modal-title" id="exampleModalLabel">رسالة</h5>
+        <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <div class="modal-image">
+          <svg viewBox="1 0 30 40" style="fill: #48db71">
+            <path d="M1 14 L5 10 L13 18 L27 4 L31 8 L13 26 z"></path>
+          </svg>
+        </div>
+        <h1>تمت العملية بنجاح !</h1>
+        <p>تمت عملية إنشاء حساب إحتياطي بنجاح</p>
+      </div>
+      <div class="modal-footer bg-info bg-gradient"></div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="errorMsg" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-danger bg-gradient">
+        <h5 class="modal-title" id="exampleModalLabel">رسالة</h5>
+        <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center bg-dark text-light">
+        <img src="{% static 'dist/img/error.png' %}" class="w-25 h-25 mb-3" alt="" />
+        <h1>لم تتم العملية بنجاح !</h1>
+        <p>هناك خطأ في كلمة المرور الرجاء الاتصال بالدعم الفني </p>
+      </div>
+      <div class="modal-footer bg-danger bg-gradient"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'settings/js/db_restore.js' %}">
+</script>
+{% endblock %}

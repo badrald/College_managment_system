@@ -1,0 +1,141 @@
+{% extends 'base.html' %} {% load static %} {% block custom_css %}
+<link rel="stylesheet" href="{% static 'home/css/settings.css' %}" />
+{% endblock custom_css %} {% block title%} الحضور و الانصراف {% endblock title%}
+{% block sub_title %} الحضور و الانصراف {% endblock%}
+{% block content %}
+<div style="direction: rtl" class="wrapper">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <div class="content bg-dark">
+      <div class="container-fluid bg-dark">
+        <div class="row">
+          {% if user.is_staff %}
+          <div class="col-lg-3 col-md-4  col-sm-6 mt-4 mb-4">
+            <a href="{% url 'group_index' %}">
+              <div
+                class="card pulse-grow  shadow-lg rounded bg-dark"
+                style="width: 18rem">
+                <img
+                  src="{% static 'attends/imges/group_icon.png' %}"
+                  class="card-img-top"
+                  alt="..." />
+                <div class="card-body">
+                  <p class="card-text text-center fs-4">المجموعات</p>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-3 col-md-4  col-sm-6 mt-4 mb-4">
+            <a href="{% url 'shifts_index' %}">
+              <div
+                class="card pulse-grow  shadow-lg rounded bg-dark"
+                style="width: 18rem">
+                <img
+                  src="{% static 'attends/imges/shifts.png' %}"
+                  class="card-img-top"
+                  alt="..." />
+                <div class="card-body card-info">
+                  <p class="card-text text-center fs-4">الورديات</p>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-3 col-md-4  col-sm-6 mt-4 mb-4">
+            <a href="{% url 'check_out_permission' %}">
+              <div
+                class="card pulse-grow  shadow-lg rounded bg-dark"
+                style="width: 18rem">
+                <img
+                  src="{% static 'attends/imges/exit_permision.png' %}"
+                  class="card-img-top"
+                  alt="..." />
+                <div class="card-body card-info">
+                  <p class="card-text text-center fs-4">تسجيل اذن خروج</p>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-lg-3 col-md-4  col-sm-6 mt-4 mb-4">
+            <a href="{% url 'check_in' %}">
+              <div
+                class="card pulse-grow shadow-lg rounded bg-dark"
+                style="width: 18rem">
+                <img
+                  src="{% static 'attends/imges/log-in.png' %}"
+                  class="card-img-top"
+                  alt="..." />
+                <div class="card-body">
+                  <p class="card-text text-center fs-4">تسجيل حضور موظفين</p>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-3 col-md-4  col-sm-6 mt-4 mb-4">
+            <a href="{% url 'check_out' %}">
+              <div
+                class="card pulse-grow shadow-lg rounded bg-dark"
+                style="width: 18rem">
+                <img
+                  src="{% static 'attends/imges/out_logo.png' %}"
+                  class="card-img-top"
+                  alt="..." />
+                <div class="card-body">
+                  <p class="card-text text-center fs-4">تسجيل انصراف موظفين</p>
+                </div>
+              </div>
+            </a>
+          </div>
+          {% endif %}
+          <div class="col-lg-3 col-md-4  col-sm-6 mt-4 mb-4">
+            <a href="{% url 'employee_report' %}">
+              <div
+                class="card pulse-grow shadow-lg rounded bg-dark"
+                style="width: 18rem">
+                <img
+                  src="{% static 'attends/imges/attendess_report.png' %}"
+                  class="card-img-top"
+                  alt="..." />
+                <div class="card-body card-info">
+                  <p class="card-text text-center fs-4">كشف حضور و غياب موظف </p>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-3 col-md-4  col-sm-6 mt-4 mb-4">
+            <a href="{% url 'attendance_report' %}">
+              <div
+                class="card pulse-grow shadow-lg rounded bg-dark"
+                style="width: 18rem">
+                <img
+                  src="{% static 'attends/imges/report.png' %}"
+                  class="card-img-top"
+                  alt="..." />
+                <div class="card-body card-info">
+                  <p class="card-text text-center fs-4">كشف الحضور و الغياب</p>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-lg-3 col-md-4  col-sm-6 mt-4 mb-4">
+            <a href="{% url 'under_develop' %}">
+              <div
+                class="card pulse-grow shadow-lg rounded bg-dark"
+                style="width: 18rem">
+                <img
+                  src="{% static 'attends/imges/fingerprint.png' %}"
+                  class="card-img-top"
+                  alt="..." />
+                <div class="card-body card-info">
+                  <p class="card-text text-center fs-4">إعدادات البصمة</p>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %} {% block scripts %}
+{% endblock scripts %}

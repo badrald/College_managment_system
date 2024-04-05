@@ -1,0 +1,127 @@
+{% extends 'base.html' %} {% load static %} {% block sub_title %}نـموذج التعاقد{% endblock %}
+{% block title %}نـموذج التعاقد{% endblock %}
+{%block content%}
+<style>
+  .myPageBody{
+    border : 6px solid black;
+    border-radius: 8%;
+  }
+  .doted {
+    border-bottom: 3px dotted #000;
+    text-decoration: none;
+  }
+</style>
+<div style="direction: rtl" class="wrapper bg-dark">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper bg-dark">
+    <!-- Content Header (Page header) -->
+    <!--اظافة موظف-->
+    <div class="content bg-dark">
+      <div class="container-fluid bg-dark">
+        <!-- form add employee -->
+        <div id="employeeform" class="card card-navy mt-2 w-100">
+          <div class="card-header d-flex justify-content-center d-print-none">
+            <h3 class="card-title d-flex justify-content-start fs-3">
+              نموذج التنسيب
+            </h3>
+          </div>
+          <!-- form start -->
+          <div class="row ml-5 " style="margin-top:100px;">
+            <div class="col-6">
+              <div class="card-body">
+                <div class="w-50 justify-content-end text-center">
+                  <h4 class="fw-bolder">دولة ليبيا</h4>
+                  <h4 class="fw-bolder">حكومة الوحدة الوطنية</h4>
+                  <h4>إدارة الخدمات الصحية قصر بن غشير</h4>
+                </div>
+              </div>
+            </div>
+            <div class="col-6 ">
+              <div class="text-center ">
+                <img class="rounded-circle" style="width: 120px; height: 120px;" src="{% static 'dist/img/1.png' %}"
+                  alt="" />
+                <p class="fs-4">إدارة الخدمات الصحية قصر بن غشير</p>
+              </div>
+            </div>
+          </div>
+          <div class="myPageBody " style="margin-top:100px;">
+            <div class="row ml-5">
+              <div class="col-6">
+                <div class="card-body">
+                  <div class="w-75 justify-content-end">
+                    <h4>الرقم الإشاري : <span class="fw-bold doted">{{page.id}}</span></h4>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="card-body">
+                  <div class="w-75 justify-content-end text-start">
+                    <h4>التاريخ : {{page.date_start|date:"Y/m/d"}}</h4>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="row ">
+              <div class="col-12">
+                <div class="card-body">
+                  <div class="w-100 justify-content-end p-5">
+                    <h3 class="fw-bolder">السيد / <span class="fw-bold doted">مدير مكتب الشؤون الادارية و المالية</span></h3>
+                    <h4 class="fw-bolder fst-italic mt-5 mb-5">بعد التحية  ...</h4>
+                    <h4 class="mb-5 text-center w-100">نفيدكم بان  <span class="text-bold fs-3">السيد{% if not page.sex %}ة{% endif %}/     <span class="fw-bold doted"> {{page.name}}</span></span> 
+                    صاحب{% if not page.sex %}ت{% endif %} {% if page.nationality == 'ليبي' or page.nationality == 'ليبية' %} رقم الوطني {% else %} رقم الهوية{% endif %} : <span class="fw-bold doted">{{page.national_number}}</span></h4>
+                    <h4 class="mb-5 text-center w-100">قد باشر{% if not page.sex %}ت{% endif %} العمل <span class="fw-bold doted">بوحدة {{page.job_place}}</span>
+                     من تاريخ   <span class="fw-bold doted mr-3 ml-3">{{page.date_start|date:"Y/m/d"}}</span></h4>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <div class="row">
+              <div class="col-12 text-center">
+                <h3 class="fw-bolder fst-italic">هذا للعلم و الإجراء</h3>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12 text-center">
+                <h3 class="fw-bold fst-italic">والسلام عليكم</h3>
+              </div>
+            </div>
+            <div class="row mt-5 mb-5">
+              <div class="col-6">
+                <div class="card-body">
+                  <div class="w-75 justify-content-end ">
+                    <h6 class="ml-4">صور منه إلــــى</h6>
+                    <ul>
+                      <li>السيد/ مدير إدارة الخدمات الصحية</li>
+                      <li>مدير مساعد إدارة الخدمات الصحية</li>
+                      <li>مكتب التفتيش و المتابعة</li>
+                      <li>الملف الدوري العام</li>
+                      <li>الملف الصادر</li>
+                    </ul>
+                    <h4 class="ml-5">.............................</h4>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6 ">
+                <div class="text-center mt-5">
+                  <h3>مدير مكتب الشؤون الإدارية و المالية</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer bg-dark d-print-none">
+            <button onclick="history.back()" type="button" class="btn btn-danger w-25 h-25">
+              رجوع <i class="fa fa-undo-alt fa-rotate-180 ml-3"></i>
+            </button>
+            <button onclick="print()" class="btn bg-success w-25 h-25 ml-3">
+              طباعة <i class="fa fa-print ml-3"></i>
+            </button>
+          </div>
+        </div>
+          <!-- /.card -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

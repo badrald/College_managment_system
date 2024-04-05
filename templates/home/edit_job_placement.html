@@ -1,0 +1,223 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block sub_title %} تعديل نـموذج التنسيب{% endblock %}
+{% block title %} تعديل نـموذج التنسيب{% endblock %}
+{%block content%}
+<style>
+  .modal-image {
+    width: 70px;
+    height: 70px;
+    margin: auto;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px #48db71;
+    padding: 11px 10px 2px;
+    margin-bottom: 2em;
+  }
+
+  .modal-body h1 {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+  }
+
+  .modal-body p {
+    margin-bottom: 2em;
+    color: #666;
+  }
+
+  :root {
+    --defualt-idr: 0.3s;
+  }
+
+  .pulse-grow {
+    display: inline-block;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    /* Hide Tap Highlight Color */
+    transform: translateZ(0);
+    /* Hardware Acceleration */
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  }
+
+  .pulse-grow:hover {
+    /* Improve Anti-Aliasing */
+    animation-name: pulse-grow;
+    /* Pulse Grow Keyframes */
+    animation-duration: var(--defualt-idr);
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+  }
+
+  @keyframes pulse-grow {
+    to {
+      transform: scale(1.1);
+    }
+  }
+</style>
+<div style="direction: rtl" class="wrapper bg-dark">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper bg-dark">
+    <!-- Content Header (Page header) -->
+    <!--اظافة اذن تنسيب-->
+    <div class="content bg-dark">
+      <div class="container-fluid bg-dark">
+        <!-- form add job placemenet -->
+        <div class="card card-navy mt-2">
+          <div class="card-header d-flex justify-content-center">
+            <h3 class="card-title d-flex justify-content-center fs-3">
+              تعديل نموذج التنسيب
+            </h3>
+          </div>
+          <!-- form start -->
+
+          <div class="card-body bg-dark">
+          <form method="POST" enctype="multipart/form-data" id="addJobPlacement">
+            {% csrf_token %}
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="id_name"> الاسم الرباعي</label>
+                  <input type="text" name="employee_name" maxlength="100" value="{{job_placement.employee_name}}" class="form-control"
+                    placeholder="الرجاء ادخال الاسم الرباعي" required id="id_employee_name" />
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="employee_sex">الجنس</label>
+                  <select name="employee_sex" class="form-select right" id="id_employee_sex">
+                    <option value="True"{% if job_placement.employee_sex %}selected{% endif %} >ذكر</option>
+                    <option value="False" {% if not job_placement.employee_sex %}selected{% endif %}>انثى</option>
+                  </select>
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="index_number">الرقم الإشاري</label>
+                  <input type="number" name="index_number" value="{{job_placement.index_number}}" class="form-control"
+                    placeholder="الرجاء إدخال الرقم الإشاري " id="id_index_number" />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="job_title">التخصص</label>
+                  <input type="text" name="job_title"value={{job_placement.job_title}} maxlength="100" class="form-control"
+                    placeholder="الرجاء ادخال التخصص" required id="id_job_title" fdprocessedid="zlfr5h" />
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="id_graduation_date">رقم إذن التعاقد</label>
+                  <input type="number" name="appointment_code" value={{job_placement.appointment_code}} class="form-control"
+                    placeholder="الرجاء ادخال  رقم إذن التعاقد" id="id_appointment_code" />
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="appointment_date">تاريخ إذن التعاقد</label>
+                  <input type="text" name="appointment_date" value="{{job_placement.appointment_date|date:'m/d/Y'}}" class="form-control" required id="id_appointment_date" />
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="id_date_start">مكان العمل</label>
+                  <select name="job_place" class="form-select" value="{{job_placement.job_place}}" required id="id_job_place" fdprocessedid="jp2iza">
+                    <option value="{{job_placement.job_place.id}}" selected>{{job_placement.job_place.name}}</option>
+                    <option>-------------------</option>
+                    {% if job_places %}
+                    {% for job_place in job_places  %}
+                    <option value="{{job_place.id}}">{{job_place.name}}</option>
+                    {% endfor %}
+                    {% endif %}
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="id_send_to">الجيهة المخاطبة </label>
+                  <select name="send_to" class="form-select" value="{{job_placement.send_to}}" required id="id_send_to" fdprocessedid="jp2iza">
+                    <option value="{{job_placement.send_to}}" selected>
+                        {{job_placement.send_to}}                  
+                      </option>
+                    <option >
+                      ------------------------------------
+                    </option>
+                    {% if job_places %}
+                    {% for job_place in job_places  %}
+                    <option value="مدير {{job_place.name}}">مدير {{job_place.name}}</option>
+                    {% endfor %}
+                    {% endif %}
+                  </select>
+                </div>
+                <div class="form-group col-md-6">
+                  <label class="" for="description">الملاحظات</label>
+                  <textarea name="description" class="form-control" placeholder="الرجاء إدخال اذا كان هناك اي ملاحظات"
+                    id="id_description" value="{{job_placement.note}}"></textarea>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="col-md-6">
+                <button onclick="history.back()" type="button" class="btn btn-danger w-100 ">
+                  رجوع <i class="fa fa-undo-alt fa-rotate-180 ml-3"></i>
+                </button>
+              </div>
+                <div class="col-md-6">
+                <button type="submit" class="btn bg-navy w-100 ml-3">
+                  تعديل<i class="fa fa-edit ml-3"></i>
+                </button>
+              </div>
+              </div>
+              <!-- /.card-body -->
+            </form>
+          </div>
+          <div class="card-footer bg-navy bg-gradient"></div>
+        </div>
+
+
+        <!-- /.card -->
+      </div>
+      <div class="modal fade" id="successMsg" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg ">
+          <div class="modal-content bg-dark">
+            <div class="modal-header bg-gradient bg-success">
+              <h5 class="modal-title">رسالة</h5>
+              <button type="button" class="btn-close m-0 bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center bg-dark ">
+              <div class="modal-image">
+                <svg viewBox="1 0 30 40" style="fill: #48db71">
+                  <path d="M1 14 L5 10 L13 18 L27 4 L31 8 L13 26 z"></path>
+                </svg>
+              </div>
+              <h1>تمت العملية بنجاح !</h1>
+              <p>تمت عملية تعديل رسالة التنسيب بنجاح</p>
+              <div class="form-row col-12 mt-5">
+                <div class="col-md-6">
+                <button type="button" class="btn btn-danger w-100" data-bs-dismiss="modal">
+                  إغلاق النافذة
+                </button>
+              </div>
+                <div class="col-md-6">
+                <a href="#" id="showJobPlacement" class="btn btn-success w-100">
+                  إظهار اذن التعاقد
+                </a>
+              </div>
+              </div>
+            </div>
+            <div class="modal-footer bg-gradient bg-success"></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade" id="errorMsg" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg ">
+          <div class="modal-content bg-dark">
+            <div class="modal-header">
+              <button type="button" class="btn-close m-0" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body  text-center bg-dark">
+              <img src="{% static 'dist/img/error.png' %}" class="w-25 h-25 mb-3" alt="" />
+              <h1>لم تتم عملية بنجاح !</h1>
+              <p>تأكد من الاتصال او إدخال البيانات بشكل صحيح</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{%endblock%} {% block scripts %}
+<script>
+
+  let addUrl = '{% url "edit_job_placement" job_placement.id %}';
+
+</script>
+<script src="{% static 'home/js/add_job_placement.js' %}"></script>
+{% endblock scripts %}
