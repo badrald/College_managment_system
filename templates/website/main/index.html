@@ -1,0 +1,807 @@
+{% extends "../base.html" %} {% load static %} {% block content %}
+<!-- ***** Main Banner Area Start ***** -->
+<div class="main-banner header-text" id="top">
+  <div class="Modern-Slider">
+    <!-- Item -->
+    <div class="item">
+      <div class="img-fill">
+        <img src="{% static 'website/images/slide-11.jpg' %}" alt="" />
+        <div class="img-overlay"></div>
+        <div class="text-content">
+          <h3>أهلا بك في كلية التقنية الالكترونية</h3>
+          <a
+            href="#"
+            class="main-filled-button"
+            data-bs-toggle="modal"
+            data-bs-target="#loginModal"
+            >تسجيل الدخول</a
+          >
+        </div>
+      </div>
+    </div>
+    <!-- // Item -->
+    <!-- Item -->
+    <div class="item">
+      <div class="img-fill">
+        <img src="{% static 'website/images/slide-14.jpg' %}" alt="" />
+        <div class="img-overlay"></div>
+        <div class="text-content">
+          <h3>Integrated Marketing Media</h3>
+          <h5>Best Digital Marketing</h5>
+          <a href="#" class="main-stroked-button">Read More</a>
+          <a href="#" class="main-filled-button">Take Action</a>
+        </div>
+      </div>
+    </div>
+    <!-- // Item -->
+    <!-- Item -->
+    <div class="item">
+      <div class="img-fill">
+        <img src="{% static 'website/images/slide-10.jpg' %}" alt="" />
+        <div class="img-overlay"></div>
+        <div class="text-content">
+          <h3>High Performance</h3>
+          <h5>Robust and Speedy</h5>
+          <a href="#" class="main-stroked-button">Learn More</a>
+          <a href="#" class="main-filled-button">Get It Now</a>
+        </div>
+      </div>
+    </div>
+    <!-- // Item -->
+  </div>
+</div>
+<div class="scroll-down scroll-to-section">
+  <a href="#about"><i class="fa fa-arrow-down"></i></a>
+</div>
+<!-- ***** Main Banner Area End ***** -->
+
+<!-- ***** About Area Starts ***** -->
+<section class="section text-right" id="about" dir="rtl">
+  <div class="container">
+    <div class="section-heading text-center">
+      <h2>حول الكلية</h2>
+    </div>
+    <br />
+    <br />
+    <div class="row">
+      <div class="col-lg-6 col-md-6 col-xs-12">
+        <div class="section-heading text-right">
+          <h2 class="fs-4">عن الكلية</h2>
+          <h6>
+            كلية التقنية الالكترونية هي احدى مؤسسات التعليم التقني في ليبيا
+          </h6>
+        </div>
+        <div class="right-text-content">
+          <p class="text-inline">كلية التقنية الإلكترونية – طرابلس</p>
+          إحدى مؤسسات التعليم التقني في ليبيا والتي تخرج المهندسين التطبيقين من
+          حملة درجة البكالوريوس التقني في مجالات الهندسة اللالكترونية ، وذلك
+          لغرض خلق كوادر تقنية وفنية متخصصة في مجالات علوم الهندسة الإلكترونية
+          قادرة على الإيفاء بمتطلبات خطط التحول والتنمية من خلال تغطية الجوانب
+          النظرية والتركيز على الجوانب العملية وبأحدث الوسائل التقنية .
+
+          <br /><br />
+          في البداية تأسست الكلية تحت اسم ” المركز العالي للمهن الإلكترونية ”
+          وكان يمنح درجة الدبلوم العالي التقني وذلك بناء على قرار أمين اللجنة
+          الشعبية العامة للتعليم والبحث العلمي سابقاً(وزارة التعليم والبحث
+          العلمي) رقم (98) لسنة1995 ، ومن ثم تم تحويله الى كلية تقنية بقرار من
+          السيد أمين اللجنة الشعبية العامة سابقا (رئيس مجلس الوزراء) رقم 534
+          لسنة 2009.
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-6 col-xs-12">
+        <div class="left-text-content">
+          <div class="row">
+            <div class="section-heading text-right">
+              <h2 class="fs-4">مراحل الدراسية</h2>
+              <h6>
+                المراحل التي يمر بها الطالب اثناء دراسته في الكلية
+              </h6>
+            </div>
+            <div class="col-md-6 col-sm-6">
+              <div class="service-item">
+                <img
+                  src="{% static 'website/images/graduation.png' %}"
+                  alt="" />
+                <h4>‌ المرحلة العامة</h4>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-6">
+              <div class="service-item">
+                <img
+                  src="{% static 'website/images/personal-development.png' %}"
+                  alt="" />
+                <h4>‌ المرحلة التخصصية</h4>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-6">
+              <div class="service-item">
+                <img
+                  src="{% static 'website/images/internship.png' %}"
+                  alt="" />
+                <h4>‌ مرحلة التدريب الميداني</h4>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-6">
+              <div class="service-item">
+                <img src="{% static 'website/images/graduate.png' %}" alt="" />
+                <h4>برنامج الدراسات العليا</h4>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <a href="{% url "about" %}" class="main-button-icon">
+                 اعرف المزيد <i class="fa fa-arrow-left"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ***** About Area Ends ***** -->
+
+<!-- ***** Features Big Item Start ***** -->
+<section class="section" id="features">
+  <div class="container">
+    <div class="section-heading text-center">
+      <h2>الشؤون العلمية</h2>
+    </div>
+    <div class="row " >
+      <div
+        class="col-lg-3 col-md-6 col-sm-12 col-xs-12"
+        data-scroll-reveal="enter left move 30px over 0.6s after 0.4s">
+        <div class="features-item">
+          <div class="features-icon">
+            <img src="{% static 'website/images/comm_logo.png' %}" alt="" />
+          </div>
+          <div class="features-content">
+            <h4>قسم الإتصالات</h4>
+            <p dir="rtl">
+              تأسس قسم هندسة الاتصالات بكلية التقنية الالكترونية طرابلس منذ
+              بداية تأسيس الكلية في عام 1995 ويعتبر من التخصصات العلمية المهمة
+              حيث صممت المناهج الخاصة بهذا القسم على نحو يضمن توفر خلفية علمية
+              قوية في مجال هندسة الاتصالات السلكية واللاسلكية, مثل الاتصالات
+              الخلوية والاتصالات الضوئية والشبكات واتصالات الأقمار الاصطناعية
+              ومعالجة الإشارات الرقمية ، والتي من شأنها تزويد الطلبة بالمعرفة
+              الضرورية بهذا المجال، وإعدادهم للتميز و الكفاءة العالية عند
+              تخرجهم, ولدى القسم العديد من المعامل المتخصصة والمزودة بتقنيات
+              عالية, مما يساهم في الجمع بين ما يكتسبه الطلبة من المعرفة النظرية
+              والتطبيق العملي
+            </p>
+            <a href="#" class="text-button-icon">
+              <i class="fa fa-arrow-left"></i> إعرف المزيد
+            </a>
+          </div>
+        </div>
+      </div>
+      <div
+        class="col-lg-3 col-md-6 col-sm-12 col-xs-12"
+        data-scroll-reveal="enter bottom move 30px over 0.6s after 0.4s">
+        <div class="features-item">
+          <div class="features-icon">
+            <img src="{% static 'website/images/contorl_logo.png' %}" alt="" />
+          </div>
+          <div class="features-content">
+            <h4>قسم التحكم الالي</h4>
+            <p dir="rtl">
+              يعد قسم التحكم الالي من الأقسام الحيوية والھامة بالكلية حيت كان
+              أحد الاقسام التي بدأت مع تأسيس الكلية سنة 1995,ونظراً لما يحظى به
+              القسم من سمعة جيدة في مجال التخصص فإن إقبال الطلاب على الالتحاق
+              بالدراسة في القسم في تزايد مستمر. يمنح القسم درجة البكالوريوس في
+              هندسة التحكم الالي حيث يتخرج من القسم عشرات الطلبة سنوياً. يضم
+              القسم ستة أعضاء هيئة تدريس من حملة شهادة الدكتوراه والماجستير،
+              إضافة لخمسة مدربين في هندسة التحكم الالي، وقد قام القسم بإيفاد
+              اربعة من حملة الماجستير للحصول على درجة الدكتوراه وكذلك ايفاد
+              ثلاثة مهندسين للحصول على درجة الماجستير في تخصصات هندسة التحكم
+              الالي المختلفة من الولايات المتحدة الأمريكية وبريطانيا وكندا،
+              ويتوقع أن يلتحقوا بالتدريس في القسم خلال السنوات الثلاث القادمة.
+            </p>
+            <a href="#" class="text-button-icon">
+              <i class="fa fa-arrow-left"></i> إعرف المزيد
+            </a>
+          </div>
+        </div>
+      </div>
+      <div
+        class="col-lg-3 col-md-6 col-sm-12 col-xs-12"
+        data-scroll-reveal="enter right move 30px over 0.6s after 0.4s">
+        <div class="features-item">
+          <div class="features-icon">
+            <img
+              src="{% static 'website/images/computer_deparment.png' %}"
+              alt="" />
+          </div>
+          <div class="features-content">
+            <h4>قسم الحاسب الالي</h4>
+            <p dir="rtl">
+              قسم الحاسب الآلي هو أحد الاقسام العلمية الرئيسية بالكلية , تأسس في
+              سنة 1998م ؛ خلال مسيرته استطاع القسم ان يستقطب العديد من الكوادر
+              الأكاديمية المتميزة , كما نجح في تخريج العديد من المهندسين الأكفاء
+              الذين تركوا بصمة واضحة في سوق العمل في القطاعين العام و الخاص على
+              السواء ؛ يضم القسم نخبة من اعضاء هيئة التدريس من حملة الدكتوراه و
+              الماجستير كما يضم العديد من المهندسين و المعيدين من حملة
+              البكالوريوس و الدبلوم العالي.
+            </p>
+            <a href="#" class="text-button-icon">
+              <i class="fa fa-arrow-left"></i>إعرف المزيد
+            </a>
+          </div>
+        </div>
+      </div>
+      <div
+        class="col-lg-3 col-md-6 col-sm-12 col-xs-12"
+        data-scroll-reveal="enter right move 30px over 0.6s after 0.4s">
+        <div class="features-item">
+          <div class="features-icon">
+            <img src="{% static 'website/images/graduation.png' %}" alt="" />
+          </div>
+          <div class="features-content">
+            <h4>قسم المواد العامة</h4>
+            <p>
+              يعتبر قسم المواد العامة أهم الاقسام الأكاديمية بالكلية حيث تعتمد
+              عليه باقي الأقسام الأكاديمية بالكلية من حيث مخرجات الفصول الدراسية
+              العامة . يبلغ عدد المواد العلمية التي تدرس بقسم المواد العامة ( 20
+              ) مادة علمية تنقسم هذه المواد بين مواد نظرية ومواد عملية ، ويتنوع
+              أعضاء هيئة التدريس بالقسم ما بين أساتذة ومهندسين ومهندسين ومدربين
+              قارين بالكلية وأساتذة ومهندسين متعاونين مع الكلية .
+            </p>
+            <a href="#" class="text-button-icon">
+              <i class="fa fa-arrow-left"></i> إعرف المزيد
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ***** Features Big Item End ***** -->
+
+<!-- ***** Features Big Item Start ***** -->
+<section class="section" id="subscribe">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 offset-lg-2">
+        <div class="section-heading">
+          <h6>اشترك في نشرة اخبار الكلية</h6>
+          <h2>لا تفوت الفرصة</h2>
+        </div>
+        <div class="subscribe-content">
+          <p>قم بإدخال بريدك الالكتروني لكي يصلك كل ما هو جديد حول الكلية</p>
+          <div class="subscribe-form">
+            <form id="subscribe-now" action="" method="get">
+              <div class="row">
+                <div class="col-md-8 col-sm-12">
+                  <fieldset>
+                    <input
+                      name="email"
+                      type="text"
+                      id="email"
+                      placeholder="قم بإدخال بريدك الالكتروني"
+                      required="" />
+                  </fieldset>
+                </div>
+                <div class="col-md-4 col-sm-12">
+                  <fieldset>
+                    <button type="submit" id="form-submit" class="main-button">
+                      اشترك الأن
+                    </button>
+                  </fieldset>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ***** Features Big Item End ***** -->
+
+
+<!-- ***** news Area Starts ***** -->
+<section class="section" id="projects">
+  <div class="container">
+    <div class="row" dir="rtl">
+      <div class="col-lg-3">
+        <div class="section-heading">
+          <h2>الكلية في صور</h2>
+        </div>
+        <div class="filters">
+          <ul>
+            <li class="active" data-filter="*">كل الصور</li>
+            <li data-filter=".des">الخارجية</li>
+            <li data-filter=".dev">الداخلية</li>
+            <li data-filter=".gra">المعامل</li>
+            <li data-filter=".tsh">المكاتب</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-lg-9">
+        <div class="filters-content">
+          <div class="row grid">
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 all des">
+              <div class="item">
+                <a
+                  href="{% static 'website/images/slide-10.jpg' %}"
+                  data-lightbox="image-1"
+                  data-title="كلية في صور"
+                  ><img src="{% static 'website/images/slide-10.jpg' %}" alt=""
+                /></a>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 all des">
+              <div class="item">
+                <a
+                  href="{% static 'website/images/slide-11.jpg' %}"
+                  data-lightbox="image-1"
+                  data-title="كلية في صور"
+                  ><img src="{% static 'website/images/slide-11.jpg' %}" alt=""
+                /></a>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 all des">
+              <div class="item">
+                <a
+                  href="{% static 'website/images/slide-12.jpg' %}"
+                  data-lightbox="image-1"
+                  data-title="كلية في صور"
+                  ><img src="{% static 'website/images/slide-12.jpg' %}" alt=""
+                /></a>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 all des">
+              <div class="item">
+                <a
+                  href="{% static 'website/images/slide-13.jpg' %}"
+                  data-lightbox="image-1"
+                  data-title="الكلية في صور "
+                  ><img src="{% static 'website/images/slide-13.jpg' %}" alt=""
+                /></a>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 all des">
+              <div class="item">
+                <a
+                  href="{% static 'website/images/slide-14.jpg' %}"
+                  data-lightbox="image-1"
+                  data-title="الكلية في صور"
+                  ><img src="{% static 'website/images/slide-14.jpg' %}" alt=""
+                /></a>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 all des">
+              <div class="item">
+                <a
+                  href="{% static 'website/images/slide-15.jpg' %}"
+                  data-lightbox="image-1"
+                  data-title="الكلية في الصور"
+                  ><img src="{% static 'website/images/slide-15.jpg' %}" alt=""
+                /></a>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 all des">
+              <div class="item">
+                <a
+                  href="{% static 'website/images/slide-16.jpg' %}"
+                  data-lightbox="image-1"
+                  data-title="الكلية في صور"
+                  ><img src="{% static 'website/images/slide-16.jpg' %}" alt=""
+                /></a>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 all des">
+              <div class="item">
+                <a
+                  href="{% static 'website/images/slide-08.jpg' %}"
+                  data-lightbox="image-1"
+                  data-title="الكلية في الصور"
+                  ><img src="{% static 'website/images/slide-08.jpg' %}" alt=""
+                /></a>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 all dev">
+              <div class="item">
+                <a
+                  href="{% static 'website/images/library-3.jpg' %}"
+                  data-lightbox="image-1"
+                  data-title="الكلية في الصور"
+                  ><img
+                    src="{% static 'website/images/library-3.jpg' %}"
+                    alt=""
+                /></a>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 all dev">
+              <div class="item">
+                <a
+                  href="{% static 'website/images/inside-1.jpg' %}"
+                  data-lightbox="image-1"
+                  data-title="الكلية في الصور"
+                  ><img src="{% static 'website/images/inside-1.jpg' %}" alt=""
+                /></a>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 all gra">
+              <div class="item">
+                <a
+                  href="{% static 'website/images/lap-1.jpg' %}"
+                  data-lightbox="image-1"
+                  data-title="الكلية في الصور"
+                  ><img src="{% static 'website/images/lap-1.jpg' %}" alt=""
+                /></a>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 all gra">
+              <div class="item">
+                <a
+                  href="{% static 'website/images/lap-2.jpg' %}"
+                  data-lightbox="image-1"
+                  data-title="الكلية في الصور"
+                  ><img src="{% static 'website/images/lap-2.jpg' %}" alt=""
+                /></a>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 all tsh">
+              <div class="item">
+                <a
+                  href="{% static 'website/images/office-1.jpg' %}"
+                  data-lightbox="image-1"
+                  data-title="الكلية في الصور"
+                  ><img src="{% static 'website/images/office-1.jpg' %}" alt=""
+                /></a>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 all tsh">
+              <div class="item">
+                <a
+                  href="{% static 'website/images/office-2.jpg' %}"
+                  data-lightbox="image-1"
+                  data-title="الكلية في الصور"
+                  ><img src="{% static 'website/images/office-2.jpg' %}" alt=""
+                /></a>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 all tsh">
+              <div class="item">
+                <a
+                  href="{% static 'website/images/office-3.jpg' %}"
+                  data-lightbox="image-1"
+                  data-title="الكلية في الصور"
+                  ><img src="{% static 'website/images/office-3.jpg' %}" alt=""
+                /></a>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 all tsh">
+              <div class="item">
+                <a
+                  href="{% static 'website/images/office-4.jpg' %}"
+                  data-lightbox="image-1"
+                  data-title="الكلية في الصور"
+                  ><img src="{% static 'website/images/office-4.jpg' %}" alt=""
+                /></a>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 all tsh">
+              <div class="item">
+                <a
+                  href="{% static 'website/images/office-5.jpg' %}"
+                  data-lightbox="image-1"
+                  data-title="الكلية في الصور"
+                  ><img src="{% static 'website/images/office-5.jpg' %}" alt=""
+                /></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ***** Projects Area Ends ***** -->
+
+<!-- ***** news Starts ***** -->
+<section class="section" id="news">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="section-heading">
+          <h6>الاخبار</h6>
+          <h2>اخر الاخبار</h2>
+        </div>
+      </div>
+      <div
+        class="col-lg-12 col-md-12 col-sm-12 mobile-bottom-fix-big"
+        data-scroll-reveal="enter left move 30px over 0.6s after 0.4s">
+        <div class="owl-carousel owl-theme">
+          <a href="#top">
+            <div class="item author-item">
+              <div class="member-thumb">
+                <img src="{% static 'website/images/news-1.jpg' %}" alt="" />
+                <div class="hover-effect">
+                  <div class="hover-content">
+                    <ul>
+                      <h2 class="text-white">الاطلاع على الخبر</h2>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <h4>اعتماد نتيجة طلبة الدراسات العليا</h4>
+              <span
+                >#اعتماد_نتيجة_طلبة_الدراسات_العليا كلية التقنية الالكترونية
+                طرابلس</span
+              >
+            </div>
+          </a>
+          <div class="item author-item">
+            <div class="member-thumb">
+              <img
+                src="{% static 'website/images/member-item-04.jpg' %}"
+                alt="" />
+              <div class="hover-effect">
+                <div class="hover-content">
+                  <ul>
+                    <li>
+                      <a href="#"><i class="fa fa-facebook"></i></a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="fa fa-twitter"></i></a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="fa fa-linkedin"></i></a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="fa fa-rss"></i></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <h4>.02 Snow Mary</h4>
+            <span>Site Analyst</span>
+          </div>
+          <div class="item author-item">
+            <div class="member-thumb">
+              <img
+                src="{% static 'website/images/member-item-02.jpg' %}"
+                alt="" />
+              <div class="hover-effect">
+                <div class="hover-content">
+                  <ul>
+                    <li>
+                      <a href="#"><i class="fa fa-facebook"></i></a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="fa fa-twitter"></i></a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="fa fa-linkedin"></i></a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="fa fa-rss"></i></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <h4>.03 Johnny Egg</h4>
+            <span>Digital Influencer</span>
+          </div>
+          <div class="item author-item">
+            <div class="member-thumb">
+              <img
+                src="{% static 'website/images/member-item-05.jpg' %}"
+                alt="" />
+              <div class="hover-effect">
+                <div class="hover-content">
+                  <ul>
+                    <li>
+                      <a href="#"><i class="fa fa-facebook"></i></a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="fa fa-twitter"></i></a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="fa fa-linkedin"></i></a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="fa fa-rss"></i></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <h4>.04 Catherine Phyu</h4>
+            <span>Co Founder</span>
+          </div>
+          <div class="item author-item">
+            <div class="member-thumb">
+              <img
+                src="{% static 'website/images/member-item-03.jpg' %}"
+                alt="" />
+              <div class="hover-effect">
+                <div class="hover-content">
+                  <ul>
+                    <li>
+                      <a href="#"><i class="fa fa-facebook"></i></a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="fa fa-twitter"></i></a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="fa fa-linkedin"></i></a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="fa fa-rss"></i></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <h4>.05 Shao Lynn</h4>
+            <span>Chief Marketing</span>
+          </div>
+
+          <div class="item author-item">
+            <div class="member-thumb">
+              <img
+                src="{% static 'website/images/member-item-04.jpg' %}"
+                alt="" />
+              <div class="hover-effect">
+                <div class="hover-content">
+                  <ul>
+                    <li>
+                      <a href="#"><i class="fa fa-facebook"></i></a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="fa fa-twitter"></i></a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="fa fa-linkedin"></i></a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="fa fa-rss"></i></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <h4>.06 Emma Honey</h4>
+            <span>Digital Influencer</span>
+          </div>
+
+          <div class="item author-item">
+            <div class="member-thumb">
+              <img
+                src="{% static 'website/images/member-item-06.jpg' %}"
+                alt="" />
+              <div class="hover-effect">
+                <div class="hover-content">
+                  <ul>
+                    <li>
+                      <a href="#"><i class="fa fa-facebook"></i></a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="fa fa-twitter"></i></a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="fa fa-linkedin"></i></a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="fa fa-rss"></i></a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <h4>.07 Oliva Sofie</h4>
+            <span>Website Analyst</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ***** news Ends ***** -->
+
+<!-- ***** Contact Us Area Starts ***** -->
+<section class="section" id="contact-us">
+  <div class="container">
+    <div class="row" dir="rtl">
+      <div class="col-lg-4 col-md-4 col-xs-12">
+        <div class="left-text-content">
+          <div class="section-heading">
+            <h6>إتصل بنا</h6>
+            <h2>لا تتردد في البقاء على اتصال معنا</h2>
+          </div>
+          <ul class="contact-info">
+            <li>
+              1638 360 21 +218
+              <img src="{% static 'website/images/contact-us.png' %}" alt="" />
+            </li>
+            <li>
+              info@cet.edu.ly
+              <img src="{% static 'website/images/mail.png' %}" alt="" />
+            </li>
+            <li>
+              cet.edu.ly
+              <a href="https://cet.edu.ly/"
+                ><img
+                  src="{% static 'website/images/world-wide-web.png' %}"
+                  alt=""
+              /></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-lg-8 col-md-8 col-xs-12">
+        <div class="contact-form">
+          <form id="contact" action="" method="get">
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <fieldset>
+                  <input
+                    name="name"
+                    type="text"
+                    id="name"
+                    placeholder="الرجاء الادخال اسمك"
+                    required="" />
+                </fieldset>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <fieldset>
+                  <input
+                    name="phone"
+                    type="text"
+                    id="phone"
+                    placeholder="الرجاء ادخال رقم الهاتفك"
+                    required="" />
+                </fieldset>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <fieldset>
+                  <input
+                    name="email"
+                    type="email"
+                    id="email"
+                    placeholder="بريدك الالكتروني"
+                    required="" />
+                </fieldset>
+              </div>
+              <div class="col-md-6 col-sm-12">
+                <fieldset>
+                  <input
+                    name="subject"
+                    type="text"
+                    id="subject"
+                    placeholder="عنوان الرسالة" />
+                </fieldset>
+              </div>
+              <div class="col-lg-12">
+                <fieldset>
+                  <textarea
+                    name="message"
+                    rows="6"
+                    id="message"
+                    placeholder="محتوى الرسالة"
+                    required=""></textarea>
+                </fieldset>
+              </div>
+              <div class="col-lg-12">
+                <fieldset>
+                  <button
+                    type="submit"
+                    id="form-submit"
+                    class="main-button-icon">
+                    إرسال الان <i class="fa fa-arrow-left"></i>
+                  </button>
+                </fieldset>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ***** Contact Us Area Ends ***** -->
+{% endblock content %}
