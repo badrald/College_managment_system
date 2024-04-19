@@ -1,0 +1,29 @@
+body {
+    font-family: 'Hind', arial;
+    background-color: white;
+}
+
+.id-card-container {
+    width: 25%;
+    max-width: 600px;
+    margin: 60px auto;
+    position: relative;
+}
+
+.age-input {
+    position: absolute;
+    left: 50%;
+    top: 45%;
+    width: 200px;
+
+    input {
+        background: #d8d8d8;
+        border: 0;
+        outline: 0;
+        padding: 10px 20px;
+        font-size: 30px;
+        font-weight: 700;
+        width: 100%;
+    }
+}
+

@@ -1,0 +1,352 @@
+#loader {
+  color: #186463;
+  font-size: 45px;
+  text-indent: -9999em;
+  overflow: hidden;
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  position: absolute;
+  transform: translateZ(0);
+  animation: mltShdSpin 1.7s infinite ease, round 1.7s infinite ease;
+}
+
+@keyframes mltShdSpin {
+  0% {
+    box-shadow: 0 -0.83em 0 -0.4em,
+      0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em,
+      0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+  }
+
+  5%,
+  95% {
+    box-shadow: 0 -0.83em 0 -0.4em,
+      0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em,
+      0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+  }
+
+  10%,
+  59% {
+    box-shadow: 0 -0.83em 0 -0.4em,
+      -0.087em -0.825em 0 -0.42em, -0.173em -0.812em 0 -0.44em,
+      -0.256em -0.789em 0 -0.46em, -0.297em -0.775em 0 -0.477em;
+  }
+
+  20% {
+    box-shadow: 0 -0.83em 0 -0.4em, -0.338em -0.758em 0 -0.42em,
+      -0.555em -0.617em 0 -0.44em, -0.671em -0.488em 0 -0.46em,
+      -0.749em -0.34em 0 -0.477em;
+  }
+
+  38% {
+    box-shadow: 0 -0.83em 0 -0.4em, -0.377em -0.74em 0 -0.42em,
+      -0.645em -0.522em 0 -0.44em, -0.775em -0.297em 0 -0.46em,
+      -0.82em -0.09em 0 -0.477em;
+  }
+
+  100% {
+    box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em,
+      0 -0.83em 0 -0.44em, 0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+  }
+}
+
+@keyframes round {
+  0% {
+    transform: rotate(0deg)
+  }
+
+  100% {
+    transform: rotate(360deg)
+  }
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+}
+
+.table th {
+  background-color: #f2f2f2;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Print styles */
+@media print {
+  body {
+    background-color: #fff;
+    /* Set a white background for printing */
+  }
+
+  .card {
+    box-shadow: none;
+    /* Remove shadow for printing */
+    margin-bottom: 0;
+    /* Adjust spacing for printing */
+  }
+
+  .card-info {
+    display: none;
+  }
+
+  .btn {
+    display: none;
+    /* Hide print-specific elements */
+  }
+
+  .table td,
+  .table th {
+    border: none;
+    /* Remove borders for printing */
+  }
+}
+
+.search_box  {
+  width: 100%;
+  background: #fff;
+  border-radius: 5px;
+  height: 65px;
+  display: flex;
+  justify-content: center;
+  align-self: center;
+  padding: 10px;
+
+}
+.search_box .bg-dark {
+  width: 100%;
+  background: #15151d;
+  border-radius: 5px;
+  height: 65px;
+  display: flex;
+  justify-content: center;
+  align-self: center;
+  padding: 10px;
+
+}
+
+.dropdown {
+  width: 75%;
+  color: #9fa3b1;
+  cursor: pointer;
+}
+.dropdown .bg-dark {
+  width: 75%;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+ .dropdown .default_option {
+  text-transform: uppercase;
+  padding: 13px 15px;
+  font-size: 20px;
+  color: #000000;
+
+}
+ .dropdown .default_option .bg-dark {
+  text-transform: uppercase;
+  padding: 13px 15px;
+  font-size: 20px;
+  color: #ffffff;
+
+}
+
+.dropdown ul  {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: #fff;
+  width: 150px;
+  border-radius: 5px;
+  padding: 20px;
+  display: none;
+  box-shadow: 8px 8px 6px -10px #b3c6ff;
+  color: #000000;
+  z-index:2;
+
+}
+.dropdown ul .bg-dark {
+  background: #3b3838;
+  box-shadow: 8px 8px 6px -10px #b4c1e9;
+  color: #ffffff;
+
+}
+
+ .dropdown ul.active {
+  display: block;
+  color: #000000;
+}
+
+.dropdown ul li {
+  padding-bottom: 20px;
+  color: #040D12;
+  list-style: none;
+  font-size: 20px;
+}
+.dropdown ul li .bg-dark {
+  padding-bottom: 20px;
+  color: #f8f9fa;
+  list-style: none;
+  font-size: 20px;
+}
+
+ .dropdown ul li:last-child {
+  padding-bottom: 0;
+}
+
+ .dropdown ul li:hover {
+  color: #6f768d;
+}
+
+ .dropdown:before {
+  content: "";
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  border: 8px solid;
+  border-color: #7296ff transparent transparent transparent;
+}
+
+.myBtn {
+  box-shadow: 4px 6px 4px rgb(82, 80, 80); ;
+}
+
+.wrapper .search_box .search_field {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  top: 0px;
+}
+
+.wrapper .search_box .search_field .input {
+  width: 100%;
+  height: 120%;
+  font-size: 25px;
+  padding-left: 20px;
+  padding-right: 38px;
+  color: #6f768d;
+  box-shadow: 6px 5px 9px 0px rgb(149 135 135 / 89%);
+}
+
+.wrapper .search_box .search_field .fas {
+  position: absolute;
+  top: 15px;
+  left: 20px;
+  font-size: 22px;
+  color: #5078ef;
+  cursor: pointer;
+}
+
+::-webkit-input-placeholder {
+  /* Chrome/Opera/Safari */
+  color: #9fa3b1;
+}
+
+::-moz-placeholder {
+  /* Firefox 19+ */
+  color: #9fa3b1;
+}
+
+:-ms-input-placeholder {
+  /* IE 10+ */
+  color: #9fa3b1;
+}
+
+.dropDown {
+  position: absolute;
+  right: 10%;
+  animation: drop 1.5s ease forwards;
+  animation-iteration-count: 1;
+}
+
+@keyframes drop {
+  0% {
+    opacity: 0
+  }
+
+  70% {
+    transform: translateY(-150%)
+  }
+
+  100% {
+    transform: translateY(-100%)
+  }
+}
+
+.card-size{
+  width:60%;
+}
+
+
+@media screen and (max-width: 804px) {
+  .card-size {
+      width: 70%;
+    }
+  
+    .wrapper .search_box .search_field .input {
+      width: 120%;
+      height: 120%;
+      font-size: 25px;
+      padding-left: 20px;
+      padding-right: 38px;
+      margin-right: -10%;
+      color: #6f768d;
+      box-shadow: 6px 5px 9px 0px rgb(149 135 135 / 89%);
+    }
+  
+    .wrapper .search_box .search_field .fas {
+      position: absolute;
+      top: 15px;
+      left: -7%;
+      font-size: 22px;
+      color: #5078ef;
+      cursor: pointer;
+    }
+}
+
+/* On screens that are 600px wide or less, make the columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+.card-size {
+    width: 100%;
+  }
+
+  .wrapper .search_box .search_field .input {
+    width: 120%;
+    height: 120%;
+    font-size: 25px;
+    padding-left: 20px;
+    padding-right: 38px;
+    margin-right: -10%;
+    color: #6f768d;
+    box-shadow: 6px 5px 9px 0px rgb(149 135 135 / 89%);
+  }
+
+  .wrapper .search_box .search_field .fas {
+    position: absolute;
+    top: 15px;
+    left: -7%;
+    font-size: 22px;
+    color: #5078ef;
+    cursor: pointer;
+  }
+}
