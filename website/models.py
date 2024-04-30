@@ -1,5 +1,6 @@
 from django.db import models
 from Core.settings import MEDIA_ROOT
+from Accounts.models import Profile
 import os
 import uuid
 
@@ -34,3 +35,9 @@ class Image(models.Model):
 
     def __str__(self):
         return self.title if self.title else f'Image - {self.id}'
+    
+
+
+class MediaUser(Profile):
+    pass
+

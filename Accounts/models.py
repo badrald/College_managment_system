@@ -26,13 +26,16 @@ class Profile(models.Model):
     address= models.CharField(max_length=50, blank=True, null=True)
     phone_number=models.CharField(max_length=15,null=True,blank=True)
     user_photo=models.ImageField(upload_to=upload_pics,null=True,blank=True)
-    job_title= models.CharField(max_length=50,blank=True,null=True)
+    user_type = models.CharField(max_length=20, choices=(('student', 'طالب'), ('teacher', 'محاضر'), ('staff', 'موظفين')), default='student')
+
     def __str__(self) :
         if self.user.first_name =='' or self.user.first_name == None:
             return self.user.username
         return self.user.first_name + " "+ self.user.last_name
     
-    
+
+
+
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
