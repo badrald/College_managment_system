@@ -22,6 +22,8 @@ from . import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include("website.urls")), # Include urls from website app
+    path('ckeditor/',include("ckeditor_uploader.urls")),
+    path('tinymce/', include('tinymce.urls')), 
     path('accounts/',include("Accounts.urls")),
     
 ]

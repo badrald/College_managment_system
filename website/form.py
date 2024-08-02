@@ -1,17 +1,20 @@
 from django import forms
-from .models import BlogPost,Image
+from .models import BlogPost,Category
 
 class CreateBlogPost(forms.ModelForm):
     class Meta:
         model = BlogPost
-        fields = ('title', 'content',)  # Adjust fields as needed
-        widgets = {
-            'content': forms.Textarea(attrs={'rows': 10}),  # Optional: adjust content area size
-        }
+        fields = ['title','category','post_cover','body'] # Adjust fields as needed
+        widgets = { 
+            'category':forms.Select(attrs={"class":"form-control"}),
+        }   
 
 
 
-class ImageForm(forms.ModelForm):
+
+class CategoryForm(forms.ModelForm):
+    """A form for adding a new category to the database."""
     class Meta:
-        model = Image
-        fields = ('image',)  # Only the image field
+        model=Category
+        fields = ['name']
+        

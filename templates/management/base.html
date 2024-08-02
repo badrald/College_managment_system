@@ -1,114 +1,138 @@
 <!DOCTYPE html>
 <html lang="ar">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    {% load static %}
+    <link
+      rel="shortcut icon"
+      href="{% static 'website/images/cet_logo.png' %}"
+      class="rounded-circle"
+      type="image/x-icon" />
+    <title>{% block title %}{% endblock title %}</title>
+    <link
+      rel="stylesheet"
+      href="{% static 'plugins/fontawesome-free/css/all.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'home/css/bootstrap_min.css' %}" />
+    <link rel="stylesheet" href="{% static 'plugins/custom.css' %}" />
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta http-equiv="x-ua-compatible" content="ie=edge" />
-  {% load static %}
-  <link rel="shortcut icon" href="{% static 'website/images/cet_logo.png' %}" class="rounded-circle" type="image/x-icon" />
-  <title>{% block title %}{% endblock title %}</title>
-  <link rel="stylesheet" href="{% static 'plugins/fontawesome-free/css/all.min.css' %}" />
-  <link rel="stylesheet" href="{% static 'home/css/bootstrap_min.css' %}" />
-  <link rel="stylesheet" href="{% static 'plugins/custom.css' %}" />
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="{% static 'plugins/jquery/jquery-ui.css' %}" />
+    <!-- IonIcons -->
+    <link
+      rel="stylesheet"
+      href=" http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{% static 'dist/css/adminlte_ar.min.css' %}" />
+    <!-- Google Font: Source Sans Pro -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700"
+      rel="stylesheet" />
+    {% block custom_css %}{% endblock custom_css %}
+  </head>
 
-  <!-- Font Awesome Icons -->
-  <link rel="stylesheet" href="{% static 'plugins/jquery/jquery-ui.css' %}" />
-  <!-- IonIcons -->
-  <link rel="stylesheet" href=" http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
-  <!-- Theme style -->
-  <link rel="stylesheet" href="{% static 'dist/css/adminlte_ar.min.css' %}" />
-  <!-- Google Font: Source Sans Pro -->
-  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet" />
-  {% block custom_css %}{% endblock custom_css %}
-</head>
+  <body dir="rtl" class="hold-transition sidebar-mini custom-scrollbar">
+    <style>
+      @font-face {
+        font-family: Jenna;
+        src: url("{% static 'fonts/mothanna_0_02/Mothanna.ttf' %}");
+      }
 
-<body dir="rtl" class="hold-transition sidebar-mini custom-scrollbar">
-  <style>
-    @font-face {
-      font-family: Jenna;
-      src: url("{% static 'fonts/mothanna_0_02/Mothanna.ttf' %}");
-    }
+      html,
+      body {
+        font-family: Jenna;
+        font-weight: 400;
+        background-color: #fff;
+        font-size: 16px;
 
-    body * {
-      font-family: Jenna;
-    }
+        -ms-text-size-adjust: 100%;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
 
-    ::-webkit-scrollbar {
-      width: 20px;
-    }
+      ::-webkit-scrollbar {
+        width: 20px;
+      }
 
-    ::-webkit-scrollbar-track {
-      background-color: #343a40;
-    }
+      ::-webkit-scrollbar-track {
+        background-color: #343a40;
+      }
 
-    ::-webkit-scrollbar-thumb {
-      background-color: #cfd8dc;
-      border-radius: 10px;
-      border: 6px solid transparent;
-      background-clip: content-box;
-    }
+      ::-webkit-scrollbar-thumb {
+        background-color: #cfd8dc;
+        border-radius: 10px;
+        border: 6px solid transparent;
+        background-clip: content-box;
+      }
 
-    ::-webkit-scrollbar-thumb:hover {
-      background-color: #a8bbbf;
-    }
-  </style>
-  <div class="print-container not-index">
-    <nav class="main-header navbar navbar-expand bg-gradient-navy navbar-light">
-      <div class="row align-items-center">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" data-widget="pushmenu" id="menuLink" href="#">
-              <div class="d-inline mt-2 bg-gradient-navy">
-                <i class="fas fa-bars fa-2x"></i>
-                <span class="ml-2 h5 mt-1">الــقــائــمــة</span>
-              </div>
-            </a>
-          </li>
-        </ul>
-      </div>
-      <div class="col d-none d-sm-flex justify-content-center">
-        <h4 class="text-center mb-1 fs-2 text-bodler fst-italic">
-          {% block sub_title %}{% endblock %}
-        </h4>
-      </div>
+      ::-webkit-scrollbar-thumb:hover {
+        background-color: #a8bbbf;
+      }
+    </style>
+    <div class="print-container not-index">
+      <nav
+        class="main-header navbar navbar-expand bg-gradient-navy navbar-light">
+        <div class="row align-items-center">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" data-widget="pushmenu" id="menuLink" href="#">
+                <div class="d-inline mt-2 bg-gradient-navy">
+                  <i class="fas fa-bars fa-2x"></i>
+                  <span class="ml-2 h5 mt-1">الــقــائــمــة</span>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="col d-none d-sm-flex justify-content-center">
+          <h4 class="text-center mb-1 fs-2 text-bodler fst-italic">
+            {% block sub_title %}{% endblock %}
+          </h4>
+        </div>
 
-      <div class="col-auto">
-        <img class="rounded-circle" style="margin-right: 25px; margin-top: -10px" src="{% static 'dist/img/cet_logo.png' %}"
-          alt="" width="80" height="80" />
-        <p class="mb-1 text-right" style="font-size: 10px">كلية التقنية الإلكترونية</p>
-      </div>
-    </nav>
-  </div>
-  {% include './parts/asidebar.html' %} {% block content %} {% endblock %}
-  {%include './parts/footer.html' %}
-  <!-- REQUIRED SCRIPTS -->
-  <!-- jQuery -->
-  <script src="{% static 'plugins/jquery/dist/jquery.js' %}"></script>
-  <!-- AdminLTE -->
-  <script src="{% static 'dist/js/adminlte.js' %}"></script>
-  <!-- BootStrap Files -->
-  <script src="{% static 'plugins/bootstrap/js/bootstrap_bundle.js' %}"></script>
-  <!-- OPTIONAL SCRIPTS -->
-  <script src="{% static 'plugins/switch.js' %}"></script>
-  <script>
-    jQuery(function () {
-      $.ajaxSetup({ headers: { "X-CSRFToken": "{{ csrf_token }}" } });
-    });
-    $(document).ready(function () {
-      var currentURL = window.location.href;
-      $('.nav-link').each(function () {
-        var linkURL = $(this).attr('href');
-        if (currentURL.indexOf(linkURL) !== -1) {
-          if ($(this).closest('.nav-treeview').length > 0) {
-            $(this).closest('.nav-treeview').css('display', 'block');
-            $(this).closest('.has-treeview').addClass('menu-open');
-          }
-        }
+        <div class="col-auto">
+          <img
+            class="rounded-circle"
+            style="margin-right: 25px; margin-top: -10px"
+            src="{% static 'dist/img/cet_logo.png' %}"
+            alt=""
+            width="80"
+            height="80" />
+          <p class="mb-1 text-right" style="font-size: 10px">
+            كلية التقنية الإلكترونية
+          </p>
+        </div>
+      </nav>
+    </div>
+    {% include './parts/asidebar.html' %} {% block content %} {% endblock %}
+    {%include './parts/footer.html' %}
+    <!-- REQUIRED SCRIPTS -->
+    <!-- jQuery -->
+    <script src="{% static 'plugins/jquery/dist/jquery.js' %}"></script>
+    <!-- AdminLTE -->
+    <script src="{% static 'dist/js/adminlte.js' %}"></script>
+    <!-- BootStrap Files -->
+    <script src="{% static 'plugins/bootstrap/js/bootstrap_bundle.js' %}"></script>
+    <!-- OPTIONAL SCRIPTS -->
+    <script src="{% static 'plugins/switch.js' %}"></script>
+    <script>
+      jQuery(function () {
+        $.ajaxSetup({ headers: { "X-CSRFToken": "{{ csrf_token }}" } });
       });
-    });
-  </script>
-  {% block scripts %} {% endblock scripts %}
-</body>
-
+      $(document).ready(function () {
+        var currentURL = window.location.href;
+        $(".nav-link").each(function () {
+          var linkURL = $(this).attr("href");
+          if (currentURL.indexOf(linkURL) !== -1) {
+            if ($(this).closest(".nav-treeview").length > 0) {
+              $(this).closest(".nav-treeview").css("display", "block");
+              $(this).closest(".has-treeview").addClass("menu-open");
+            }
+          }
+        });
+      });
+    </script>
+    {% block scripts %} {% endblock scripts %}
+  </body>
 </html>

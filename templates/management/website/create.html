@@ -1,0 +1,231 @@
+{% extends '../base.html' %}  
+{% load static %}
+{% block custom_css %}
+<link rel="stylesheet" href="{% static 'home/css/settings.css' %}" />
+{{form.media}}
+{% endblock custom_css %} {% block title%}إنشاء منشور{% endblock title %} 
+{% block sub_title %}إنشاء منشور{% endblock %} {% block content %}
+<style>
+  .modal-image {
+    width: 70px;
+    height: 70px;
+    margin: auto;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px #48db71;
+    padding: 11px 10px 2px;
+    margin-bottom: 2em;
+  }
+
+  .modal-body h1 {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+  }
+
+  .modal-body p {
+    margin-bottom: 2em;
+    color: #666;
+  }
+
+  :root {
+    --defualt-idr: 0.3s;
+  }
+
+  .pulse-grow {
+    display: inline-block;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    /* Hide Tap Highlight Color */
+    transform: translateZ(0);
+    /* Hardware Acceleration */
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  }
+
+  .pulse-grow:hover {
+    /* Improve Anti-Aliasing */
+    animation-name: pulse-grow;
+    /* Pulse Grow Keyframes */
+    animation-duration: var(--defualt-idr);
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+  }
+
+  @keyframes pulse-grow {
+    to {
+      transform: scale(1.1);
+    }
+  }
+</style> 
+
+
+
+
+<div style="direction: rtl" class="wrapper">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper bg-dark">
+    <!-- Content Header (Page header) -->
+
+    <div class="content bg-dark">
+      <div class="container-fluid bg-dark">
+        <div id="employeeform" class="card card-navy mt-2">
+          <div class="card-header d-flex justify-content-center">
+            <h3 class="card-title d-flex justify-content-center fs-3">
+              إضافة منشور
+            </h3>
+          </div>
+          <!-- form start -->
+          <form method="POST" enctype="multipart/form-data" id="blogCreate">
+            {% csrf_token %}
+            <div class="card-body bg-dark">
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="title" > عنوان المنشور</label>
+                  <input type="text" class="form-control " required name="title" id="id_title" value=""
+                    placeholder="الرجاء ادخال عنوان المنشور" />
+                </div>
+                <div class="form-group col-md-5">
+                    <label for="id_category">نوع المنشور</label>
+                    {{form.category}}
+                </div>
+                <div class="form-group col-md-1 text-center">
+                    <label for="id_category" >إضافة فئة جديدة</label>
+                    <button class="btn bg-navy w-100"> <i class="fa fa-plus ml-3"></i></button>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="id_post_cover" class="btn btn-outline-info w-100">صورة غلاف المنشور</label>
+                  <input type="file" name="post_cover" class="d-none" accept="image/*" id="id_post_cover">
+                </div>
+                <div class="form-group col-md-6">
+                  <div id="image-preview" class="mt-2"></div>
+                </div>
+                
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-md-12">
+                  <label for="id_body">المحتوى</label>
+                  {{ form.body }}
+                </div>
+              </div>
+
+
+            <div class="form-row col-12 mt-4">
+                <div class="col-md-6">
+                  <a
+                    href="{% url 'blog_management' %}"
+                    type="button"
+                    class="btn btn-danger w-100">
+                    رجوع <i class="fa fa-undo-alt fa-rotate-180 ml-3"></i>
+                  </a>
+                </div>
+                <div class="col-md-6">
+                  <button type="submit" class="btn bg-navy w-100">
+                    اضافة <i class="fa fa-plus ml-3"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <!-- /.card-body -->
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="modal fade"
+    id="successMsg"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-gradient bg-success">
+          <h5 class="modal-title" id="exampleModalLabel">رسالة</h5>
+          <button
+            type="button"
+            class="btn-close m-0"
+            data-bs-dismiss="modal"
+            aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center bg-dark">
+          <div class="modal-image">
+            <svg viewBox="1 0 30 40" style="fill: #48db71">
+              <path d="M1 14 L5 10 L13 18 L27 4 L31 8 L13 26 z"></path>
+            </svg>
+          </div>
+          <h1>تمت العملية بنجاح !</h1>
+          <p>تمت عملية اضافة الموظف بنجاح</p>
+        </div>
+        <div class="modal-footer bg-gradient bg-success"></div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade"
+    id="errorMsg"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-danger bg-gradient">
+          <h5 class="modal-title" id="exampleModalLabel">رسالة خطأ</h5>
+          <button
+            type="button"
+            class="btn-close m-0 bg-white"
+            data-bs-dismiss="modal"
+            aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center bg-dark">
+          <img
+            src="{% static 'dist/img/error.png' %}"
+            class="w-25 h-25 mb-3"
+            alt="" />
+          <h1>لم تتم عملية بنجاح !</h1>
+          <p>تأكد من الاتصال</p>
+        </div>
+        <div class="modal-footer bg-danger bg-gradient"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+{% endblock %} 
+{% block scripts %}
+<script type="text/javascript" src="{% static 'website/js/editor.js' %}"></script>
+
+<script>
+const imageInput = document.getElementById("id_post_cover");
+  const previewContainer = document.getElementById("image-preview");
+
+  imageInput.addEventListener("change", function(e) {
+    const files = e.target.files;
+    previewContainer.innerHTML = ""; // Clear previous previews
+
+    for (let i = 0; i < files.length; i++) {
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const img = document.createElement("img");
+        img.src = event.target.result;
+        img.classList.add("img-thumbnail", "w-100"); // Add Bootstrap classes
+        previewContainer.appendChild(img);
+      };
+      reader.readAsDataURL(files[i]);
+    }
+  });
+</script>
+{% endblock %}
+
+
+

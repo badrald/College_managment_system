@@ -140,18 +140,6 @@ hgroup {
   box-sizing: border-box;
 }
 
-html,
-body {
-  font-family: "Times New Roman", Times, serif;
-  font-weight: 400;
-  background-color: #fff;
-  font-size: 16px;
-
-  -ms-text-size-adjust: 100%;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  
-}
 
 a {
   text-decoration: none !important;
@@ -190,12 +178,6 @@ global styles
 
 .text-center{
   text-align: center;
-}
-
-html,
-body {
-  background: #fff;
-  font-family: "Times New Roman", Times, serif;
 }
 
 ::selection {
@@ -452,10 +434,10 @@ header
 .header-area .main-nav .logo {
   line-height: 80px;
   color: #fff;
-  font-size: 28px;
+  font-size: 19px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0px;
   float: right;
   -webkit-transition: all 0.3s ease 0s;
   -moz-transition: all 0.3s ease 0s;

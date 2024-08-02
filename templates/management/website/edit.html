@@ -1,7 +1,10 @@
-{% extends '../base.html' %} {% load static %} {% block custom_css %}
+{% extends '../base.html' %}  
+{% load static %}
+{% block custom_css %}
 <link rel="stylesheet" href="{% static 'home/css/settings.css' %}" />
-{% endblock custom_css %} {% block title%}إنشاء خبر{% endblock title %} 
-{% block sub_title %}إنشاء خبر{% endblock %} {% block content %}
+{{form.media}}
+{% endblock custom_css %} {% block title%}إنشاء منشور{% endblock title %} 
+{% block sub_title %}إنشاء منشور{% endblock %} {% block content %}
 <style>
   .modal-image {
     width: 70px;
@@ -52,53 +55,29 @@
       transform: scale(1.1);
     }
   }
-</style>
+</style> 
+
+
+
+
 <div style="direction: rtl" class="wrapper">
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper bg-dark">
     <!-- Content Header (Page header) -->
+
     <div class="content bg-dark">
       <div class="container-fluid bg-dark">
         <div id="employeeform" class="card card-navy mt-2">
           <div class="card-header d-flex justify-content-center">
             <h3 class="card-title d-flex justify-content-center fs-3">
-              إضافة خبر
+              إضافة منشور
             </h3>
           </div>
           <!-- form start -->
           <form method="POST" enctype="multipart/form-data" id="blogCreate">
             {% csrf_token %}
-            <div class="card-body bg-dark">
-              <div class="form-row">
-                <div class="form-group col-md-12">
-                  <label for="title"> عنوان الخبر</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    required
-                    name="title"
-                    id="id_title"
-                    value=""
-                    placeholder="الرجاء ادخال عنوان الخبر" />
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="form-group col-md-12">
-                  <label for="content">المحتوى</label>
-                  <textarea
-                    name="content"
-                    id="id_content"
-                    class="form-control"
-                    rows="20"
-                    required></textarea>
-                </div>
-              </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                  <label for="images">رفع الصور الخبر (يمكن رفع اكثر من صورة )</label>
-                  <input type="file" name="image" id="id_image" multiple class="form-control-file" />
-                  <div id="image-preview" class="mt-2"></div>
-                </div>
+            {{form}}
+
             <div class="form-row col-12 mt-4">
                 <div class="col-md-6">
                   <a
@@ -110,7 +89,7 @@
                 </div>
                 <div class="col-md-6">
                   <button type="submit" class="btn bg-navy w-100">
-                    اضافة <i class="fa fa-plus ml-3"></i>
+                    تعديل <i class="fa fa-edit ml-3"></i>
                   </button>
                 </div>
               </div>
@@ -150,8 +129,7 @@
       </div>
     </div>
   </div>
-  <div
-    class="modal fade"
+  <div class="modal fade"
     id="errorMsg"
     tabindex="-1"
     aria-labelledby="exampleModalLabel"
@@ -180,9 +158,21 @@
   </div>
 </div>
 
-{% endblock %} {% block scripts %}
+
+
+
+
+
+
+
+
+
+{% endblock %} 
+{% block scripts %}
+<script type="text/javascript" src="{% static 'website/js/editor.js' %}"></script>
+
 <script>
-const imageInput = document.getElementById("id_image");
+const imageInput = document.getElementById("id_post_cover");
   const previewContainer = document.getElementById("image-preview");
 
   imageInput.addEventListener("change", function(e) {
@@ -194,7 +184,7 @@ const imageInput = document.getElementById("id_image");
       reader.onload = function(event) {
         const img = document.createElement("img");
         img.src = event.target.result;
-        img.classList.add("img-thumbnail", "w-25", "me-2"); // Add Bootstrap classes
+        img.classList.add("img-thumbnail", "w-100"); // Add Bootstrap classes
         previewContainer.appendChild(img);
       };
       reader.readAsDataURL(files[i]);
@@ -202,3 +192,6 @@ const imageInput = document.getElementById("id_image");
   });
 </script>
 {% endblock %}
+
+
+
