@@ -153,7 +153,7 @@ h5,
 h6 {
   margin-top: 0px;
   margin-bottom: 0px;
-  
+
 }
 
 ul {
@@ -172,11 +172,11 @@ global styles
 --------------------------------------------- 
 */
 
-.text-right{
-  text-align:right;
+.text-right {
+  text-align: right;
 }
 
-.text-center{
+.text-center {
   text-align: center;
 }
 
@@ -479,7 +479,7 @@ header
   line-height: 40px;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 1190px) {
   .header-area .main-nav .nav .search-icon {
     float: none;
     text-align: center;
@@ -570,7 +570,7 @@ header
   display: block;
   background: #fff;
   color: #7a7a7a !important;
-  padding-right:15px;
+  padding-right: 15px;
   height: 40px;
   text-align: right;
   line-height: 40px;
@@ -724,20 +724,22 @@ header
   color: #4695d0;
 }
 
-@media (max-width: 1190px) {
+@media (max-width: 1400px) {
   .header-area .main-nav .nav li {
     padding-left: 10px;
     padding-right: 10px;
   }
+
+  .container {
+    max-width: 90% !important;
+  }
+
   .header-area .main-nav .nav li.submenu:after {
-    padding-left:2px;
+    padding-left: 2px;
     left: -5px;
     top: 7px;
   }
 
-  .header-area .main-nav .logo {
-    font-size: 26px;
-  }
 
   .header-area .main-nav .nav li a {
     font-size: 13px;
@@ -748,7 +750,7 @@ header
   }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 1190px) {
   .header-area .main-nav .logo {
     color: #1e1e1e;
   }
@@ -868,12 +870,12 @@ header
 
   .header-area .main-nav .nav li.submenu:hover ul,
   .header-area .main-nav .nav li.submenu:focus ul {
-    color:#4695d0;
+    color: #4695d0;
     height: 0px;
   }
 }
 
-@media (min-width: 767px) {
+@media (min-width: 1190px) {
   .header-area .main-nav .nav {
     display: flex !important;
   }
@@ -1299,9 +1301,10 @@ features
   color: #4695d0;
 }
 
-#features .row{
+#features .row {
   margin-top: 70px;
 }
+
 #features .features-item {
   margin-bottom: 50px;
 }
@@ -1389,7 +1392,7 @@ subscribe
   color: #fff;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 1190px) {
   #subscribe fieldset {
     text-align: center;
     margin-bottom: 20px;
@@ -1563,7 +1566,7 @@ contact
 
 #contact-us .left-text-content ul li img {
   margin-right: 15px;
-  width:48px;
+  width: 48px;
   height: 48px;
 }
 
@@ -1577,9 +1580,10 @@ contact
 #contact {
   margin-top: 40px;
 }
-#contact .main-button-icon:hover{
+
+#contact .main-button-icon:hover {
   transform: none;
-  
+
 }
 
 .contact-form input,
@@ -1629,8 +1633,8 @@ footer
 */
 
 footer {
-  
-padding: 80px 0px;
+
+  padding: 80px 0px;
   background: rgb(70, 149, 208);
   /* fallback for older browsers */
   background: linear-gradient(145deg, rgb(70, 149, 208, 1) 0%, rgb(23, 102, 163) 100%);

@@ -33,7 +33,7 @@
     </div>
      <div class="position-absolute bg-dark" style="bottom: 5%">
         <h4>
-          اهلا بعودتك من جديد استاذ
+          اهلا بعودتك من جديد {% if user.is_lecturer %}استاذ {% elif user.is_student %} طالب / طالبة {% elif user.is_staff%} مهندس / مهندسة{% endif %}
           <a href=" 'profile' %}"
             >{{user.first_name}} {{user.last_name}}</a
           >

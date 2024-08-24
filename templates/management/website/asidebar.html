@@ -1,0 +1,76 @@
+{% load static %}
+
+<li class="nav-item">
+  <a
+    href=" 'home_page' %}"
+    class="nav-link {% if current_page == 'home_page' %}active{% endif %}">
+    <i class="nav-icon fas fa-home"></i>
+    <p>القائمة الرئسية</p>
+  </a>
+</li>
+<li class="nav-item has-treeview">
+  <a href="#" class="nav-link {% if current_page == '' %}active{% endif %}">
+    <i class="nav-icon fas fa-users-cog"></i>
+    <p>
+      إدارة المحتوى
+      <i class="fas fa-angle-left right"></i>
+    </p>
+  </a>
+  <ul class="nav nav-treeview">
+    <li style="cursor: pointer" class="ml-3 nav-item">
+      <a
+        href="{% url 'blog_management' %}"
+        class="nav-link {% if current_page == 'blog_management' %}active{% endif %}">
+        <i class="fas fa-newspaper nav-icon"></i>
+        <p>ادارة الاخبار</p>
+      </a>
+    </li>
+    <li style="cursor: pointer" class="ml-3 nav-item">
+      <a
+        href="{% url 'blog_create' %}"
+        class="nav-link {% if current_page == 'blog_create' %}active{% endif %}">
+        <i class="fas fa-calendar-week nav-icon"></i>
+        <p>إضافة خبر</p>
+      </a>
+    </li>
+  </ul>
+</li>
+
+<li class="nav-item">
+  <a
+    href=" 'statistics_view' %}"
+    class="nav-link {% if current_page == 'statistics_view' %}active{% endif %}">
+    <i class="nav-icon fas fa-signal"></i>
+    <p>الإحصائيـات</p>
+  </a>
+</li>
+<li class="nav-item">
+  <a
+    href=" 'statistics_view' %}"
+    class="nav-link {% if current_page == 'statistics_view' %}active{% endif %}">
+    <i class="nav-icon fas fa-signal"></i>
+    <p>تقارير</p>
+  </a>
+</li>
+
+{% if user.is_superuser %}
+<li class="nav-item">
+  <a
+    href=" {% url 'profiles' %}"
+    class="nav-link {% if current_page == 'profiles' %}active{% endif %}">
+    <i class="nav-icon fas fa-users"></i>
+    <p>المستخدمين</p>
+  </a>
+</li>
+{% endif %}
+
+<li class="nav-item">
+  <a
+    href=" 'support_center' %}"
+    class="nav-link {% if current_page == 'support_center' %}active{% endif %}">
+    <img
+      src="{% static 'home/default_imges/technical_support.png' %}"
+      class="nav-icon" />
+    <p>مركز الدعم الفني</p>
+  </a>
+</li>
